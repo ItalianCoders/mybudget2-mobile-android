@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Project: mybudget2-mobile-android
-  ~ File: colors.xml
+  ~ File: login_header.xml
   ~
   ~ Created by fattazzo
   ~ Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -26,13 +25,27 @@
   ~ SOFTWARE.
   -->
 
-<resources>
-    <color name="primaryColor">#43a047</color>
-    <color name="primaryLightColor">#75d27a</color>
-    <color name="primaryDarkColor">#00701a</color>
-
-    <color name="primaryTextColor">#000000</color>
-    <color name="primaryTextColorInverted">#ffffff</color>
-
-    <color name="disabled">#818181</color>
-</resources>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+        android:height="20dp"
+        android:viewportHeight="20.34417"
+        android:viewportWidth="182.3809"
+        android:width="182dp">
+    <path android:fillAlpha="1"
+          android:fillColor="#75d27a"
+          android:fillType="nonZero"
+          android:pathData="M0,20.344L182.366,20.344L182.366,0L0,0Z"
+          android:strokeColor="#00000000"
+          android:strokeWidth="0.03527778"/>
+    <path android:fillAlpha="1"
+          android:fillColor="#00701a"
+          android:fillType="nonZero"
+          android:pathData="M182.381,20.344L136.47,20.344l19.693,-20.291 26.203,-0.053 0.014,10.432v0,9.912"
+          android:strokeColor="#00000000"
+          android:strokeWidth="0.04318056"/>
+    <path android:fillAlpha="1"
+          android:fillColor="#43a047"
+          android:fillType="nonZero"
+          android:pathData="M136.474,20.344L115.213,20.344l18.86,-20.291h22.09l-19.69,20.291"
+          android:strokeColor="#00000000"
+          android:strokeWidth="0.043177"/>
+</vector>

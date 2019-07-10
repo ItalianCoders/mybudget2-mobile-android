@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: build
+ * File: LoginValidationRules.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,29 +25,35 @@
  * SOFTWARE.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+package it.italiancoders.mybudget.activity.login
 
-buildscript {
-    ext.kotlin_version = '1.3.41'
-    repositories {
-        google()
-        jcenter()
-        
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.2'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
-}
+import android.text.Editable
 
-allprojects {
-    repositories {
-        google()
-        jcenter()
-        
-    }
-}
+object LoginValidationRules {
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+    @JvmStatic
+    var USERNAME: Rule = object : Rule {
+        override fun isValid(s: Editable?): Boolean {
+            // Check length
+            return s?.toString().orEmpty().length >= 8
+
+        }
+    }
+
+    @JvmStatic
+    var PASSWORD: Rule = object : Rule {
+        override fun isValid(s: Editable?): Boolean {
+            // Check if contains at least one upper case char
+            val upperCaseChar = """.*[A-Z].*""".toRegex().containsMatchIn(s?.toString().orEmpty())
+            // Check if contains at least one digit char
+            val digitChar = """.*[0-9].*""".toRegex().containsMatchIn(s?.toString().orEmpty())
+            // Check length
+            val length = s?.toString().orEmpty().length >= 8
+            return length && upperCaseChar && digitChar
+        }
+    }
+
+    interface Rule {
+        fun isValid(s: Editable?): Boolean
+    }
 }

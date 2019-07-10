@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: build
+ * File: BaseActivity.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,29 +25,37 @@
  * SOFTWARE.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+package it.italiancoders.mybudget.activity
 
-buildscript {
-    ext.kotlin_version = '1.3.41'
-    repositories {
-        google()
-        jcenter()
-        
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.2'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
-}
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 
-allprojects {
-    repositories {
-        google()
-        jcenter()
-        
-    }
-}
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+/**
+ * @author fattazzo
+ *         <p/>
+ *         date: 01/07/19
+ */
+abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
+
+    /**
+     * Activity data binding
+     */
+    protected val binding: T by lazy {
+        val bind = DataBindingUtil.setContentView<T>(this, getLayoutResID())
+        bind.lifecycleOwner = this
+        bind
+    }
+
+    /**
+     * Activity layout ID
+     * @return activity layout ID
+     */
+    protected abstract fun getLayoutResID(): Int
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
 }

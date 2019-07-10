@@ -1,6 +1,6 @@
 <!--
   ~ Project: mybudget2-mobile-android
-  ~ File: styles.xml
+  ~ File: login_header_insert.xml
   ~
   ~ Created by fattazzo
   ~ Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,10 +25,10 @@
   ~ SOFTWARE.
   -->
 
-<resources>
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-    </style>
-</resources>
+<vector android:height="12dp" android:viewportHeight="11.830755"
+    android:viewportWidth="68.56836" android:width="69dp" xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillAlpha="1" android:fillColor="#3c3b44"
+        android:fillType="nonZero"
+        android:pathData="M0,11.8308H38.9756C49.4556,11.8308 59.7196,7.7272 68.5684,0H0v11.8308"
+        android:strokeColor="#00000000" android:strokeWidth="0.03527778"/>
+</vector>

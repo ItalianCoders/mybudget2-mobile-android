@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: build
+ * File: AppConstants.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,29 +25,17 @@
  * SOFTWARE.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+package it.italiancoders.mybudget.activity
 
-buildscript {
-    ext.kotlin_version = '1.3.41'
-    repositories {
-        google()
-        jcenter()
-        
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.2'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
-}
+/**
+ * General app constants.
+ *
+ * @author fattazzo
+ *         <p/>
+ *         date: 08/07/19
+ *
+ */
+object AppConstants {
 
-allprojects {
-    repositories {
-        google()
-        jcenter()
-        
-    }
-}
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
+    const val PRIVACY_POLICY_URL = "https://raw.githubusercontent.com/wiki/ItalianCoders/myBudget-mobile-android/privacy/privacy_policy.pdf"
 }

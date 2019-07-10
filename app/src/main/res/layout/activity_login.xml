@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Project: mybudget2-mobile-android
+  ~ File: activity_login.xml
+  ~
+  ~ Created by fattazzo
+  ~ Copyright © 2019 Gianluca Fattarsi. All rights reserved.
+  ~
+  ~ MIT License
+  ~ Permission is hereby granted, free of charge, to any person obtaining a copy
+  ~ of this software and associated documentation files (the "Software"), to deal
+  ~ in the Software without restriction, including without limitation the rights
+  ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  ~ copies of the Software, and to permit persons to whom the Software is
+  ~ furnished to do so, subject to the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be included in all
+  ~ copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  ~ SOFTWARE.
+  -->
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable name="viewModel"
+                  type="it.italiancoders.mybudget.activity.login.LoginViewModel"/>
+        <import type="it.italiancoders.mybudget.activity.login.LoginValidationRules"/>
+        <import type="it.italiancoders.mybudget.activity.utils.BooleanSafeUnboxConversions"/>
+
+    </data>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical"
+            tools:context=".activity.login.LoginActivity">
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="69dp"
+                      android:id="@+id/headerContainer"
+                      android:orientation="vertical">
+            <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    app:srcCompat="@drawable/login_header"
+                    android:id="@+id/headerIV"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:scaleType="fitXY"
+                    tools:ignore="ContentDescription"/>
+
+            <ImageView
+                    android:layout_width="150dp"
+                    android:layout_height="25dp"
+                    app:srcCompat="@drawable/login_header_insert"
+                    android:id="@+id/headerInsertIV"
+                    android:scaleType="fitXY"
+                    android:layout_marginTop="4dp"
+                    tools:ignore="ContentDescription"/>
+
+
+        </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="0dp"
+                          android:layout_weight="1"
+                          android:gravity="center_vertical"
+                          android:orientation="vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/usernameLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        app:errorEnabled="false"
+                        app:validation="@{LoginValidationRules.USERNAME}"
+                        app:errorMsg='@{@string/error_username_invalid}'>
+
+                    <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/usernameET"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/login_username_hint"
+                            android:text="@={viewModel.username}"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/passwordLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        app:errorEnabled="false"
+                        app:validation="@{LoginValidationRules.PASSWORD}"
+                        app:errorMsg='@{@{@string/error_password_invalid}}'>
+
+                    <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/passwordET"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/login_password_hint"
+                            android:inputType="textPassword"
+                            android:text="@={viewModel.password}"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                        android:id="@+id/privacyPolicyContainer"
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@{BooleanSafeUnboxConversions.unbox(viewModel.policyAccepted) ? @drawable/box_round_green : @drawable/box_round_empty}"
+                        android:layout_gravity="center_horizontal">
+                    <CheckBox
+                            android:layout_gravity="center_vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/checkBox"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:checked="@={BooleanSafeUnboxConversions.unbox(viewModel.policyAccepted)}"
+                            android:layout_weight="1"/>
+                    <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/privacy_policy"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginEnd="16dp"
+                            android:drawableStart="@drawable/ic_privacy_policy"
+                            android:drawablePadding="12dp"
+                            android:background="@null"
+                            android:id="@+id/privacyPolicyButton"
+                            android:onClick="showPrivacyPolicy"
+                            android:layout_weight="1"/>
+
+                </LinearLayout>
+
+
+                <FrameLayout android:id="@+id/signInButton"
+                             android:layout_width="300dp"
+                             android:layout_height="50dp"
+                             android:background="@{safeUnbox(viewModel.dataValid) ? @drawable/box_round_green : @drawable/box_round_gray}"
+                             android:layout_marginTop="24dp"
+                             android:clickable="@{safeUnbox(viewModel.dataValid)}"
+                             android:layout_gravity="center_horizontal"
+                             android:focusable="true"
+                             android:onClick="login"
+                             android:elevation="4dp"
+                             android:layout_margin="8dp">
+
+                    <TextView android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:id="@+id/signInText"
+                              android:text="@string/login_sign_in"
+                              android:layout_gravity="center"
+                              android:textAppearance="@style/TextAppearance.Large"
+                              android:textColor="@android:color/white"/>
+
+                    <ProgressBar android:layout_width="30dp"
+                                 android:layout_height="30dp"
+                                 android:id="@+id/progressBar"
+                                 android:layout_gravity="center"
+                                 android:visibility="invisible"
+                                 android:indeterminateTint="@android:color/white"/>
+
+                </FrameLayout>
+
+            </LinearLayout>
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="69dp"
+                      android:id="@+id/footerContainer"
+                      android:orientation="vertical">
+            <ImageView
+                    android:layout_width="150dp"
+                    android:layout_height="25dp"
+                    app:srcCompat="@drawable/login_header_insert"
+                    android:id="@+id/footerInsertIV"
+                    android:rotation="180"
+                    android:scaleType="fitXY"
+                    android:layout_gravity="end"
+                    android:layout_marginBottom="4dp"
+                    tools:ignore="ContentDescription"/>
+
+            <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    app:srcCompat="@drawable/login_header"
+                    android:id="@+id/footerIV"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:scaleType="fitXY"
+                    android:rotation="180"
+                    tools:ignore="ContentDescription"/>
+        </LinearLayout>
+    </LinearLayout>
+</layout>

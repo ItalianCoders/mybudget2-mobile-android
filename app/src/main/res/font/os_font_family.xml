@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Project: mybudget2-mobile-android
-  ~ File: colors.xml
+  ~ File: os_font_family.xml
   ~
   ~ Created by fattazzo
   ~ Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -26,13 +26,30 @@
   ~ SOFTWARE.
   -->
 
-<resources>
-    <color name="primaryColor">#43a047</color>
-    <color name="primaryLightColor">#75d27a</color>
-    <color name="primaryDarkColor">#00701a</color>
+<font-family xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <color name="primaryTextColor">#000000</color>
-    <color name="primaryTextColorInverted">#ffffff</color>
+    <!-- regular -->
+    <font android:fontStyle="normal"
+          android:font="@font/os_regular"
 
-    <color name="disabled">#818181</color>
-</resources>
+          app:fontStyle="normal"
+          app:font="@font/os_regular"/>
+
+    <!-- italic -->
+    <font android:fontStyle="italic"
+          android:font="@font/os_regular"
+
+          app:fontStyle="italic"
+          app:font="@font/os_regular"/>
+
+    <!-- bold -->
+    <font android:fontStyle="normal"
+          android:fontWeight="700"
+          android:font="@font/os_bold"
+
+          app:fontStyle="normal"
+          app:fontWeight="700"
+          app:font="@font/os_bold"/>
+
+</font-family>

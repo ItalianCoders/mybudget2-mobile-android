@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Project: mybudget2-mobile-android
-  ~ File: colors.xml
+  ~ File: slide_in_right.xml
   ~
   ~ Created by fattazzo
   ~ Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -26,13 +26,7 @@
   ~ SOFTWARE.
   -->
 
-<resources>
-    <color name="primaryColor">#43a047</color>
-    <color name="primaryLightColor">#75d27a</color>
-    <color name="primaryDarkColor">#00701a</color>
-
-    <color name="primaryTextColor">#000000</color>
-    <color name="primaryTextColorInverted">#ffffff</color>
-
-    <color name="disabled">#818181</color>
-</resources>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <translate android:fromXDelta="100%p" android:toXDelta="0"
+               android:duration="@android:integer/config_mediumAnimTime"/>
+</set>

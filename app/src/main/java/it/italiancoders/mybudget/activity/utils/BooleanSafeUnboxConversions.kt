@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: build
+ * File: BooleanSafeUnboxConversions.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,29 +25,21 @@
  * SOFTWARE.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+package it.italiancoders.mybudget.activity.utils
 
-buildscript {
-    ext.kotlin_version = '1.3.41'
-    repositories {
-        google()
-        jcenter()
-        
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.2'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
-}
+import androidx.annotation.Nullable
+import androidx.databinding.InverseMethod
 
-allprojects {
-    repositories {
-        google()
-        jcenter()
-        
-    }
-}
+object BooleanSafeUnboxConversions {
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+    @JvmStatic
+    @InverseMethod("box")
+    fun unbox(@Nullable b: java.lang.Boolean?): Boolean {
+        return b != null && b.booleanValue()
+    }
+
+    @JvmStatic
+    fun box(b: Boolean): Boolean? {
+        return if (b) java.lang.Boolean.TRUE else java.lang.Boolean.FALSE
+    }
 }

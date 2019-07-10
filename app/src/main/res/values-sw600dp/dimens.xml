@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Project: mybudget2-mobile-android
-  ~ File: colors.xml
+  ~ File: dimens.xml
   ~
   ~ Created by fattazzo
   ~ Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -27,12 +27,8 @@
   -->
 
 <resources>
-    <color name="primaryColor">#43a047</color>
-    <color name="primaryLightColor">#75d27a</color>
-    <color name="primaryDarkColor">#00701a</color>
-
-    <color name="primaryTextColor">#000000</color>
-    <color name="primaryTextColorInverted">#ffffff</color>
-
-    <color name="disabled">#818181</color>
+    <dimen name="font_size_small">16sp</dimen>
+    <dimen name="font_size_medium">20sp</dimen>
+    <dimen name="font_size_large">30sp</dimen>
+    <dimen name="font_size_big">40sp</dimen>
 </resources>

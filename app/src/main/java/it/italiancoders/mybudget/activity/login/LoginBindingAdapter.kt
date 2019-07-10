@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: build
+ * File: LoginBindingAdapter.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,29 +25,39 @@
  * SOFTWARE.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+package it.italiancoders.mybudget.activity.login
 
-buildscript {
-    ext.kotlin_version = '1.3.41'
-    repositories {
-        google()
-        jcenter()
-        
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.2'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
-}
+import android.text.Editable
+import android.text.TextWatcher
+import androidx.databinding.BindingAdapter
+import com.google.android.material.textfield.TextInputLayout
 
-allprojects {
-    repositories {
-        google()
-        jcenter()
-        
-    }
-}
+/**
+ * @author fattazzo
+ *         <p/>
+ *         date: 10/07/19
+ */
+object LoginBindingAdapter {
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+    @JvmStatic
+    @BindingAdapter("app:validation", "app:errorMsg")
+    fun setErrorEnable(textInputLayout: TextInputLayout, stringRule: LoginValidationRules.Rule, errorMsg: String) {
+        textInputLayout.editText?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+
+            }
+
+            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+
+            }
+
+            override fun afterTextChanged(editable: Editable) {
+                if (stringRule.isValid(textInputLayout.editText?.text)) {
+                    textInputLayout.editText?.error = null
+                } else {
+                    textInputLayout.editText?.error = errorMsg
+                }
+            }
+        })
+    }
 }

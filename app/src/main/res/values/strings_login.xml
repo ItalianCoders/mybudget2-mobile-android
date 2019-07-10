@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Project: mybudget2-mobile-android
-  ~ File: colors.xml
+  ~ File: strings_login.xml
   ~
   ~ Created by fattazzo
   ~ Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -27,12 +27,13 @@
   -->
 
 <resources>
-    <color name="primaryColor">#43a047</color>
-    <color name="primaryLightColor">#75d27a</color>
-    <color name="primaryDarkColor">#00701a</color>
+    <string name="login_activity_title">Login</string>
 
-    <color name="primaryTextColor">#000000</color>
-    <color name="primaryTextColorInverted">#ffffff</color>
+    <string name="login_sign_in">Sign In</string>
 
-    <color name="disabled">#818181</color>
+    <string name="login_username_hint">Username</string>
+    <string name="login_password_hint">Password</string>
+
+    <string name="error_password_invalid">La password deve avere minimo 8 caratteri e contenere almeno una maiuscola e un numero</string>
+    <string name="error_username_invalid">L\'username deve avere minimo 8 caratteri</string>
 </resources>
