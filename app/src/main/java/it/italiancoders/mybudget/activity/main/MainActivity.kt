@@ -36,7 +36,7 @@ import androidx.core.view.GravityCompat
 import com.google.android.material.navigation.NavigationView
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.activity.BaseActivity
-import it.italiancoders.mybudget.activity.login.LoginActivity
+import it.italiancoders.mybudget.activity.settings.SettingsActivity
 import it.italiancoders.mybudget.databinding.ActivityMainBinding
 
 class MainActivity : BaseActivity<ActivityMainBinding>(), NavigationView.OnNavigationItemSelectedListener {
@@ -84,27 +84,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), NavigationView.OnNavig
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        // Handle navigation view item clicks here.
         when (item.itemId) {
-            R.id.nav_home -> {
-                // Handle the camera action
+            R.id.nav_settings -> {
+                startActivity(Intent(this, SettingsActivity::class.java))
             }
-            R.id.nav_gallery -> {
-
-            }
-            R.id.nav_slideshow -> {
-
-            }
-            R.id.nav_tools -> {
-
-            }
-            R.id.nav_share -> {
-
-            }
-            R.id.nav_send -> {
-                startActivity(Intent(this, LoginActivity::class.java))
-
-            }
+            //R.id.nav_send -> {
+            //    startActivity(Intent(this, LoginActivity::class.java))
+            //}
         }
         binding.drawerLayout.closeDrawer(GravityCompat.START)
         return true

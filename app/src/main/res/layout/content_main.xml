@@ -33,7 +33,7 @@
     <ImageView android:id="@+id/logo"
                android:layout_width="wrap_content"
                android:layout_height="40dp"
-               android:src="@drawable/ic_menu_gallery"
+               android:src="@drawable/menu_settings"
                android:layout_centerHorizontal="true"/>
 
 

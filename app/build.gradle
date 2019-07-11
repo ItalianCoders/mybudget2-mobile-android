@@ -70,6 +70,7 @@ dependencies {
     implementation 'androidx.dynamicanimation:dynamicanimation-ktx:1.0.0-alpha02'
 
     // Databinding kotlin
+    implementation 'androidx.preference:preference:1.1.0-rc01'
     kapt "com.android.databinding:compiler:3.1.4"
 
 

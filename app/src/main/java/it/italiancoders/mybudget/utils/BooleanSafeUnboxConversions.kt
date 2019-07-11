@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: AppConstants.kt
+ * File: BooleanSafeUnboxConversions.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,17 +25,21 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget.activity
+package it.italiancoders.mybudget.utils
 
-/**
- * General app constants.
- *
- * @author fattazzo
- *         <p/>
- *         date: 08/07/19
- *
- */
-object AppConstants {
+import androidx.annotation.Nullable
+import androidx.databinding.InverseMethod
 
-    const val PRIVACY_POLICY_URL = "https://raw.githubusercontent.com/wiki/ItalianCoders/myBudget-mobile-android/privacy/privacy_policy.pdf"
+object BooleanSafeUnboxConversions {
+
+    @JvmStatic
+    @InverseMethod("box")
+    fun unbox(@Nullable b: java.lang.Boolean?): Boolean {
+        return b != null && b.booleanValue()
+    }
+
+    @JvmStatic
+    fun box(b: Boolean): Boolean? {
+        return if (b) java.lang.Boolean.TRUE else java.lang.Boolean.FALSE
+    }
 }

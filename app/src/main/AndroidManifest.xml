@@ -39,6 +39,10 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
         <activity
+                android:name=".activity.settings.SettingsActivity"
+                android:label="@string/activity_settings_title">
+        </activity>
+        <activity
                 android:name=".activity.login.LoginActivity"
                 android:label="@string/login_activity_title">
         </activity>

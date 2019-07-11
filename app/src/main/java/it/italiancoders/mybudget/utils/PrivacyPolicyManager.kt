@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: BooleanSafeUnboxConversions.kt
+ * File: PrivacyPolicyManager.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,21 +25,41 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget.activity.utils
+package it.italiancoders.mybudget.utils
 
-import androidx.annotation.Nullable
-import androidx.databinding.InverseMethod
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import it.italiancoders.mybudget.AppConstants
+import it.italiancoders.mybudget.R
 
-object BooleanSafeUnboxConversions {
+/**
+ * @author fattazzo
+ *         <p/>
+ *         date: 08/07/19
+ */
+object PrivacyPolicyManager {
 
-    @JvmStatic
-    @InverseMethod("box")
-    fun unbox(@Nullable b: java.lang.Boolean?): Boolean {
-        return b != null && b.booleanValue()
+    private const val PREF_NAME = "pref_privacy_policy"
+    private const val ACCEPTED_PREF_KEY = "privacy_policy_accepted"
+
+    fun showContent(context: Context) {
+        val browserIntent = Intent(Intent.ACTION_VIEW).apply {
+            setDataAndType(Uri.parse(AppConstants.PRIVACY_POLICY_URL), "application/pdf")
+        }
+
+        val chooser = Intent.createChooser(browserIntent, context.resources.getString(R.string.open_with)).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        }
+
+        context.startActivity(chooser)
     }
 
-    @JvmStatic
-    fun box(b: Boolean): Boolean? {
-        return if (b) java.lang.Boolean.TRUE else java.lang.Boolean.FALSE
+    fun isAccepted(context: Context): Boolean = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        .getBoolean(ACCEPTED_PREF_KEY, false)
+
+    fun markasAccepted(context: Context) {
+        context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+            .edit().putBoolean(ACCEPTED_PREF_KEY, true).apply()
     }
 }

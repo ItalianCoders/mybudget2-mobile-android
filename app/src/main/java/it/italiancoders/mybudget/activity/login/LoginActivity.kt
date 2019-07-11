@@ -36,8 +36,8 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.activity.BaseActivity
-import it.italiancoders.mybudget.activity.utils.PrivacyPolicyManager
 import it.italiancoders.mybudget.databinding.ActivityLoginBinding
+import it.italiancoders.mybudget.utils.PrivacyPolicyManager
 
 
 class LoginActivity : BaseActivity<ActivityLoginBinding>() {

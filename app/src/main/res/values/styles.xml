@@ -52,6 +52,10 @@
     <!-- Text -->
     <style name="TextAppearance" parent="@android:style/TextAppearance"/>
 
+    <style name="TextAppearance.Big" parent="@android:style/TextAppearance.Large">
+        <item name="android:textSize">@dimen/font_size_big</item>
+    </style>
+
     <style name="TextAppearance.Large" parent="@android:style/TextAppearance.Large">
         <item name="android:textSize">@dimen/font_size_large</item>
     </style>

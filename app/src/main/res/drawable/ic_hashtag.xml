@@ -1,6 +1,6 @@
 <!--
   ~ Project: mybudget2-mobile-android
-  ~ File: ic_menu_slideshow.xml
+  ~ File: ic_hashtag.xml
   ~
   ~ Created by fattazzo
   ~ Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -24,13 +24,6 @@
   ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
   ~ SOFTWARE.
   -->
-
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-        android:width="24dp"
-        android:height="24dp"
-        android:viewportWidth="24.0"
-        android:viewportHeight="24.0">
-    <path
-            android:fillColor="#FF000000"
-            android:pathData="M4,6H2v14c0,1.1 0.9,2 2,2h14v-2H4V6zm16,-4H8c-1.1,0 -2,0.9 -2,2v12c0,1.1 0.9,2 2,2h12c1.1,0 2,-0.9 2,-2V4c0,-1.1 -0.9,-2 -2,-2zm-8,12.5v-9l6,4.5 -6,4.5z"/>
+<vector android:height="24dp" android:viewportHeight="32" android:viewportWidth="32" android:width="24dp" xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillColor="#030104" android:pathData="M30 12V8h-5.004l1-8h-4l-1 8h-7.998l1-8h-4l-1 8H2v4h6.498L7.5 20H2v4h5l-1 8h4l1-8h8l-1.002 8H22l1-8h7v-4h-6.5l0.996-8H30zm-10.5 8h-8l0.998-8h7.998L19.5 20z"/>
 </vector>

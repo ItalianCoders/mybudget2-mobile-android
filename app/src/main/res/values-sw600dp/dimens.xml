@@ -31,4 +31,10 @@
     <dimen name="font_size_medium">20sp</dimen>
     <dimen name="font_size_large">30sp</dimen>
     <dimen name="font_size_big">40sp</dimen>
+
+    <!-- Login -->
+    <dimen name="login_header_footer_height">110dp</dimen>
+    <dimen name="login_header_footer_image_height">60dp</dimen>
+    <dimen name="login_header_footer_insert_image_height">40dp</dimen>
+    <dimen name="login_header_footer_insert_image_width">250dp</dimen>
 </resources>
