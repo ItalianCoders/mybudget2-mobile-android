@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: LoginValidationRules.kt
+ * File: AuthManager.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,37 +25,46 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget.activity.login
+package it.italiancoders.mybudget.manager
 
-import android.text.Editable
+import android.content.Context
+import com.beust.klaxon.Klaxon
+import it.italiancoders.mybudget.SessionData
+import it.italiancoders.mybudget.rest.models.Session
 
-object LoginValidationRules {
+/**
+ * @author fattazzo
+ *         <p/>
+ *         date: 16/07/19
+ */
+class AuthManager(val context: Context) {
 
-    @JvmStatic
-    var USERNAME: Rule = object : Rule {
-        override fun isValid(s: Editable?): Boolean {
-            // Check length
-            //return s?.toString().orEmpty().length >= 8
-            return s?.toString().orEmpty().length >= 3
+    fun getLastSession(): Session? {
 
+        val lastSessionJson = context.getSharedPreferences(AUTH_PREF_FILE, Context.MODE_PRIVATE).getString(
+            ACCESS_TOKEN_KEY, ""
+        )
+
+        return try {
+            Klaxon().parse<Session>(lastSessionJson!!)
+        } catch (e: Exception) {
+            null
         }
     }
 
-    @JvmStatic
-    var PASSWORD: Rule = object : Rule {
-        override fun isValid(s: Editable?): Boolean {
-            // Check if contains at least one upper case char
-            val upperCaseChar = """.*[A-Z].*""".toRegex().containsMatchIn(s?.toString().orEmpty())
-            // Check if contains at least one digit char
-            val digitChar = """.*[0-9].*""".toRegex().containsMatchIn(s?.toString().orEmpty())
-            // Check length
-            val length = s?.toString().orEmpty().length >= 8
-            //return length && upperCaseChar && digitChar
-            return s?.toString().orEmpty().length > 3
-        }
+    fun setSession(session: Session?) {
+
+        val sessionJson = Klaxon().toJsonString(session ?: "")
+
+        context.getSharedPreferences(AUTH_PREF_FILE, Context.MODE_PRIVATE).edit().putString(sessionJson, "")
+            .apply()
+        SessionData.session = session
     }
 
-    interface Rule {
-        fun isValid(s: Editable?): Boolean
+    companion object {
+
+        private const val AUTH_PREF_FILE = "auth_prefs"
+
+        private const val ACCESS_TOKEN_KEY = "accessToken"
     }
 }

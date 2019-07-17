@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: LoginValidationRules.kt
+ * File: SessionRestService.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,37 +25,38 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget.activity.login
+package it.italiancoders.mybudget.rest.api.services
 
-import android.text.Editable
+import it.italiancoders.mybudget.rest.models.LoginRequest
+import it.italiancoders.mybudget.rest.models.Session
+import retrofit2.Call
+import retrofit2.http.Body
+import retrofit2.http.POST
+import retrofit2.http.Path
 
-object LoginValidationRules {
 
-    @JvmStatic
-    var USERNAME: Rule = object : Rule {
-        override fun isValid(s: Editable?): Boolean {
-            // Check length
-            //return s?.toString().orEmpty().length >= 8
-            return s?.toString().orEmpty().length >= 3
+/**
+ * @author fattazzo
+ *         <p/>
+ *         date: 16/07/19
+ */
+interface SessionRestService {
 
-        }
-    }
+    /**
+     * Obtain AccessToken, RefreshToken and the user session
+     *
+     * @param loginRequest The login request data
+     * @return The session object
+     */
+    @POST("session")
+    fun login(@Body loginRequest: LoginRequest): Call<Session>
 
-    @JvmStatic
-    var PASSWORD: Rule = object : Rule {
-        override fun isValid(s: Editable?): Boolean {
-            // Check if contains at least one upper case char
-            val upperCaseChar = """.*[A-Z].*""".toRegex().containsMatchIn(s?.toString().orEmpty())
-            // Check if contains at least one digit char
-            val digitChar = """.*[0-9].*""".toRegex().containsMatchIn(s?.toString().orEmpty())
-            // Check length
-            val length = s?.toString().orEmpty().length >= 8
-            //return length && upperCaseChar && digitChar
-            return s?.toString().orEmpty().length > 3
-        }
-    }
-
-    interface Rule {
-        fun isValid(s: Editable?): Boolean
-    }
+    /**
+     * Obtain a new AccessToken and user session using RefreshToken
+     *
+     * @param refreshToken The refresh token
+     * @return The session object
+     */
+    @POST("session/refresh/{refreshToken}")
+    fun refresh(@Path("refreshToken") refreshToken: String): Call<Session>
 }

@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: LoginValidationRules.kt
+ * File: UserRole.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,37 +25,33 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget.activity.login
+package it.italiancoders.mybudget.rest.models
 
-import android.text.Editable
+/**
+ * Gets or Sets UserRole
+ */
+enum class UserRole private constructor(val value: String) {
 
-object LoginValidationRules {
+    VIEW_BUDGET("VIEW_BUDGET"),
 
-    @JvmStatic
-    var USERNAME: Rule = object : Rule {
-        override fun isValid(s: Editable?): Boolean {
-            // Check length
-            //return s?.toString().orEmpty().length >= 8
-            return s?.toString().orEmpty().length >= 3
+    DELETE_EXPENSE("DELETE_EXPENSE"),
 
-        }
+    ADD_EXPENSE("ADD_EXPENSE");
+
+    override fun toString(): String {
+        return value
     }
 
-    @JvmStatic
-    var PASSWORD: Rule = object : Rule {
-        override fun isValid(s: Editable?): Boolean {
-            // Check if contains at least one upper case char
-            val upperCaseChar = """.*[A-Z].*""".toRegex().containsMatchIn(s?.toString().orEmpty())
-            // Check if contains at least one digit char
-            val digitChar = """.*[0-9].*""".toRegex().containsMatchIn(s?.toString().orEmpty())
-            // Check length
-            val length = s?.toString().orEmpty().length >= 8
-            //return length && upperCaseChar && digitChar
-            return s?.toString().orEmpty().length > 3
-        }
-    }
+    companion object {
 
-    interface Rule {
-        fun isValid(s: Editable?): Boolean
+        fun fromValue(value: String): UserRole {
+            for (b in UserRole.values()) {
+                if (b.value == value) {
+                    return b
+                }
+            }
+            throw IllegalArgumentException("Unexpected value '$value'")
+        }
     }
 }
+

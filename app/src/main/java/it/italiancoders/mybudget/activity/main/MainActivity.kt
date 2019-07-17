@@ -36,6 +36,7 @@ import androidx.core.view.GravityCompat
 import com.google.android.material.navigation.NavigationView
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.activity.BaseActivity
+import it.italiancoders.mybudget.activity.login.LoginActivity
 import it.italiancoders.mybudget.activity.settings.SettingsActivity
 import it.italiancoders.mybudget.databinding.ActivityMainBinding
 
@@ -57,6 +58,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), NavigationView.OnNavig
         toggle.syncState()
 
         binding.navView.setNavigationItemSelectedListener(this)
+
+        //if (SessionData.session == null) {
+            startActivity(Intent(this, LoginActivity::class.java))
+        //}
     }
 
     override fun onBackPressed() {

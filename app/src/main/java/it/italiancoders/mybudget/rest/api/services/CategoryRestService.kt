@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: AppConstants.kt
+ * File: CategoryRestService.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,20 +25,59 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget
+package it.italiancoders.mybudget.rest.api.services
+
+import it.italiancoders.mybudget.rest.models.Category
+import retrofit2.Call
+import retrofit2.http.*
 
 /**
- * General app constants.
- *
  * @author fattazzo
  *         <p/>
- *         date: 08/07/19
- *
+ *         date: 16/07/19
  */
-object AppConstants {
+interface CategoryRestService {
 
-    const val REST_API_BASE_URL = "https://mybudgetfin.herokuapp.com/public/v1/"
+    /**
+     * Create a new category
+     *
+     * @param category The category to create
+     * @return The Category object created
+     */
+    @POST("/categories")
+    fun create(@Body category: Category): Call<Category>
 
-    const val PRIVACY_POLICY_URL =
-        "https://raw.githubusercontent.com/wiki/ItalianCoders/myBudget-mobile-android/privacy/privacy_policy.pdf"
+    /**
+     * Obtain the categories to use to perform new movement
+     *
+     * @return All categories loaded
+     */
+    @GET("/categories")
+    fun loadAll(): Call<List<Category>>
+
+    /**
+     * Obtain the categoriy to use to perform new movement
+     *
+     * @param id category id to load
+     * @return The category loaded
+     */
+    @GET("/categories/{id}")
+    fun load(@Path("id") id: Int): Call<Category>
+
+    /**
+     * Update an existing category
+     *
+     * @param id id to update
+     * @param category new Category data
+     */
+    @PUT("/categories/{id}")
+    fun update(@Path("id") id: Int, @Body category: Category)
+
+    /**
+     * Delete an existing category
+     *
+     * @param category id to delete
+     */
+    @DELETE("/categories/{id}")
+    fun delete(@Path("id") id: Int)
 }

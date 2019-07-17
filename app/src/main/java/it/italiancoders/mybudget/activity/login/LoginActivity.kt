@@ -32,17 +32,16 @@ import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.activity.BaseActivity
 import it.italiancoders.mybudget.databinding.ActivityLoginBinding
+import it.italiancoders.mybudget.manager.rest.SessionManager
 import it.italiancoders.mybudget.utils.PrivacyPolicyManager
+import java.util.*
 
 
 class LoginActivity : BaseActivity<ActivityLoginBinding>() {
-
-    //private lateinit var model: LoginViewModel
 
     override fun getLayoutResID(): Int = R.layout.activity_login
 
@@ -53,7 +52,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
         //supportActionBar?.setDisplayHomeAsUpEnabled(true)
         //supportActionBar?.setDisplayShowHomeEnabled(true)
 
-        //model = ViewModelProviders.of(this).get(LoginViewModel::class.java)
         binding.viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
 
         // Animate header and footer slide in
@@ -69,19 +67,16 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
 
     fun login(view: View) {
         if (isLoginDataValid()) {
-            Toast.makeText(this, "OK", Toast.LENGTH_SHORT).show()
-        } else {
-            Toast.makeText(this, "NO", Toast.LENGTH_SHORT).show()
+            animateLoginButton()
+
+            val username = binding.usernameET.text.toString()
+            val password = binding.passwordET.text.toString()
+            val locale = Locale.getDefault().language
+            val successAction = { this@LoginActivity.finish() }
+            val failureAction = { this@LoginActivity.recreate() }
+
+            SessionManager(this).login(username, password, locale, successAction, failureAction)
         }
-
-        /**
-        animateLoginButton()
-
-        Handler().postDelayed({
-        Toast.makeText(this, "OK", Toast.LENGTH_SHORT).show()
-        this.recreate()
-        }, 2000)
-         **/
     }
 
     fun showPrivacyPolicy(view: View) {

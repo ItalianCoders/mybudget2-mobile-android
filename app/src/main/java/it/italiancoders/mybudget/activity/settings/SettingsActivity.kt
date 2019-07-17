@@ -33,6 +33,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import com.crashlytics.android.Crashlytics
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.utils.PrivacyPolicyManager
 
@@ -69,7 +70,9 @@ class SettingsActivity : AppCompatActivity() {
                     0
                 ).versionName
             } catch (ex: PackageManager.NameNotFoundException) {
-                Log.e("Preferences", ex.message)
+                Crashlytics.logException(ex)
+                Log.e("Preferences", ex.message.orEmpty())
+                prefVersion?.summary = "Nd."
             }
         }
 

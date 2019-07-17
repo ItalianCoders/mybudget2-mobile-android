@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: LoginValidationRules.kt
+ * File: ErrorResponse.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,37 +25,52 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget.activity.login
+package it.italiancoders.mybudget.rest.models
 
-import android.text.Editable
+import java.io.Serializable
+import java.util.*
 
-object LoginValidationRules {
+/**
+ * ErrorResponse
+ */
+class ErrorResponse : Serializable {
 
-    @JvmStatic
-    var USERNAME: Rule = object : Rule {
-        override fun isValid(s: Editable?): Boolean {
-            // Check length
-            //return s?.toString().orEmpty().length >= 8
-            return s?.toString().orEmpty().length >= 3
+    var error: ErrorData? = null
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
         }
+        if (other == null || javaClass != other.javaClass) {
+            return false
+        }
+        val errorResponse = other as ErrorResponse?
+        return this.error == errorResponse!!.error
     }
 
-    @JvmStatic
-    var PASSWORD: Rule = object : Rule {
-        override fun isValid(s: Editable?): Boolean {
-            // Check if contains at least one upper case char
-            val upperCaseChar = """.*[A-Z].*""".toRegex().containsMatchIn(s?.toString().orEmpty())
-            // Check if contains at least one digit char
-            val digitChar = """.*[0-9].*""".toRegex().containsMatchIn(s?.toString().orEmpty())
-            // Check length
-            val length = s?.toString().orEmpty().length >= 8
-            //return length && upperCaseChar && digitChar
-            return s?.toString().orEmpty().length > 3
-        }
+    override fun hashCode(): Int {
+        return Objects.hash(error)
     }
 
-    interface Rule {
-        fun isValid(s: Editable?): Boolean
+    override fun toString(): String {
+        val sb = StringBuilder()
+        sb.append("class ErrorResponse {\n")
+
+        sb.append("    error: ").append(toIndentedString(error)).append("\n")
+        sb.append("}")
+        return sb.toString()
+    }
+
+    /**
+     * Convert the given object to string with each line indented by 4 spaces
+     * (except the first line).
+     */
+    private fun toIndentedString(o: Any?): String {
+        return o?.toString()?.replace("\n", "\n    ") ?: "null"
+    }
+
+    companion object {
+        private const val serialVersionUID = 1L
     }
 }
+
