@@ -28,7 +28,7 @@
 package it.italiancoders.mybudget.rest.api.services
 
 import it.italiancoders.mybudget.rest.models.Category
-import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.*
 
 /**
@@ -44,25 +44,25 @@ interface CategoryRestService {
      * @param category The category to create
      * @return The Category object created
      */
-    @POST("/categories")
-    fun create(@Body category: Category): Call<Category>
+    @POST("categories")
+    suspend fun create(@Body category: Category): Response<Category>
 
     /**
      * Obtain the categories to use to perform new movement
      *
      * @return All categories loaded
      */
-    @GET("/categories")
-    fun loadAll(): Call<List<Category>>
+    @GET("categories")
+    suspend fun loadAll(): Response<List<Category>>
 
     /**
-     * Obtain the categoriy to use to perform new movement
+     * Obtain the category to use to perform new movement
      *
      * @param id category id to load
      * @return The category loaded
      */
-    @GET("/categories/{id}")
-    fun load(@Path("id") id: Int): Call<Category>
+    @GET("categories/{id}")
+    suspend fun load(@Path("id") id: Int): Response<Category>
 
     /**
      * Update an existing category
@@ -70,14 +70,14 @@ interface CategoryRestService {
      * @param id id to update
      * @param category new Category data
      */
-    @PUT("/categories/{id}")
-    fun update(@Path("id") id: Int, @Body category: Category)
+    @PUT("categories/{id}")
+    suspend fun update(@Path("id") id: Int, @Body category: Category): Response<Void>
 
     /**
      * Delete an existing category
      *
      * @param category id to delete
      */
-    @DELETE("/categories/{id}")
-    fun delete(@Path("id") id: Int)
+    @DELETE("categories/{id}")
+    suspend fun delete(@Path("id") id: Int): Response<Void>
 }

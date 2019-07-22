@@ -29,22 +29,25 @@ package it.italiancoders.mybudget.activity.main
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import com.google.android.material.navigation.NavigationView
 import it.italiancoders.mybudget.R
+import it.italiancoders.mybudget.SessionData
 import it.italiancoders.mybudget.activity.BaseActivity
+import it.italiancoders.mybudget.activity.categories.CategoriesActivity
 import it.italiancoders.mybudget.activity.login.LoginActivity
 import it.italiancoders.mybudget.activity.settings.SettingsActivity
 import it.italiancoders.mybudget.databinding.ActivityMainBinding
+import kotlinx.android.synthetic.main.content_main.view.*
 
 class MainActivity : BaseActivity<ActivityMainBinding>(), NavigationView.OnNavigationItemSelectedListener {
 
     override fun getLayoutResID(): Int = R.layout.activity_main
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
 
         setSupportActionBar(binding.toolbar)
@@ -59,9 +62,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), NavigationView.OnNavig
 
         binding.navView.setNavigationItemSelectedListener(this)
 
-        //if (SessionData.session == null) {
+        if (SessionData.session == null) {
             startActivity(Intent(this, LoginActivity::class.java))
-        //}
+        }
+
+        binding.contentMain.sign_in.setOnClickListener { startActivity(Intent(this, LoginActivity::class.java)) }
     }
 
     override fun onBackPressed() {
@@ -72,30 +77,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), NavigationView.OnNavig
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.main, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_settings -> {
                 startActivity(Intent(this, SettingsActivity::class.java))
             }
-            //R.id.nav_send -> {
-            //    startActivity(Intent(this, LoginActivity::class.java))
-            //}
+            R.id.nav_categories -> {
+                startActivity(Intent(this, CategoriesActivity::class.java))
+            }
         }
         binding.drawerLayout.closeDrawer(GravityCompat.START)
         return true

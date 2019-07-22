@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: AppConstants.kt
+ * File: CategoriesViewModel.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,21 +25,18 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget
+package it.italiancoders.mybudget.activity.categories
+
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import it.italiancoders.mybudget.rest.models.Category
 
 /**
- * General app constants.
- *
  * @author fattazzo
  *         <p/>
- *         date: 08/07/19
- *
+ *         date: 18/07/19
  */
-object AppConstants {
+class CategoriesViewModel : ViewModel() {
 
-    const val REST_API_BASE_URL_PUBLIC = "https://mybudgetfin.herokuapp.com/public/v1/"
-    const val REST_API_BASE_URL = "https://mybudgetfin.herokuapp.com/v1/"
-
-    const val PRIVACY_POLICY_URL =
-        "https://raw.githubusercontent.com/wiki/ItalianCoders/myBudget-mobile-android/privacy/privacy_policy.pdf"
+    val categories = MutableLiveData<List<Category>>().apply { postValue(listOf()) }
 }

@@ -30,8 +30,11 @@
       xmlns:tools="http://schemas.android.com/tools"
       tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
-
+    <group>
+        <item
+                android:id="@+id/nav_categories"
+                android:icon="@drawable/menu_categories"
+                android:title="@string/categories_activity_title"/>
     </group>
 
     <item android:title="@string/nav_other_section">

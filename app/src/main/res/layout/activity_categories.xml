@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Project: mybudget2-mobile-android
+  ~ File: activity_categories.xml
+  ~
+  ~ Created by fattazzo
+  ~ Copyright © 2019 Gianluca Fattarsi. All rights reserved.
+  ~
+  ~ MIT License
+  ~ Permission is hereby granted, free of charge, to any person obtaining a copy
+  ~ of this software and associated documentation files (the "Software"), to deal
+  ~ in the Software without restriction, including without limitation the rights
+  ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  ~ copies of the Software, and to permit persons to whom the Software is
+  ~ furnished to do so, subject to the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be included in all
+  ~ copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  ~ SOFTWARE.
+  -->
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+    <data>
+    </data>
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            tools:context=".activity.categories.CategoriesActivity">
+
+        <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appBar"
+                android:fitsSystemWindows="true"
+                android:layout_height="@dimen/app_bar_height"
+                app:theme="@style/AppTheme.AppBarOverlay"
+                app:elevation="0dp"
+                android:layout_width="match_parent"
+        >
+
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                    android:id="@+id/toolbarLayout"
+                    android:fitsSystemWindows="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:toolbarId="@+id/toolbar"
+                    app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                    app:contentScrim="?attr/colorPrimary">
+
+                <ImageView
+                        android:id="@+id/categoriesImage"
+                        android:layout_width="@dimen/categories_header_icon_size"
+                        android:layout_height="@dimen/categories_header_icon_size"
+                        android:src="@drawable/ic_categories"
+                        android:scaleType="centerInside"
+                        android:layout_gravity="top|end"
+                        android:padding="8dp"
+                        app:layout_collapseMode="pin"
+                        tools:ignore="ContentDescription"/>
+
+                <androidx.appcompat.widget.Toolbar
+                        android:id="@+id/toolbar"
+                        android:layout_height="?attr/actionBarSize"
+                        android:layout_width="match_parent"
+                        app:popupTheme="@style/AppTheme.AppBarOverlay"
+                        app:layout_collapseMode="pin">
+
+                </androidx.appcompat.widget.Toolbar>
+
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <include layout="@layout/content_categories"
+                 android:id="@+id/contentLayout"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/fab_margin"
+                app:layout_anchor="@id/appBar"
+                app:layout_anchorGravity="bottom|end"
+                app:srcCompat="@drawable/ic_add"/>
+
+        <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/arc_shape"
+                app:layout_anchor="@id/appBar"
+                app:layout_anchorGravity="bottom"
+                android:layout_gravity="bottom"/>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

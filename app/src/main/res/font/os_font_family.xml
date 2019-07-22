@@ -38,10 +38,10 @@
 
     <!-- italic -->
     <font android:fontStyle="italic"
-          android:font="@font/os_regular"
+          android:font="@font/os_regular_italic"
 
           app:fontStyle="italic"
-          app:font="@font/os_regular"/>
+          app:font="@font/os_regular_italic"/>
 
     <!-- bold -->
     <font android:fontStyle="normal"

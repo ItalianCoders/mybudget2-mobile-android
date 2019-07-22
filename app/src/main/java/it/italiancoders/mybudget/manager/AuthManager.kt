@@ -37,7 +37,7 @@ import it.italiancoders.mybudget.rest.models.Session
  *         <p/>
  *         date: 16/07/19
  */
-class AuthManager(val context: Context) {
+class AuthManager(private val context: Context) {
 
     fun getLastSession(): Session? {
 
@@ -56,7 +56,7 @@ class AuthManager(val context: Context) {
 
         val sessionJson = Klaxon().toJsonString(session ?: "")
 
-        context.getSharedPreferences(AUTH_PREF_FILE, Context.MODE_PRIVATE).edit().putString(sessionJson, "")
+        context.getSharedPreferences(AUTH_PREF_FILE, Context.MODE_PRIVATE).edit().putString(ACCESS_TOKEN_KEY, sessionJson)
             .apply()
         SessionData.session = session
     }

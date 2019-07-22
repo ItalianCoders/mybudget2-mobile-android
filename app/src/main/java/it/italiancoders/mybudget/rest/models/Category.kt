@@ -44,6 +44,10 @@ class Category : Serializable {
 
     var isIsReadOnly: Boolean? = null
 
+    init {
+        isIsReadOnly = false
+    }
+
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {

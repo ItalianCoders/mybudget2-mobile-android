@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: SessionManager.kt
+ * File: AbstractRestManager.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,15 +25,10 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget.manager.rest
+package it.italiancoders.mybudget.manager
 
 import android.content.Context
 import android.widget.Toast
-import it.italiancoders.mybudget.manager.AuthManager
-import it.italiancoders.mybudget.rest.api.RetrofitBuilder
-import it.italiancoders.mybudget.rest.api.services.SessionRestService
-import it.italiancoders.mybudget.rest.models.LoginRequest
-import it.italiancoders.mybudget.rest.models.Session
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -41,31 +36,45 @@ import retrofit2.Response
 /**
  * @author fattazzo
  *         <p/>
- *         date: 17/07/19
+ *         date: 22/07/19
  */
-class SessionManager(val context: Context) {
+abstract class AbstractRestManager(protected val context: Context) {
 
-    fun login(username: String, password: String, locale: String, onSuccessAction: ()->Unit, onFailureAction: ()->Unit) {
-
-        val loginRequest = LoginRequest(username, username, locale)
-
-        val sessionService = RetrofitBuilder.client.create(SessionRestService::class.java)
-        sessionService.login(loginRequest).enqueue(object : Callback<Session> {
-            override fun onResponse(call: Call<Session>, response: Response<Session>) {
+    protected fun <T> enqueueRequest(call: Call<T>, onSuccessAction: (T?) -> Unit, onFailureAction: () -> Unit) {
+        call.enqueue(object : Callback<T> {
+            override fun onResponse(call: Call<T>, response: Response<T>) {
 
                 if (response.isSuccessful) {
-                    AuthManager(context).setSession(response.body())
-                    onSuccessAction.invoke()
+                    onSuccessAction.invoke(response.body())
                 } else {
-                    Toast.makeText(context, "ERRORE!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "ERRORE! ${response.message()}", Toast.LENGTH_SHORT).show()
                     onFailureAction.invoke()
                 }
             }
 
-            override fun onFailure(call: Call<Session>?, t: Throwable?) {
+            override fun onFailure(call: Call<T>?, t: Throwable?) {
                 Toast.makeText(context, "ERRORE!!", Toast.LENGTH_SHORT).show()
                 onFailureAction.invoke()
             }
         })
+    }
+
+    protected fun <T> processResponse(
+        response: Response<T>,
+        onSuccessAction: ((T?) -> Unit)?,
+        onFailureAction: (() -> Unit?)?
+    ) {
+        try {
+            if (response.isSuccessful) {
+                onSuccessAction?.invoke(response.body())
+            } else {
+                Toast.makeText(context, "ERRORE! ${response.message()}", Toast.LENGTH_SHORT).show()
+                onFailureAction?.invoke()
+            }
+        } catch (e: Exception) {
+            Toast.makeText(context, "ERRORE!!", Toast.LENGTH_SHORT).show()
+            onFailureAction?.invoke()
+        }
+
     }
 }

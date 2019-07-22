@@ -27,6 +27,8 @@
 
 package it.italiancoders.mybudget.rest.api
 
+import android.content.Context
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import it.italiancoders.mybudget.AppConstants
 import it.italiancoders.mybudget.SessionData
 import okhttp3.OkHttpClient
@@ -37,7 +39,7 @@ import java.util.concurrent.TimeUnit
 object RetrofitBuilder {
 
     val client: Retrofit by lazy {
-        Retrofit.Builder().client(httpClientBuilder.build()).baseUrl(AppConstants.REST_API_BASE_URL)
+        Retrofit.Builder().client(httpClientBuilder.build()).baseUrl(AppConstants.REST_API_BASE_URL_PUBLIC)
             .addConverterFactory(GsonConverterFactory.create()).build()
     }
 
@@ -47,18 +49,23 @@ object RetrofitBuilder {
             TimeUnit.SECONDS
         ).readTimeout(50, TimeUnit.SECONDS)
 
-    fun getSecureClient(): Retrofit {
+    fun getSecureClient(context: Context): Retrofit {
 
         val httpClient = httpClientBuilder
         httpClient.addInterceptor { chain ->
             val request = chain.request().newBuilder()
-                .addHeader("x-auth-token", SessionData.session?.accessToken.orEmpty())
+                .addHeader(
+                    "x-access-token",
+                    SessionData.session?.accessToken.orEmpty()
+                )
                 .addHeader("Accept-Language", SessionData.session?.locale.orEmpty())
                 .build()
             chain.proceed(request)
         }
+        httpClient.addInterceptor(RefreshTokenInterceptor(context))
 
         return Retrofit.Builder().client(httpClient.build()).baseUrl(AppConstants.REST_API_BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create()).build()
+            .addConverterFactory(GsonConverterFactory.create()).addCallAdapterFactory(CoroutineCallAdapterFactory())
+            .build()
     }
 }

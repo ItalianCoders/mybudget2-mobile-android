@@ -37,7 +37,7 @@ android {
     compileSdkVersion 29
     defaultConfig {
         applicationId "it.italiancoders.mybudget"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -68,10 +68,13 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
     //implementation 'androidx.core:core-ktx:1.0.2'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.google.android.material:material:1.1.0-alpha08'
     implementation 'androidx.recyclerview:recyclerview:1.1.0-beta01'
     implementation "androidx.annotation:annotation:1.1.0"
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta2'
+
+    // Downgrade to 1.0.0 for layout preview errors in design editor ( see toolbar in activity_categories.xml )
+    // https://stackoverflow.com/questions/56083927/android-studio-xml-preview-not-showing
+    implementation 'com.google.android.material:material:1.0.0'
 
     // Physics based animation
     implementation 'androidx.dynamicanimation:dynamicanimation-ktx:1.0.0-alpha02'
@@ -88,10 +91,15 @@ dependencies {
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.6.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.6.0'
+    implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2'
 
-    // klaxon: json hendler
+    // klaxon: json handler
     implementation 'com.beust:klaxon:5.0.1'
 
+    // Material Dialogs
+    // https://github.com/afollestad/material-dialogs
+    implementation 'com.afollestad.material-dialogs:core:3.1.0'
+    implementation 'com.afollestad.material-dialogs:bottomsheets:3.1.0'
 
     // Test ------------------------------------------
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0-alpha02'

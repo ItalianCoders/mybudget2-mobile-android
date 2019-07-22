@@ -35,4 +35,6 @@
     <color name="primaryTextColorInverted">#ffffff</color>
 
     <color name="disabled">#818181</color>
+
+    <color name="item_separator">#C7C4C4</color>
 </resources>

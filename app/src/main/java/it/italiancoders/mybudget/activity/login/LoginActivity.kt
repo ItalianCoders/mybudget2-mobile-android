@@ -36,7 +36,8 @@ import androidx.lifecycle.ViewModelProviders
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.activity.BaseActivity
 import it.italiancoders.mybudget.databinding.ActivityLoginBinding
-import it.italiancoders.mybudget.manager.rest.SessionManager
+import it.italiancoders.mybudget.manager.SessionManager
+import it.italiancoders.mybudget.rest.models.Session
 import it.italiancoders.mybudget.utils.PrivacyPolicyManager
 import java.util.*
 
@@ -72,10 +73,11 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
             val username = binding.usernameET.text.toString()
             val password = binding.passwordET.text.toString()
             val locale = Locale.getDefault().language
-            val successAction = { this@LoginActivity.finish() }
+            val successAction: (Session?) -> Unit = { this@LoginActivity.finish() }
             val failureAction = { this@LoginActivity.recreate() }
 
-            SessionManager(this).login(username, password, locale, successAction, failureAction)
+            SessionManager(this)
+                .login(username, password, locale, successAction, failureAction)
         }
     }
 

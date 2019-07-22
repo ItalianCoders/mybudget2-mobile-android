@@ -45,7 +45,7 @@ interface MovementRestService {
      * @param movement The Movement to create
      * @return The Movement object created
      */
-    @POST("/movements")
+    @POST("movements")
     fun create(@Body movement: Movement): Call<Movement>
 
     /**
@@ -56,7 +56,7 @@ interface MovementRestService {
      * @param sort The fields to sort (example sort=field1,desc&sort=field2,asc)
      * @return The paged Movement list object
      */
-    @GET("/movements")
+    @GET("movements")
     fun query(@Query("page") page: Int, @Query("size") size: Int, @Query("sort") sort: Array<String>?): Call<MovementListPage>
 
     /**
@@ -65,7 +65,7 @@ interface MovementRestService {
      * @param id movement id to load
      * @return The Movement loaded
      */
-    @GET("/movements/{id}")
+    @GET("movements/{id}")
     fun load(@Path("id") id: Int): Call<Movement>
 
     /**
@@ -74,7 +74,7 @@ interface MovementRestService {
      * @param id movement id to update
      * @param movement new Movement data
      */
-    @PUT("/movements/{id}")
+    @PUT("movements/{id}")
     fun update(@Path("id") id: Int, @Body movement: Movement)
 
     /**
@@ -82,6 +82,6 @@ interface MovementRestService {
      *
      * @param id movement id to delete
      */
-    @DELETE("/movements/{id}")
+    @DELETE("movements/{id}")
     fun delete(@Path("id") id: Int)
 }

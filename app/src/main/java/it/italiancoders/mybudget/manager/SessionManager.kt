@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: AppConstants.kt
+ * File: SessionManager.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,21 +25,37 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget
+package it.italiancoders.mybudget.manager
+
+import android.content.Context
+import it.italiancoders.mybudget.rest.api.RetrofitBuilder
+import it.italiancoders.mybudget.rest.api.services.SessionRestService
+import it.italiancoders.mybudget.rest.models.LoginRequest
+import it.italiancoders.mybudget.rest.models.Session
 
 /**
- * General app constants.
- *
  * @author fattazzo
  *         <p/>
- *         date: 08/07/19
- *
+ *         date: 17/07/19
  */
-object AppConstants {
+class SessionManager(context: Context) : AbstractRestManager(context) {
 
-    const val REST_API_BASE_URL_PUBLIC = "https://mybudgetfin.herokuapp.com/public/v1/"
-    const val REST_API_BASE_URL = "https://mybudgetfin.herokuapp.com/v1/"
+    fun login(
+        username: String,
+        password: String,
+        locale: String,
+        onSuccessAction: (Session?) -> Unit,
+        onFailureAction: () -> Unit
+    ) {
 
-    const val PRIVACY_POLICY_URL =
-        "https://raw.githubusercontent.com/wiki/ItalianCoders/myBudget-mobile-android/privacy/privacy_policy.pdf"
+        val loginRequest = LoginRequest(username, password, locale)
+
+        val sessionService = RetrofitBuilder.client.create(SessionRestService::class.java)
+
+        val loginOnSuccessAction: (Session?) -> Unit = {
+            onSuccessAction.invoke(it)
+        }
+
+        enqueueRequest(sessionService.login(loginRequest), loginOnSuccessAction, onFailureAction)
+    }
 }
