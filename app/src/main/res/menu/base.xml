@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Project: mybudget2-mobile-android
-  ~ File: colors.xml
+  ~ File: base.xml
   ~
   ~ Created by fattazzo
   ~ Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -26,17 +26,14 @@
   ~ SOFTWARE.
   -->
 
-<resources>
-    <color name="primaryColor">#43A047</color>
-    <color name="primaryLightColor">#75d27a</color>
-    <color name="primaryDarkColor">#00701a</color>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <color name="primaryTextColor">#000000</color>
-    <color name="primaryTextColorInverted">#ffffff</color>
+    <item
+            android:id="@+id/action_network_offline"
+            android:orderInCategory="200"
+            android:title="@string/add"
+            app:showAsAction="ifRoom"
+            android:icon="@drawable/ic_signal_cellular_off"/>
 
-    <color name="disabled">#818181</color>
-
-    <color name="item_separator">#C7C4C4</color>
-
-    <color name="light_gray">#DBD9D9</color>
-</resources>
+</menu>

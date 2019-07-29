@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: SessionData.kt
+ * File: MyBudgetApplication.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -27,17 +27,11 @@
 
 package it.italiancoders.mybudget
 
-import androidx.lifecycle.MutableLiveData
-import it.italiancoders.mybudget.rest.models.Session
+import android.app.Application
 
 /**
  * @author fattazzo
  *         <p/>
  *         date: 16/07/19
  */
-object SessionData {
-
-    var session: Session? = null
-
-    var networkAvailable: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { true }
-}
+class MyBudgetApplication : Application()

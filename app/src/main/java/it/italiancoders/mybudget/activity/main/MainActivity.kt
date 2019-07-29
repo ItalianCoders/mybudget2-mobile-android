@@ -30,25 +30,47 @@ package it.italiancoders.mybudget.activity.main
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.navigation.NavigationView
+import com.whiteelephant.monthpicker.MonthPickerDialog
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.SessionData
 import it.italiancoders.mybudget.activity.BaseActivity
 import it.italiancoders.mybudget.activity.categories.CategoriesActivity
 import it.italiancoders.mybudget.activity.login.LoginActivity
+import it.italiancoders.mybudget.activity.main.chart.CategoryPieChartManager
+import it.italiancoders.mybudget.activity.main.view.lastmovements.LastMovementsView
 import it.italiancoders.mybudget.activity.settings.SettingsActivity
 import it.italiancoders.mybudget.databinding.ActivityMainBinding
-import kotlinx.android.synthetic.main.content_main.view.*
+import it.italiancoders.mybudget.manager.AuthManager
+import it.italiancoders.mybudget.manager.movements.MovementsManager
+import it.italiancoders.mybudget.utils.NetworkChecker
+
 
 class MainActivity : BaseActivity<ActivityMainBinding>(), NavigationView.OnNavigationItemSelectedListener {
 
+    private val movementsManager by lazy { MovementsManager(this) }
+
+    private var mBottomSheetBehavior: BottomSheetBehavior<LastMovementsView?>? = null
+
     override fun getLayoutResID(): Int = R.layout.activity_main
 
+    override fun getMenuItemsIconColor(): Int = android.R.color.black
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        SessionData.session = AuthManager(this.applicationContext).getLastSession()
+        NetworkChecker().isNetworkAvailable(this)
+
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
+
+        binding.model = ViewModelProviders.of(this).get(MainViewModel::class.java)
+        binding.contentMain.lastMovementsView.lifecycleOwner = this
 
         setSupportActionBar(binding.toolbar)
 
@@ -66,15 +88,42 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), NavigationView.OnNavig
             startActivity(Intent(this, LoginActivity::class.java))
         }
 
-        binding.contentMain.sign_in.setOnClickListener { startActivity(Intent(this, LoginActivity::class.java)) }
+        CategoryPieChartManager.configure(binding.contentMain.categoriesPieChart)
+        binding.model?.categoryOverview?.observe(this, Observer {
+            CategoryPieChartManager.setData(binding.contentMain.categoriesPieChart, it)
+        })
+
+        binding.model?.loadExpenseSummary(movementsManager)
+
+        binding.contentMain.lastMovementsButton.setOnClickListener {
+            mBottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+        }
+
+        initLastMovementsSlidingPanel()
     }
 
     override fun onBackPressed() {
-        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            binding.drawerLayout.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
+        when {
+            binding.drawerLayout.isDrawerOpen(GravityCompat.START) -> binding.drawerLayout.closeDrawer(GravityCompat.START)
+            mBottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED -> mBottomSheetBehavior?.state =
+                BottomSheetBehavior.STATE_COLLAPSED
+            else -> super.onBackPressed()
         }
+    }
+
+    fun changePeriod(view: View) {
+        mBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+
+        MonthPickerDialog.Builder(
+            this,
+            MonthPickerDialog.OnDateSetListener { selectedMonth, selectedYear ->
+                binding.model?.year?.postValue(selectedYear)
+                binding.model?.month?.postValue(selectedMonth)
+                binding.model?.loadExpenseSummary(movementsManager)
+            },
+            binding.model?.year?.value!!,
+            binding.model?.month?.value!!
+        ).build().show()
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -89,4 +138,17 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), NavigationView.OnNavig
         binding.drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
+
+    private fun initLastMovementsSlidingPanel() {
+        BottomSheetBehavior.from(binding.contentMain.lastMovementsView)?.let { bsb ->
+            bsb.state = BottomSheetBehavior.STATE_HIDDEN
+
+            binding.contentMain.lastMovementsButton.setOnClickListener {
+                bsb.state = BottomSheetBehavior.STATE_EXPANDED
+            }
+
+            mBottomSheetBehavior = bsb
+        }
+    }
+
 }

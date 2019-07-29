@@ -33,6 +33,7 @@
               android:padding="@dimen/fab_margin">
 
     <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/nameTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -41,10 +42,13 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/nameTextView"
                 android:maxLines="1"
+                android:inputType="text"
+                android:imeOptions="actionNext"
                 android:hint="@string/name"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/descriptionTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -53,6 +57,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/descriptionTextView"
                 android:maxLines="1"
+                android:inputType="text"
+                android:imeOptions="actionDone"
                 android:hint="@string/description"/>
     </com.google.android.material.textfield.TextInputLayout>
 </LinearLayout>

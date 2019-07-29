@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: Movement.kt
+ * File: AppDatabase.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,19 +25,45 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget.rest.models
+package it.italiancoders.mybudget.db
 
+import android.content.Context
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import it.italiancoders.mybudget.db.converter.BigDecimalConverter
+import it.italiancoders.mybudget.db.dao.CategoryDao
+import it.italiancoders.mybudget.db.dao.MovementDao
+import it.italiancoders.mybudget.db.entity.Category
 import it.italiancoders.mybudget.db.entity.Movement
-import java.math.BigDecimal
 
-/**
- * Movement
- */
-data class Movement(val id: Long?, val amount: BigDecimal, val category: Category, val executedAt: String) {
+@Database(
+    entities = [Category::class, Movement::class],
+    version = 2,
+    exportSchema = false
+)
+@TypeConverters(BigDecimalConverter::class)
+abstract class AppDatabase : RoomDatabase() {
 
-    constructor() : this(null, BigDecimal.ZERO, Category(), "")
+    abstract fun categoryDao(): CategoryDao
+    abstract fun movementDao(): MovementDao
 
-    fun toEntity(): Movement =
-        Movement(this@Movement.id!!, this@Movement.amount, this@Movement.category.toEntity(), this@Movement.executedAt)
+    companion object {
+
+        @Volatile
+        private var instance: AppDatabase? = null
+
+        private val LOCK = Any()
+
+        operator fun invoke(context: Context) = instance ?: synchronized(LOCK) {
+            instance ?: buildDatabase(context).also { instance = it }
+        }
+
+        private fun buildDatabase(context: Context) = Room.databaseBuilder(
+            context,
+            AppDatabase::class.java, "myBudget.db"
+            ).fallbackToDestructiveMigration()
+            .build()
+    }
 }
-

@@ -27,68 +27,17 @@
 
 package it.italiancoders.mybudget.rest.models
 
-import java.io.Serializable
-import java.util.*
+import it.italiancoders.mybudget.db.entity.Category
 
 /**
  * Category
  */
 
-class Category : Serializable {
+data class Category(val id: Long?, var name: String, var description: String, val isIsReadOnly: Boolean) {
 
-    var id: Long? = null
+    constructor() : this(null, "", "", false)
 
-    var name: String? = null
-
-    var description: String? = null
-
-    var isIsReadOnly: Boolean? = null
-
-    init {
-        isIsReadOnly = false
-    }
-
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-        if (other == null || javaClass != other.javaClass) {
-            return false
-        }
-        val category = other as Category?
-        return this.id == category!!.id &&
-                this.name == category.name &&
-                this.description == category.description &&
-                this.isIsReadOnly == category.isIsReadOnly
-    }
-
-    override fun hashCode(): Int {
-        return Objects.hash(id, name, description, isIsReadOnly)
-    }
-
-    override fun toString(): String {
-        val sb = StringBuilder()
-        sb.append("class Category {\n")
-
-        sb.append("    id: ").append(toIndentedString(id)).append("\n")
-        sb.append("    name: ").append(toIndentedString(name)).append("\n")
-        sb.append("    description: ").append(toIndentedString(description)).append("\n")
-        sb.append("    isReadOnly: ").append(toIndentedString(isIsReadOnly)).append("\n")
-        sb.append("}")
-        return sb.toString()
-    }
-
-    /**
-     * Convert the given object to string with each line indented by 4 spaces
-     * (except the first line).
-     */
-    private fun toIndentedString(o: Any?): String {
-        return o?.toString()?.replace("\n", "\n    ") ?: "null"
-    }
-
-    companion object {
-        private const val serialVersionUID = 1L
-    }
+    fun toEntity(): Category =
+        Category(this@Category.id!!, this@Category.name, this@Category.description, this@Category.isIsReadOnly)
 }
 

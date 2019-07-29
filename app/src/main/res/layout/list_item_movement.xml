@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Project: mybudget2-mobile-android
+  ~ File: list_item_movement.xml
+  ~
+  ~ Created by fattazzo
+  ~ Copyright © 2019 Gianluca Fattarsi. All rights reserved.
+  ~
+  ~ MIT License
+  ~ Permission is hereby granted, free of charge, to any person obtaining a copy
+  ~ of this software and associated documentation files (the "Software"), to deal
+  ~ in the Software without restriction, including without limitation the rights
+  ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  ~ copies of the Software, and to permit persons to whom the Software is
+  ~ furnished to do so, subject to the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be included in all
+  ~ copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  ~ SOFTWARE.
+  -->
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <import type="java.text.NumberFormat"/>
+        <variable
+                name="movement"
+                type="it.italiancoders.mybudget.rest.models.Movement"/>
+
+    </data>
+    <LinearLayout
+            xmlns:bind="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:id="@+id/rootLayout"
+            android:clickable="true"
+            android:focusable="true">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp">
+
+            <TextView
+                    android:id="@+id/nameTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="@{movement.category.name}"
+                    bind:layout_constraintEnd_toEndOf="parent"
+                    bind:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginStart="8dp"
+                    bind:layout_constraintStart_toStartOf="parent"
+                    android:textAppearance="@style/TextAppearance.Medium"
+                    android:textStyle="bold"/>
+
+            <TextView
+                    android:id="@+id/descriptionTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginTop="4dp"
+                    android:text="@{NumberFormat.getCurrencyInstance().format(movement.amount)}"
+                    bind:layout_constraintEnd_toEndOf="parent"
+                    bind:layout_constraintTop_toBottomOf="@+id/nameTextView"
+                    android:layout_marginStart="8dp"
+                    bind:layout_constraintStart_toStartOf="parent"
+                    android:textAppearance="@style/TextAppearance.Small"
+                    android:textStyle="italic"/>
+
+            <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@color/item_separator"
+                    bind:layout_constraintTop_toBottomOf="@+id/descriptionTextView"
+                    bind:layout_constraintStart_toStartOf="parent"
+                    bind:layout_constraintEnd_toEndOf="parent"/>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </LinearLayout>
+</layout>

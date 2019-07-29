@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: SessionData.kt
+ * File: CategoryMovementOverview.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -24,20 +24,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
-package it.italiancoders.mybudget
-
-import androidx.lifecycle.MutableLiveData
-import it.italiancoders.mybudget.rest.models.Session
+package it.italiancoders.mybudget.rest.models
 
 /**
- * @author fattazzo
- *         <p/>
- *         date: 16/07/19
+ *
+ * @param totalAmount
+ * @param category
  */
-object SessionData {
+data class CategoryMovementOverview(
+    val category: Category,
+    val totalAmount: Double? = null
+)
 
-    var session: Session? = null
-
-    var networkAvailable: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { true }
-}

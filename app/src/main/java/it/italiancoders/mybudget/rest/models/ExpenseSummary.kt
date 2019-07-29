@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: SessionData.kt
+ * File: ExpenseSummary.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,19 +25,40 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget
+package it.italiancoders.mybudget.rest.models
 
-import androidx.lifecycle.MutableLiveData
-import it.italiancoders.mybudget.rest.models.Session
 
 /**
- * @author fattazzo
- *         <p/>
- *         date: 16/07/19
+ *
+ * @param totalAmount
+ * @param categoryOverview
+ * @param lastMovements
  */
-object SessionData {
+data class ExpenseSummary(
+    val totalAmount: Double? = null,
+    val categoryOverview: Array<CategoryMovementOverview>?,
+    val lastMovements: Array<Movement>
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is ExpenseSummary) return false
 
-    var session: Session? = null
+        if (totalAmount != other.totalAmount) return false
+        if (categoryOverview != null) {
+            if (other.categoryOverview == null) return false
+            if (!categoryOverview.contentEquals(other.categoryOverview)) return false
+        } else if (other.categoryOverview != null) return false
+        if (!lastMovements.contentEquals(other.lastMovements)) return false
 
-    var networkAvailable: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { true }
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = totalAmount?.hashCode() ?: 0
+        result = 31 * result + (categoryOverview?.contentHashCode() ?: 0)
+        result = 31 * result + lastMovements.contentHashCode()
+        return result
+    }
+
 }
+

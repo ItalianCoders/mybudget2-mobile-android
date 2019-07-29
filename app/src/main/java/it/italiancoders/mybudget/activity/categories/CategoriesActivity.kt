@@ -40,14 +40,12 @@ import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.activity.BaseActivity
 import it.italiancoders.mybudget.activity.categories.edit.EditCategoryDialogBuilder
 import it.italiancoders.mybudget.databinding.ActivityCategoriesBinding
-import it.italiancoders.mybudget.manager.CategoriesManager
+import it.italiancoders.mybudget.manager.categories.CategoriesManager
 import it.italiancoders.mybudget.rest.models.Category
 import kotlinx.android.synthetic.main.content_categories.view.*
 
 
 class CategoriesActivity : BaseActivity<ActivityCategoriesBinding>() {
-
-    private lateinit var menu: Menu
 
     private val categoriesDataAdapter: CategoriesDataAdapter = CategoriesDataAdapter()
 
@@ -127,12 +125,12 @@ class CategoriesActivity : BaseActivity<ActivityCategoriesBinding>() {
                     categoriesViewModel.categories.postValue(it)
                     binding.contentLayout.swipeRefreshContainer.isRefreshing = false
                 },
-                { binding.contentLayout.swipeRefreshContainer.isRefreshing = false })
+                { binding.contentLayout.swipeRefreshContainer.isRefreshing = false },forceRefresh)
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        this.menu = menu
+        super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.categories, menu)
         hideOption(R.id.action_add)
         return true
@@ -148,13 +146,5 @@ class CategoriesActivity : BaseActivity<ActivityCategoriesBinding>() {
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    private fun hideOption(id: Int) {
-        menu.findItem(id).isVisible = false
-    }
-
-    private fun showOption(id: Int) {
-        menu.findItem(id).isVisible = true
     }
 }

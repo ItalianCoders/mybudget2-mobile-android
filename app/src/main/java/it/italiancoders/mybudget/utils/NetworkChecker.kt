@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: SessionData.kt
+ * File: NetworkChecker.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,19 +25,33 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget
+package it.italiancoders.mybudget.utils
 
-import androidx.lifecycle.MutableLiveData
-import it.italiancoders.mybudget.rest.models.Session
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import it.italiancoders.mybudget.SessionData
+
 
 /**
  * @author fattazzo
  *         <p/>
- *         date: 16/07/19
+ *         date: 23/07/19
  */
-object SessionData {
+class NetworkChecker {
 
-    var session: Session? = null
+    fun isNetworkAvailable(context: Context): Boolean {
+        val networkAvailable = try {
+            val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-    var networkAvailable: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { true }
+            val an = cm.activeNetwork
+            val capabilities = cm.getNetworkCapabilities(an)
+            capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) ?: false
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
+        SessionData.networkAvailable.value = networkAvailable
+        return networkAvailable
+    }
 }

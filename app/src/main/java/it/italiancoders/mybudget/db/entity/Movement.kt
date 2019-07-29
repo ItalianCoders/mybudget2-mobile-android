@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: SessionData.kt
+ * File: Movement.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,19 +25,31 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget
+package it.italiancoders.mybudget.db.entity
 
-import androidx.lifecycle.MutableLiveData
-import it.italiancoders.mybudget.rest.models.Session
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import it.italiancoders.mybudget.rest.models.Movement
+import java.math.BigDecimal
 
 /**
- * @author fattazzo
- *         <p/>
- *         date: 16/07/19
+ * Movement
  */
-object SessionData {
+@Entity(tableName = "movements")
+data class Movement(
+    @PrimaryKey val id: Long,
+    val amount: BigDecimal,
+    @Embedded(prefix = "category_") val category: Category,
+    val executedAt: String
+) {
 
-    var session: Session? = null
-
-    var networkAvailable: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { true }
+    fun toModel(): Movement =
+        Movement(
+            this@Movement.id,
+            this@Movement.amount,
+            this@Movement.category.toModel(),
+            this@Movement.executedAt
+        )
 }
+

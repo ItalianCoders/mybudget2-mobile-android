@@ -48,4 +48,16 @@
     <string name="name">Nome</string>
     <string name="description">Descrizione</string>
 
+    <string name="network_unavailable_dialog_title">Nessuna connessione disponibile</string>
+    <string name="network_unavailable_dialog_message">In questo momento sembra non essere disponibile nessuna
+        connessione internet.\n
+        Potrai comunque consultare tutte informazioni disponibili risalenti all\'ultima disponibile.
+        \n\n
+        Quando non vedrai più questo simbolo significherà che potrai utilizzare l\'applicazione online.
+    </string>
+
+    <string name="field_required">Richiesto</string>
+
+    <string name="last_movements">Ultimi movimenti</string>
+
 </resources>

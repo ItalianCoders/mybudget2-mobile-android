@@ -35,8 +35,10 @@ import com.afollestad.materialdialogs.bottomsheets.BottomSheet
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import it.italiancoders.mybudget.R
-import it.italiancoders.mybudget.manager.CategoriesManager
+import it.italiancoders.mybudget.SessionData
+import it.italiancoders.mybudget.manager.categories.CategoriesManager
 import it.italiancoders.mybudget.rest.models.Category
 
 /**
@@ -49,25 +51,26 @@ class EditCategoryDialogBuilder() {
     fun build(context: Context, category: Category = Category()): MaterialDialog {
 
         val dialog = MaterialDialog(context, BottomSheet(LayoutMode.WRAP_CONTENT))
+        dialog.noAutoDismiss()
 
         dialog.customView(R.layout.item_category)
-
-        dialog.cornerRadius(16f)
 
         // Icon and title
         dialog.icon(R.drawable.ic_categories)
         dialog.title(if (category.id == null) R.string.new_category else R.string.edit_category)
 
         // TextView
-        dialog.getCustomView().findViewById<TextInputEditText>(R.id.nameTextView).setText(category.name.orEmpty())
+        dialog.getCustomView().findViewById<TextInputEditText>(R.id.nameTextView).setText(category.name)
         dialog.getCustomView().findViewById<TextInputEditText>(R.id.descriptionTextView)
-            .setText(category.description.orEmpty())
+            .setText(category.description)
 
         // Buttons
-        dialog.positiveButton(R.string.save, click = getPositiveCallback(category))
-        // Add delete button only for existing and not readonly categories
-        if (category.id != null && category.isIsReadOnly == false) {
-            dialog.negativeButton(R.string.delete, click = getNegativeCallback(category))
+        if(SessionData.networkAvailable.value != false) {
+            dialog.positiveButton(R.string.save, click = getPositiveCallback(category))
+            // Add delete button only for existing and not readonly categories
+            if (category.id != null && !category.isIsReadOnly) {
+                dialog.negativeButton(R.string.delete, click = getNegativeCallback(category))
+            }
         }
 
         return dialog
@@ -81,6 +84,7 @@ class EditCategoryDialogBuilder() {
             override fun invoke(dialog: MaterialDialog) {
                 if (category.id != null)
                     CategoriesManager(dialog.context).delete(category.id!!.toInt())
+                dialog.dismiss()
             }
         }
     }
@@ -91,17 +95,40 @@ class EditCategoryDialogBuilder() {
     private fun getPositiveCallback(category: Category): DialogCallback {
         return object : DialogCallback {
             override fun invoke(dialog: MaterialDialog) {
-                category.name =
-                    dialog.getCustomView().findViewById<TextInputEditText>(R.id.nameTextView).text.toString()
-                category.description =
-                    dialog.getCustomView().findViewById<TextInputEditText>(R.id.descriptionTextView).text.toString()
 
-                if (category.id != null) {
-                    CategoriesManager(dialog.context).update(category.id!!.toInt(), category)
-                } else {
-                    CategoriesManager(dialog.context).create(category)
+                val nameTIL = dialog.getCustomView().findViewById<TextInputLayout>(R.id.nameTextInputLayout)
+                val descriptionTIL =
+                    dialog.getCustomView().findViewById<TextInputLayout>(R.id.descriptionTextInputLayout)
+                validateView(nameTIL, descriptionTIL)
+
+                if (nameTIL.editText?.error == null && descriptionTIL.editText?.error == null) {
+                    category.name = nameTIL.editText?.text.toString()
+                    category.description = descriptionTIL.editText?.text.toString()
+
+                    if (category.id != null) {
+                        CategoriesManager(dialog.context)
+                            .update(category.id.toInt(), category)
+                    } else {
+                        CategoriesManager(dialog.context).create(category)
+                    }
+                    dialog.dismiss()
                 }
             }
+        }
+    }
+
+    private fun validateView(nameTIL: TextInputLayout, descriptionTIL: TextInputLayout) {
+
+        if (nameTIL.editText?.text.isNullOrBlank()) {
+            nameTIL.editText?.error = nameTIL.context.getString(R.string.field_required)
+        } else {
+            nameTIL.editText?.error = null
+        }
+
+        if (descriptionTIL.editText?.text.isNullOrBlank()) {
+            descriptionTIL.editText?.error = descriptionTIL.context.getString(R.string.field_required)
+        } else {
+            descriptionTIL.editText?.error = null
         }
     }
 }

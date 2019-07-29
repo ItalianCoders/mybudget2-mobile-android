@@ -1,0 +1,3 @@
+finire launch screen
+validazioni nuova/modifica categoria
+catch exception su login se non esiste internet

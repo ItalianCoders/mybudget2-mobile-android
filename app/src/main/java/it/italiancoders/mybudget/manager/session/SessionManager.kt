@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: Application.kt
+ * File: SessionManager.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,21 +25,40 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget
+package it.italiancoders.mybudget.manager.session
 
-import android.app.Application
+import android.content.Context
+import it.italiancoders.mybudget.manager.AbstractRestManager
 import it.italiancoders.mybudget.manager.AuthManager
+import it.italiancoders.mybudget.rest.api.RetrofitBuilder
+import it.italiancoders.mybudget.rest.api.services.SessionRestService
+import it.italiancoders.mybudget.rest.models.LoginRequest
+import it.italiancoders.mybudget.rest.models.Session
 
 /**
  * @author fattazzo
  *         <p/>
- *         date: 16/07/19
+ *         date: 17/07/19
  */
-class Application : Application() {
+class SessionManager(context: Context) : AbstractRestManager(context) {
 
-    override fun onCreate() {
-        super.onCreate()
+    fun login(
+        username: String,
+        password: String,
+        locale: String,
+        onSuccessAction: (Session?) -> Unit,
+        onFailureAction: () -> Unit
+    ) {
 
-        SessionData.session = AuthManager(this.applicationContext).getLastSession()
+        val loginRequest = LoginRequest(username, password, locale)
+
+        val sessionService = RetrofitBuilder.client.create(SessionRestService::class.java)
+
+        val loginOnSuccessAction: (Session?) -> Unit = {
+            AuthManager(context).setSession(it)
+            onSuccessAction.invoke(it)
+        }
+
+        enqueueRequest(sessionService.login(loginRequest), loginOnSuccessAction, onFailureAction)
     }
 }

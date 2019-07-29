@@ -25,12 +25,15 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget.manager
+package it.italiancoders.mybudget.manager.categories
 
 import android.content.Context
+import it.italiancoders.mybudget.db.AppDatabase
+import it.italiancoders.mybudget.manager.AbstractRestManager
 import it.italiancoders.mybudget.rest.api.RetrofitBuilder
 import it.italiancoders.mybudget.rest.api.services.CategoryRestService
 import it.italiancoders.mybudget.rest.models.Category
+import it.italiancoders.mybudget.utils.NetworkChecker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -43,20 +46,44 @@ import kotlinx.coroutines.withContext
  */
 class CategoriesManager(context: Context) : AbstractRestManager(context) {
 
-    val categoriesService = RetrofitBuilder.getSecureClient(context).create(CategoryRestService::class.java)
+    private val categoriesService = RetrofitBuilder.getSecureClient(context).create(CategoryRestService::class.java)
 
-    fun loadAll(onSuccessAction: (List<Category>?) -> Unit, onFailureAction: () -> Unit) {
+    private val categoryDao = AppDatabase(context).categoryDao()
+
+    fun loadAll(onSuccessAction: (List<Category>?) -> Unit, onFailureAction: () -> Unit, forceReload: Boolean = false) {
+        val networkAvailable = NetworkChecker().isNetworkAvailable(context)
         CoroutineScope(Dispatchers.IO).launch {
-            val response = categoriesService.loadAll()
-            withContext(Dispatchers.Main) {
-                processResponse(response, onSuccessAction, onFailureAction)
+
+            val dbCategories = categoryDao.loadAll()
+
+            if (networkAvailable && (dbCategories.isNullOrEmpty() || forceReload)) {
+                val response = categoriesService.loadAll()
+                categoryDao.deleteAll()
+                withContext(Dispatchers.Main) {
+                    val onLoadAllSuccessAction: ((List<Category>?) -> Unit)? = { categoriesResponse ->
+                        onSuccessAction.invoke(categoriesResponse)
+                        CoroutineScope(Dispatchers.IO).launch {
+                            categoryDao.insertAll(*categoriesResponse.orEmpty().map { it.toEntity() }.toTypedArray())
+                        }
+                    }
+                    processResponse(response, onLoadAllSuccessAction, onFailureAction)
+                }
+            } else {
+                withContext(Dispatchers.Main) {
+                    onSuccessAction.invoke(dbCategories.map { it.toModel() })
+                }
             }
         }
     }
 
-    fun create(category: Category, onSuccessAction: ((Category?) -> Unit)? = null, onFailureAction: (() -> Unit)? = null) {
+    fun create(
+        category: Category,
+        onSuccessAction: ((Category?) -> Unit)? = null,
+        onFailureAction: (() -> Unit)? = null
+    ) {
         CoroutineScope(Dispatchers.IO).launch {
             val response = categoriesService.create(category)
+            categoryDao.deleteAll()
             withContext(Dispatchers.Main) {
                 processResponse(response, onSuccessAction, onFailureAction)
             }
@@ -72,9 +99,15 @@ class CategoriesManager(context: Context) : AbstractRestManager(context) {
         }
     }
 
-    fun update(id: Int, category: Category, onSuccessAction: ((Void?) -> Unit)? = null, onFailureAction: (() -> Unit)? = null) {
+    fun update(
+        id: Int,
+        category: Category,
+        onSuccessAction: ((Void?) -> Unit)? = null,
+        onFailureAction: (() -> Unit)? = null
+    ) {
         CoroutineScope(Dispatchers.IO).launch {
             val response = categoriesService.update(id, category)
+            categoryDao.insert(category.toEntity())
             withContext(Dispatchers.Main) {
                 processResponse(response, onSuccessAction, onFailureAction)
             }
@@ -84,6 +117,7 @@ class CategoriesManager(context: Context) : AbstractRestManager(context) {
     fun delete(id: Int, onSuccessAction: ((Void?) -> Unit)? = null, onFailureAction: (() -> Unit?)? = null) {
         CoroutineScope(Dispatchers.IO).launch {
             val response = categoriesService.delete(id)
+            categoryDao.delete(id.toLong())
             withContext(Dispatchers.Main) {
                 processResponse(response, onSuccessAction, onFailureAction)
             }

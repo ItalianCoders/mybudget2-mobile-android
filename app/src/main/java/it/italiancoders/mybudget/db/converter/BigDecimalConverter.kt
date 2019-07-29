@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: SessionData.kt
+ * File: BigDecimalConverter.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,19 +25,19 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget
+package it.italiancoders.mybudget.db.converter
 
-import androidx.lifecycle.MutableLiveData
-import it.italiancoders.mybudget.rest.models.Session
+import androidx.room.TypeConverter
 
-/**
- * @author fattazzo
- *         <p/>
- *         date: 16/07/19
- */
-object SessionData {
+import java.math.BigDecimal
 
-    var session: Session? = null
+class BigDecimalConverter {
 
-    var networkAvailable: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { true }
+    @TypeConverter
+    fun fromLong(value: Long?): BigDecimal? {
+        return if (value == null) null else BigDecimal(value).divide(BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP)
+    }
+
+    @TypeConverter
+    fun fromBigDecimal(value: BigDecimal?): Long? = value?.multiply(BigDecimal(100))?.longValueExact()
 }

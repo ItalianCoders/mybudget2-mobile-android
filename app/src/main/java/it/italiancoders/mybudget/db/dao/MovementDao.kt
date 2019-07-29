@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: SessionData.kt
+ * File: MovementDao.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,19 +25,31 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget
+package it.italiancoders.mybudget.db.dao
 
-import androidx.lifecycle.MutableLiveData
-import it.italiancoders.mybudget.rest.models.Session
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import it.italiancoders.mybudget.db.entity.Movement
 
 /**
  * @author fattazzo
  *         <p/>
- *         date: 16/07/19
+ *         date: 23/07/19
  */
-object SessionData {
+@Dao
+interface MovementDao {
 
-    var session: Session? = null
+    @Query("SELECT * from movements where executedAt like :dateFilter || '%' LIMIT :page,:size")
+    fun search(dateFilter: String, page: Int, size: Int): List<Movement>
 
-    var networkAvailable: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { true }
+    @Query("SELECT count(id) from movements where executedAt like :dateFilter || '%'")
+    fun count(dateFilter: String): Int
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAll(vararg movement: Movement)
+
+    @Query("DELETE FROM movements where executedAt like :dateFilter || '%'")
+    fun delete(dateFilter: String)
 }

@@ -34,7 +34,7 @@
 
     <item android:bottom="150dp"
             android:gravity="center"
-            android:drawable="@mipmap/ic_launcher_round"/>
+            android:drawable="@drawable/logo_splash"/>
 
     <item android:top="150dp" >
         <bitmap

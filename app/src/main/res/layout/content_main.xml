@@ -25,17 +25,152 @@
   ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
   ~ SOFTWARE.
   -->
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="java.text.NumberFormat"/>
+        <import type="android.text.format.DateUtils"/>
+        <import type="android.view.View"/>
+        <variable name="model"
+                  type="it.italiancoders.mybudget.activity.main.MainViewModel"/>
+    </data>
+    <FrameLayout
+            android:id="@+id/footer_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <RelativeLayout android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+            <RelativeLayout
+                    android:id="@+id/header_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_margin="4dp"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
+                    android:elevation="4dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="changePeriod"
+                    android:background="@color/primaryColor">
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/periodo_text_view"
+                          android:layout_alignParentTop="true"
+                          android:layout_alignParentStart="true"
+                          android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                          android:text="@{DateUtils.formatDateTime(context, model.periodDate.getTime(), DateUtils.FORMAT_SHOW_YEAR | DateUtils.FORMAT_NO_MONTH_DAY)}"
+                          android:textColor="@android:color/white"
+                          android:textStyle="bold"
+                          android:textAllCaps="true"/>
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/total_text_view"
+                          android:layout_alignParentTop="true"
+                          android:layout_alignParentEnd="true"
+                          android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                          android:text="@{NumberFormat.getCurrencyInstance().format(model.total)}"
+                          android:textColor="@android:color/white"
+                          android:textStyle="bold"/>
+            </RelativeLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/movement_chart_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_below="@+id/header_layout"
+                    android:layout_above="@+id/last_movements_button">
+
+                <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/categories_pie_chart"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <com.github.ybq.android.spinkit.SpinKitView
+                        android:id="@+id/loading_spin"
+                        style="@style/SpinKitView.Large.ThreeBounce"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="@{ model.loadingData ? View.VISIBLE : View.GONE}"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:SpinKit_Color="@color/primaryDarkColor"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <Button android:id="@+id/last_movements_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:background="@drawable/box_round_top_empty"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:elevation="4dp"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:textColor="@android:color/white"
+                    android:text="@string/last_movements"
+                    style="@android:style/Widget.Material.Light.Button.Borderless.Small"/>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/add_movement_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:elevation="4dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:src="@drawable/ic_add"
+                    android:layout_margin="@dimen/fab_margin"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentStart="true"/>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/add_scheduled_movement_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:elevation="4dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:src="@drawable/ic_time"
+                    android:layout_margin="@dimen/fab_margin"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentEnd="true"/>
+        </RelativeLayout>
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+            <it.italiancoders.mybudget.activity.main.view.lastmovements.LastMovementsView
+                    app:behavior_hideable="true"
+                    app:behavior_peekHeight="0dp"
+                    android:layout_marginTop="?attr/actionBarSize"
+                    app:behavior_skipCollapsed="true"
+                    app:model="@{model}"
+                    android:id="@+id/last_movements_view"
+                    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"/>
 
-    <Button android:id="@+id/sign_in"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="8dp"
-            android:layout_alignParentBottom="true"
-            android:textSize="18sp"
-            android:text="Login"/>
-</RelativeLayout>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    </FrameLayout>
+</layout>

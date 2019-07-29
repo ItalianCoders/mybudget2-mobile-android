@@ -46,7 +46,9 @@
         <!-- define activities transition animations -->
         <item name="android:windowAnimationStyle">@style/CustomActivityAnimation</item>
 
+        <!-- Material dialod -->
         <item name="md_color_title">@color/primaryColor</item>
+        <item name="md_corner_radius">16dp</item>
     </style>
 
     <!-- Splash screen theme -->

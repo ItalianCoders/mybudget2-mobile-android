@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: SessionData.kt
+ * File: Category.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,19 +25,18 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget
+package it.italiancoders.mybudget.db.entity
 
-import androidx.lifecycle.MutableLiveData
-import it.italiancoders.mybudget.rest.models.Session
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import it.italiancoders.mybudget.rest.models.Category
 
 /**
- * @author fattazzo
- *         <p/>
- *         date: 16/07/19
+ * Category
  */
-object SessionData {
+@Entity(tableName = "categories")
+data class Category(@PrimaryKey val id: Long, val name: String, val description: String, val isIsReadOnly: Boolean) {
 
-    var session: Session? = null
-
-    var networkAvailable: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { true }
+    fun toModel(): Category = Category(this@Category.id,this@Category.name,this@Category.description,this@Category.isIsReadOnly)
 }
+

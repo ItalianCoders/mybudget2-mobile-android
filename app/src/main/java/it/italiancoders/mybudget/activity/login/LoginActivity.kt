@@ -36,7 +36,7 @@ import androidx.lifecycle.ViewModelProviders
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.activity.BaseActivity
 import it.italiancoders.mybudget.databinding.ActivityLoginBinding
-import it.italiancoders.mybudget.manager.SessionManager
+import it.italiancoders.mybudget.manager.session.SessionManager
 import it.italiancoders.mybudget.rest.models.Session
 import it.italiancoders.mybudget.utils.PrivacyPolicyManager
 import java.util.*

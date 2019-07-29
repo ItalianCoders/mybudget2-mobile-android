@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: SessionManager.kt
+ * File: CategoryDao.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,37 +25,34 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget.manager
+package it.italiancoders.mybudget.db.dao
 
-import android.content.Context
-import it.italiancoders.mybudget.rest.api.RetrofitBuilder
-import it.italiancoders.mybudget.rest.api.services.SessionRestService
-import it.italiancoders.mybudget.rest.models.LoginRequest
-import it.italiancoders.mybudget.rest.models.Session
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import it.italiancoders.mybudget.db.entity.Category
 
 /**
  * @author fattazzo
  *         <p/>
- *         date: 17/07/19
+ *         date: 23/07/19
  */
-class SessionManager(context: Context) : AbstractRestManager(context) {
+@Dao
+interface CategoryDao {
 
-    fun login(
-        username: String,
-        password: String,
-        locale: String,
-        onSuccessAction: (Session?) -> Unit,
-        onFailureAction: () -> Unit
-    ) {
+    @Query("SELECT * from categories")
+    fun loadAll(): List<Category>
 
-        val loginRequest = LoginRequest(username, password, locale)
+    @Query("DELETE from categories")
+    fun deleteAll()
 
-        val sessionService = RetrofitBuilder.client.create(SessionRestService::class.java)
+    @Query("DELETE from categories where id = :id")
+    fun delete(id: Long)
 
-        val loginOnSuccessAction: (Session?) -> Unit = {
-            onSuccessAction.invoke(it)
-        }
+    @Insert
+    fun insertAll(vararg category: Category)
 
-        enqueueRequest(sessionService.login(loginRequest), loginOnSuccessAction, onFailureAction)
-    }
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(category: Category)
 }
