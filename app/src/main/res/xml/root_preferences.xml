@@ -39,6 +39,12 @@
             app:title="@string/settings_other_section">
 
         <Preference
+                android:icon="@drawable/ic_live_help"
+                android:key="@string/pref_key_tutorial"
+                android:title="@string/settings_tutorial_reset"
+                android:summary="@string/settings_tutorial_reset_summary"/>
+
+        <Preference
                 android:icon="@drawable/ic_privacy_policy"
                 android:key="@string/pref_key_privacy"
                 android:title="@string/privacy_policy"

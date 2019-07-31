@@ -29,11 +29,22 @@ package it.italiancoders.mybudget.rest.models
 
 import it.italiancoders.mybudget.db.entity.Movement
 import java.math.BigDecimal
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Movement
  */
 data class Movement(val id: Long?, val amount: BigDecimal, val category: Category, val executedAt: String) {
+
+    val executedAtDate: Date?
+        get() =
+            try {
+                SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault()).parse(executedAt)
+            } catch (e: Exception) {
+                null
+            }
+
 
     constructor() : this(null, BigDecimal.ZERO, Category(), "")
 

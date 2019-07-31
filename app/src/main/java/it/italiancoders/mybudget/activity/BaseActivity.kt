@@ -39,6 +39,7 @@ import androidx.lifecycle.Observer
 import com.afollestad.materialdialogs.MaterialDialog
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.SessionData
+import it.italiancoders.mybudget.tutorial.AbstractTutorialActivity
 
 
 /**
@@ -50,12 +51,14 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
 
     private var menu: Menu? = null
 
-    private val networkAvailabilityObserver  by lazy { Observer<Boolean> { syncNetworkStateOption() } }
+    private val networkAvailabilityObserver by lazy { Observer<Boolean> { syncNetworkStateOption() } }
+
+    private var tutorial: AbstractTutorialActivity<T>? = null
 
     /**
      * Activity data binding
      */
-    protected val binding: T by lazy {
+    val binding: T by lazy {
         val bind = DataBindingUtil.setContentView<T>(this, getLayoutResID())
         bind.lifecycleOwner = this
         bind
@@ -67,15 +70,32 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
      */
     protected abstract fun getLayoutResID(): Int
 
+    protected open fun createTutorial(): AbstractTutorialActivity<T>? = null
+
+    private fun getTutorial(): AbstractTutorialActivity<T>? {
+        if(tutorial == null) {
+            tutorial = createTutorial()
+        }
+        return tutorial
+    }
+
     /**
      * Tint color of all menu items icon
      */
-    open fun getMenuItemsIconColor() : Int = android.R.color.white
+    open fun getMenuItemsIconColor(): Int = android.R.color.white
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        SessionData.networkAvailable.observe(this,networkAvailabilityObserver)
+        SessionData.networkAvailable.observe(this, networkAvailabilityObserver)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (getTutorial() != null && getTutorial()!!.isNeverShow()) {
+            binding.root.post { getTutorial()?.start() }
+        }
     }
 
     override fun onDestroy() {

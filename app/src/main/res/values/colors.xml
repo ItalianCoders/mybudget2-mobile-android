@@ -39,4 +39,6 @@
     <color name="item_separator">#C7C4C4</color>
 
     <color name="light_gray">#DBD9D9</color>
+
+    <color name="black_70">#B3000000</color>
 </resources>

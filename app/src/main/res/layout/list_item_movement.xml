@@ -29,6 +29,8 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <import type="java.text.NumberFormat"/>
+        <import type="android.text.format.DateUtils"/>
+        <import type="java.text.DateFormat"/>
         <variable
                 name="movement"
                 type="it.italiancoders.mybudget.rest.models.Movement"/>
@@ -50,38 +52,44 @@
                 android:padding="8dp">
 
             <TextView
-                    android:id="@+id/nameTextView"
+                    android:id="@+id/category_text_view"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
                     android:text="@{movement.category.name}"
                     bind:layout_constraintEnd_toEndOf="parent"
                     bind:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginStart="8dp"
                     bind:layout_constraintStart_toStartOf="parent"
                     android:textAppearance="@style/TextAppearance.Medium"
                     android:textStyle="bold"/>
 
             <TextView
-                    android:id="@+id/descriptionTextView"
+                    android:id="@+id/execute_at_text_view"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
                     android:layout_marginTop="4dp"
-                    android:text="@{NumberFormat.getCurrencyInstance().format(movement.amount)}"
-                    bind:layout_constraintEnd_toEndOf="parent"
-                    bind:layout_constraintTop_toBottomOf="@+id/nameTextView"
-                    android:layout_marginStart="8dp"
+                    android:text="@{DateFormat.getDateTimeInstance().format(movement.executedAtDate)}"
+                    bind:layout_constraintEnd_toEndOf="@+id/amount_text_view"
+                    bind:layout_constraintTop_toBottomOf="@+id/category_text_view"
                     bind:layout_constraintStart_toStartOf="parent"
                     android:textAppearance="@style/TextAppearance.Small"
                     android:textStyle="italic"/>
+
+            <TextView
+                    android:id="@+id/amount_text_view"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@{NumberFormat.getCurrencyInstance().format(movement.amount)}"
+                    bind:layout_constraintEnd_toEndOf="parent"
+                    bind:layout_constraintTop_toBottomOf="@+id/category_text_view"
+                    android:textAppearance="@style/TextAppearance.Small"/>
 
             <View
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="4dp"
                     android:background="@color/item_separator"
-                    bind:layout_constraintTop_toBottomOf="@+id/descriptionTextView"
+                    bind:layout_constraintTop_toBottomOf="@+id/execute_at_text_view"
                     bind:layout_constraintStart_toStartOf="parent"
                     bind:layout_constraintEnd_toEndOf="parent"/>
 

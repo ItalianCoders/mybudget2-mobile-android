@@ -3,4 +3,4 @@ validazioni nuova/modifica categoria
 catch exception su login se non esiste internet
 finire last movements
 cache expense summary
-aggiungere https://github.com/TakuSemba/Spotlight per tutarial
+aggiungere per tutorial: categorie

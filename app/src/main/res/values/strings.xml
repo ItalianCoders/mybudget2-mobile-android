@@ -60,4 +60,6 @@
 
     <string name="last_movements">Ultimi movimenti</string>
 
+    <string name="reset_tutorial_complete_message">Il tutorial è di nuovo attivo. Chiudi le preferenze per visualizzarlo</string>
+
 </resources>

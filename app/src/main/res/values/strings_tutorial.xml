@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Project: mybudget2-mobile-android
-  ~ File: strings_settings.xml
+  ~ File: strings_tutorial.xml
   ~
   ~ Created by fattazzo
   ~ Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -28,18 +28,19 @@
 
 <resources>
 
-    <string name="activity_settings_title">Settings</string>
+    <!-- Period -->
+    <string name="tutorial_main_period_title">Periodo</string>
+    <string name="tutorial_main_period_description">Seleziona il periodo che desideri</string>
 
-    <string name="settings_global_section">Generali</string>
-    <string name="settings_other_section">Altro</string>
+    <!-- Add movements -->
+    <string name="tutorial_main_add_movements_title">Nuovi movimenti</string>
+    <string name="tutorial_main_add_movements_description">Aggiungi i nuovi movimenti di spesa</string>
 
-    <string name="settings_privacy_policy_summary">Visiona la privacy policy dell\'app</string>
+    <!-- Scheduled movements -->
+    <string name="tutorial_main_add_scheduled_movements_title">Movimenti programmati</string>
+    <string name="tutorial_main_add_scheduled_movements_description">Gestisci i movimenti che si\nripetono nel tempo</string>
 
-    <string name="settings_tutorial_reset">Reset tutorial</string>
-    <string name="settings_tutorial_reset_summary">Visualizza nuovamente il tutorial introduttivo nelle sezioni dell\'app</string>
-
-    <!-- Settings keys -->
-    <string name="pref_key_privacy">pref_key_privacy</string>
-    <string name="pref_key_version">pref_key_version</string>
-    <string name="pref_key_tutorial">pref_key_tutorial</string>
+    <!-- Last movements button -->
+    <string name="tutorial_main_last_movements_button_title">Ultimi movimenti</string>
+    <string name="tutorial_main_last_movements_button_description">Consulta gli ultimi movimenti che hai inserito</string>
 </resources>

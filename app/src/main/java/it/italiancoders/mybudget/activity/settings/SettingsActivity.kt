@@ -27,14 +27,18 @@
 
 package it.italiancoders.mybudget.activity.settings
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import com.afollestad.materialdialogs.MaterialDialog
 import com.crashlytics.android.Crashlytics
 import it.italiancoders.mybudget.R
+import it.italiancoders.mybudget.tutorial.AbstractTutorialActivity
 import it.italiancoders.mybudget.utils.PrivacyPolicyManager
 
 class SettingsActivity : AppCompatActivity() {
@@ -53,6 +57,7 @@ class SettingsActivity : AppCompatActivity() {
 
         private var prefKeyPrivacy: Preference? = null
         private var prefVersion: Preference? = null
+        private var prefResetTutorial: Preference? = null
 
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey)
@@ -63,6 +68,7 @@ class SettingsActivity : AppCompatActivity() {
 
             prefKeyPrivacy = findPreference(resources.getString(R.string.pref_key_privacy))
             prefVersion = findPreference(resources.getString(R.string.pref_key_version))
+            prefResetTutorial = findPreference(resources.getString(R.string.pref_key_tutorial))
 
             try {
                 prefVersion?.summary = this.context!!.packageManager.getPackageInfo(
@@ -76,11 +82,26 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
 
+        @SuppressLint("ApplySharedPref")
         override fun onPreferenceTreeClick(preference: Preference?): Boolean {
 
             context?.let {
-                if (preference?.key.orEmpty() == prefKeyPrivacy?.key.orEmpty()) {
-                    PrivacyPolicyManager.showContent(it)
+                when (preference?.key.orEmpty()) {
+                    prefKeyPrivacy?.key.orEmpty() -> PrivacyPolicyManager.showContent(it)
+                    prefResetTutorial?.key.orEmpty() -> {
+                        it.getSharedPreferences(AbstractTutorialActivity.TUTORIAL_PREF_FILE, Context.MODE_PRIVATE)
+                            .edit().clear().commit()
+                        MaterialDialog(it).show {
+                            title(R.string.settings_tutorial_reset)
+                            message(R.string.reset_tutorial_complete_message)
+                            icon(R.drawable.ic_live_help)
+                            cancelOnTouchOutside(true)
+                            cancelable(true)
+                        }
+                    }
+                    else -> {
+                        /** Non used **/
+                    }
                 }
             }
 

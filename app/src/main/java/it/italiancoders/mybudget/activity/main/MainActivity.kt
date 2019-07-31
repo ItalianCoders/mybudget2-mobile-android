@@ -49,6 +49,7 @@ import it.italiancoders.mybudget.activity.settings.SettingsActivity
 import it.italiancoders.mybudget.databinding.ActivityMainBinding
 import it.italiancoders.mybudget.manager.AuthManager
 import it.italiancoders.mybudget.manager.movements.MovementsManager
+import it.italiancoders.mybudget.tutorial.TutorialMainActivity
 import it.italiancoders.mybudget.utils.NetworkChecker
 
 
@@ -61,6 +62,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), NavigationView.OnNavig
     override fun getLayoutResID(): Int = R.layout.activity_main
 
     override fun getMenuItemsIconColor(): Int = android.R.color.black
+
+    override fun createTutorial() = TutorialMainActivity(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         SessionData.session = AuthManager(this.applicationContext).getLastSession()
