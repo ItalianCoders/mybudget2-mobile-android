@@ -66,7 +66,7 @@ class MainViewModel : ViewModel() {
         addSource(categoryOverview) { setValue(false) }
     }
 
-    fun loadExpenseSummary(movementsManager: MovementsManager) {
+    fun loadExpenseSummary(movementsManager: MovementsManager,forceReload: Boolean = false) {
         loadingData.value = true
 
         movementsManager.getExpenseSummary(
@@ -80,7 +80,8 @@ class MainViewModel : ViewModel() {
                 total.postValue(BigDecimal.ZERO)
                 categoryOverview.postValue(listOf())
                 lastMovements.postValue(listOf())
-            }
+            },
+            forceReload
         )
     }
 }

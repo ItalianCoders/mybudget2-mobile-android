@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Project: mybudget2-mobile-android
-  ~ File: activity_main_drawer.xml
+  ~ File: strings_movements.xml
   ~
   ~ Created by fattazzo
   ~ Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -26,28 +26,8 @@
   ~ SOFTWARE.
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:tools="http://schemas.android.com/tools"
-      tools:showIn="navigation_view">
+<resources>
+    <string name="activity_movements_title">Movimenti</string>
 
-    <group>
-        <item
-                android:id="@+id/nav_movements"
-                android:icon="@drawable/menu_movements"
-                android:title="@string/activity_movements_title"/>
-        <item
-                android:id="@+id/nav_categories"
-                android:icon="@drawable/menu_categories"
-                android:title="@string/categories_activity_title"/>
-    </group>
-
-    <item android:title="@string/nav_other_section">
-        <menu>
-            <item
-                    android:id="@+id/nav_settings"
-                    android:icon="@drawable/menu_settings"
-                    android:title="@string/activity_settings_title"/>
-        </menu>
-    </item>
-
-</menu>
+    <string name="movements_search_parameters_data_required">Anno e mese non validi</string>
+</resources>

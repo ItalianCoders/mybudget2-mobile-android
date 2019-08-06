@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: BooleanSafeUnboxConversions.kt
+ * File: ExpenseSummaryCache.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,21 +25,28 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget.utils
+package it.italiancoders.mybudget.cache
 
-import androidx.annotation.Nullable
-import androidx.databinding.InverseMethod
+import android.content.Context
+import it.italiancoders.mybudget.db.AppDatabase
+import it.italiancoders.mybudget.rest.models.ExpenseSummary
 
-object BooleanSafeUnboxConversions {
+/**
+ * @author fattazzo
+ *         <p/>
+ *         date: 01/08/19
+ */
+class ExpenseSummaryCache(private val context: Context) {
 
-    @JvmStatic
-    @InverseMethod("box")
-    fun unbox(@Nullable b: java.lang.Boolean?): Boolean {
-        return b != null && b.booleanValue()
+    private val expenseSummaryDao = AppDatabase(context).expenseSummaryDao()
+
+    fun get(year: Int, month: Int): ExpenseSummary? = expenseSummaryDao.search(year, month)?.toModel()
+
+    fun remove(year: Int, month: Int) {
+        expenseSummaryDao.delete(year, month)
     }
 
-    @JvmStatic
-    fun box(b: Boolean): Boolean? {
-        return if (b) java.lang.Boolean.TRUE else java.lang.Boolean.FALSE
+    fun add(expenseSummary: ExpenseSummary, year: Int, month: Int) {
+        expenseSummaryDao.insert(expenseSummary, year, month)
     }
 }

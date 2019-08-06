@@ -44,6 +44,7 @@
     <string name="add">Aggiungi</string>
     <string name="save">Salva</string>
     <string name="delete">Cancella</string>
+    <string name="refresh">Aggiorna</string>
 
     <string name="name">Nome</string>
     <string name="description">Descrizione</string>
@@ -61,5 +62,12 @@
     <string name="last_movements">Ultimi movimenti</string>
 
     <string name="reset_tutorial_complete_message">Il tutorial è di nuovo attivo. Chiudi le preferenze per visualizzarlo</string>
+
+    <string name="year">Anno</string>
+    <string name="month">Mese</string>
+    <string name="day">Giorno</string>
+
+    <string name="search">Search</string>
+    <string name="reset">Reimposta</string>
 
 </resources>

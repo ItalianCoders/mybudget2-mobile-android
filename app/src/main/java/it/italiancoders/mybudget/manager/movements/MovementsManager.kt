@@ -28,6 +28,7 @@
 package it.italiancoders.mybudget.manager.movements
 
 import android.content.Context
+import it.italiancoders.mybudget.cache.ExpenseSummaryCache
 import it.italiancoders.mybudget.cache.MovementCache
 import it.italiancoders.mybudget.manager.AbstractRestManager
 import it.italiancoders.mybudget.rest.api.RetrofitBuilder
@@ -50,6 +51,7 @@ class MovementsManager(context: Context) : AbstractRestManager(context) {
     private val movementService = RetrofitBuilder.getSecureClient(context).create(MovementRestService::class.java)
 
     private val movementCache = MovementCache(context)
+    private val expenseSummaryCache = ExpenseSummaryCache(context)
 
     fun search(
         parametri: ParametriRicerca,
@@ -96,14 +98,31 @@ class MovementsManager(context: Context) : AbstractRestManager(context) {
         month: Int,
         day: Int?,
         onSuccessAction: (ExpenseSummary?) -> Unit,
-        onFailureAction: () -> Unit
+        onFailureAction: () -> Unit,
+        forceReload: Boolean = false
     ) {
+        val networkAvailable = NetworkChecker().isNetworkAvailable(context)
         CoroutineScope(Dispatchers.IO).launch {
 
-            val response = movementService.getExpenseSummary(year, month, day)
+            val expenseSummary = expenseSummaryCache.get(year, month)
 
-            withContext(Dispatchers.Main) {
-                processResponse(response, onSuccessAction, onFailureAction)
+            if (networkAvailable && (expenseSummary == null || forceReload)) {
+                val response = movementService.getExpenseSummary(year, month, day)
+
+                expenseSummaryCache.remove(year, month)
+                val onLoadAllSuccessAction: ((ExpenseSummary?) -> Unit)? = { summary ->
+                    onSuccessAction.invoke(summary)
+                    summary?.let {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            expenseSummaryCache.add(it, year, month)
+                        }
+                    }
+                }
+                processResponse(response, onLoadAllSuccessAction, onFailureAction)
+            } else {
+                withContext(Dispatchers.Main) {
+                    onSuccessAction.invoke(expenseSummary)
+                }
             }
         }
     }

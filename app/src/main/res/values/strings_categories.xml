@@ -29,6 +29,7 @@
 <resources>
     <string name="categories_activity_title">Categorie</string>
 
+    <string name="category">Categoria</string>
     <string name="new_category">Nuova categoria</string>
     <string name="edit_category">Modifica categoria</string>
 </resources>

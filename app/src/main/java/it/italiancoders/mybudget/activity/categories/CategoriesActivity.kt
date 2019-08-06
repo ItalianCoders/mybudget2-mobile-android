@@ -42,6 +42,8 @@ import it.italiancoders.mybudget.activity.categories.edit.EditCategoryDialogBuil
 import it.italiancoders.mybudget.databinding.ActivityCategoriesBinding
 import it.italiancoders.mybudget.manager.categories.CategoriesManager
 import it.italiancoders.mybudget.rest.models.Category
+import it.italiancoders.mybudget.tutorial.AbstractTutorialActivity
+import it.italiancoders.mybudget.tutorial.TutorialCategoriesActivity
 import kotlinx.android.synthetic.main.content_categories.view.*
 
 
@@ -52,6 +54,9 @@ class CategoriesActivity : BaseActivity<ActivityCategoriesBinding>() {
     private val categoriesViewModel by lazy { ViewModelProviders.of(this).get(CategoriesViewModel::class.java) }
 
     override fun getLayoutResID(): Int = R.layout.activity_categories
+
+    override fun createTutorial(): AbstractTutorialActivity<ActivityCategoriesBinding>? =
+        TutorialCategoriesActivity(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -125,7 +130,8 @@ class CategoriesActivity : BaseActivity<ActivityCategoriesBinding>() {
                     categoriesViewModel.categories.postValue(it)
                     binding.contentLayout.swipeRefreshContainer.isRefreshing = false
                 },
-                { binding.contentLayout.swipeRefreshContainer.isRefreshing = false },forceRefresh)
+                { binding.contentLayout.swipeRefreshContainer.isRefreshing = false }, forceRefresh
+            )
         }
     }
 

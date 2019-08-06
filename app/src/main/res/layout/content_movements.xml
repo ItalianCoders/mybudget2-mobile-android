@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Project: mybudget2-mobile-android
-  ~ File: activity_main_drawer.xml
+  ~ File: content_movements.xml
   ~
   ~ Created by fattazzo
   ~ Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -26,28 +26,24 @@
   ~ SOFTWARE.
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:tools="http://schemas.android.com/tools"
-      tools:showIn="navigation_view">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_height="match_parent"
+              android:layout_width="match_parent"
+              android:orientation="vertical"
+              tools:showIn="@layout/activity_movements"
+              android:layout_marginBottom="36dp"
+              app:layout_behavior="@string/appbar_scrolling_view_behavior"
+              tools:context=".activity.movements.MovementsActivity">
 
-    <group>
-        <item
-                android:id="@+id/nav_movements"
-                android:icon="@drawable/menu_movements"
-                android:title="@string/activity_movements_title"/>
-        <item
-                android:id="@+id/nav_categories"
-                android:icon="@drawable/menu_categories"
-                android:title="@string/categories_activity_title"/>
-    </group>
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/movements_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layoutAnimation="@anim/layout_animation_from_bottom"
+                android:paddingTop="18dp">
 
-    <item android:title="@string/nav_other_section">
-        <menu>
-            <item
-                    android:id="@+id/nav_settings"
-                    android:icon="@drawable/menu_settings"
-                    android:title="@string/activity_settings_title"/>
-        </menu>
-    </item>
+        </androidx.recyclerview.widget.RecyclerView>
 
-</menu>
+</LinearLayout>

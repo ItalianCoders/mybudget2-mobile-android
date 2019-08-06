@@ -29,6 +29,7 @@ package it.italiancoders.mybudget.activity.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -45,6 +46,7 @@ import it.italiancoders.mybudget.activity.categories.CategoriesActivity
 import it.italiancoders.mybudget.activity.login.LoginActivity
 import it.italiancoders.mybudget.activity.main.chart.CategoryPieChartManager
 import it.italiancoders.mybudget.activity.main.view.lastmovements.LastMovementsView
+import it.italiancoders.mybudget.activity.movements.MovementsActivity
 import it.italiancoders.mybudget.activity.settings.SettingsActivity
 import it.italiancoders.mybudget.databinding.ActivityMainBinding
 import it.italiancoders.mybudget.manager.AuthManager
@@ -120,8 +122,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), NavigationView.OnNavig
         MonthPickerDialog.Builder(
             this,
             MonthPickerDialog.OnDateSetListener { selectedMonth, selectedYear ->
-                binding.model?.year?.postValue(selectedYear)
-                binding.model?.month?.postValue(selectedMonth)
+                binding.model?.year?.value = selectedYear
+                binding.model?.month?.value = selectedMonth
                 binding.model?.loadExpenseSummary(movementsManager)
             },
             binding.model?.year?.value!!,
@@ -131,12 +133,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), NavigationView.OnNavig
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.nav_settings -> {
-                startActivity(Intent(this, SettingsActivity::class.java))
-            }
-            R.id.nav_categories -> {
-                startActivity(Intent(this, CategoriesActivity::class.java))
-            }
+            R.id.nav_settings -> startActivity(Intent(this, SettingsActivity::class.java))
+            R.id.nav_categories -> startActivity(Intent(this, CategoriesActivity::class.java))
+            R.id.nav_movements -> startActivity(Intent(this, MovementsActivity::class.java))
         }
         binding.drawerLayout.closeDrawer(GravityCompat.START)
         return true
@@ -151,6 +150,22 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), NavigationView.OnNavig
             }
 
             mBottomSheetBehavior = bsb
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        super.onCreateOptionsMenu(menu)
+        menuInflater.inflate(R.menu.main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_sync -> {
+                binding.model?.loadExpenseSummary(movementsManager, true)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 

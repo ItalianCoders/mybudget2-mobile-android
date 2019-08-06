@@ -1,0 +1,99 @@
+<!--
+  ~ Project: mybudget2-mobile-android
+  ~ File: ic_movement.xml
+  ~
+  ~ Created by fattazzo
+  ~ Copyright © 2019 Gianluca Fattarsi. All rights reserved.
+  ~
+  ~ MIT License
+  ~ Permission is hereby granted, free of charge, to any person obtaining a copy
+  ~ of this software and associated documentation files (the "Software"), to deal
+  ~ in the Software without restriction, including without limitation the rights
+  ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  ~ copies of the Software, and to permit persons to whom the Software is
+  ~ furnished to do so, subject to the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be included in all
+  ~ copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  ~ SOFTWARE.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="464dp"
+    android:height="464dp"
+    android:viewportWidth="464"
+    android:viewportHeight="464">
+  <path
+      android:pathData="M0,0h240v464H0V0z"
+      android:fillColor="#D9DDE1"/>
+  <path
+      android:pathData="M240,344m-72,0a72,72 0,1 1,144 0a72,72 0,1 1,-144 0"
+      android:fillColor="#FAA41B"/>
+  <path
+      android:pathData="M240,320c4.418,0 8,3.582 8,8h16c-0.042,-10.134 -6.445,-19.15 -16,-22.528V296h-16v9.472c-12.473,4.393 -19.023,18.066 -14.629,30.539c3.38,9.596 12.455,16.009 22.629,15.989c4.418,0 8,3.582 8,8s-3.582,8 -8,8s-8,-3.582 -8,-8h-16c0.042,10.134 6.445,19.15 16,22.528V392h16v-9.472c12.473,-4.393 19.023,-18.066 14.629,-30.539c-3.38,-9.596 -12.455,-16.009 -22.629,-15.989c-4.418,0 -8,-3.582 -8,-8S235.582,320 240,320z"
+      android:fillColor="#F08015"/>
+  <path
+      android:pathData="M392,376m-72,0a72,72 0,1 1,144 0a72,72 0,1 1,-144 0"
+      android:fillColor="#FAA41B"/>
+  <path
+      android:pathData="M392,368c-4.418,0 -8,-3.582 -8,-8s3.582,-8 8,-8s8,3.582 8,8h16c-0.042,-10.134 -6.445,-19.15 -16,-22.528V328h-16v9.472c-12.473,4.393 -19.023,18.066 -14.629,30.539c3.38,9.596 12.455,16.009 22.629,15.989c4.418,0 8,3.582 8,8s-3.582,8 -8,8s-8,-3.582 -8,-8h-16c0.042,10.134 6.445,19.15 16,22.528V424h16v-9.472c12.473,-4.393 19.023,-18.066 14.629,-30.539C411.249,374.393 402.174,367.981 392,368z"
+      android:fillColor="#F08015"/>
+  <path
+      android:pathData="M64,376h112v16H64V376z"
+      android:fillColor="#A6ADB9"/>
+  <path
+      android:pathData="M96,408h48v16H96V408z"
+      android:fillColor="#A6ADB9"/>
+  <path
+      android:pathData="M24,296h88v16H24V296z"
+      android:fillColor="#6B778A"/>
+  <path
+      android:pathData="M168,216h48v16h-48V216z"
+      android:fillColor="#6B778A"/>
+  <path
+      android:pathData="M40,24h160v16H40V24z"
+      android:fillColor="#6B778A"/>
+  <path
+      android:pathData="M88,56h64v16H88V56z"
+      android:fillColor="#A6ADB9"/>
+  <path
+      android:pathData="M72,88h96v16H72V88z"
+      android:fillColor="#A6ADB9"/>
+  <path
+      android:pathData="M56,136h80v16H56V136z"
+      android:fillColor="#A6ADB9"/>
+  <path
+      android:pathData="M152,136h32v16h-32V136z"
+      android:fillColor="#A6ADB9"/>
+  <path
+      android:pathData="M24,184h80v16H24V184z"
+      android:fillColor="#A6ADB9"/>
+  <path
+      android:pathData="M168,184h48v16h-48V184z"
+      android:fillColor="#6B778A"/>
+  <path
+      android:pathData="M24,216h96v16H24V216z"
+      android:fillColor="#A6ADB9"/>
+  <path
+      android:pathData="M24,248h64v16H24V248z"
+      android:fillColor="#A6ADB9"/>
+  <path
+      android:pathData="M24,328h48v16H24V328z"
+      android:fillColor="#6B778A"/>
+  <path
+      android:pathData="M184,248h32v16h-32V248z"
+      android:fillColor="#6B778A"/>
+  <path
+      android:pathData="M328,296m-72,0a72,72 0,1 1,144 0a72,72 0,1 1,-144 0"
+      android:fillColor="#FFD33F"/>
+  <path
+      android:pathData="M328,272c4.418,0 8,3.582 8,8h16c-0.042,-10.134 -6.445,-19.15 -16,-22.528V248h-16v9.472c-12.473,4.393 -19.023,18.066 -14.629,30.539c3.38,9.596 12.455,16.009 22.629,15.989c4.418,0 8,3.582 8,8s-3.582,8 -8,8s-8,-3.582 -8,-8h-16c0.042,10.134 6.445,19.15 16,22.528V344h16v-9.472c12.473,-4.393 19.023,-18.066 14.629,-30.539c-3.38,-9.596 -12.455,-16.009 -22.629,-15.989c-4.418,0 -8,-3.582 -8,-8S323.582,272 328,272z"
+      android:fillColor="#FAA41B"/>
+</vector>

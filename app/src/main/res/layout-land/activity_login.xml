@@ -33,7 +33,7 @@
         <variable name="viewModel"
                   type="it.italiancoders.mybudget.activity.login.LoginViewModel"/>
         <import type="it.italiancoders.mybudget.activity.login.LoginValidationRules"/>
-        <import type="it.italiancoders.mybudget.utils.BooleanSafeUnboxConversions"/>
+        <import type="it.italiancoders.mybudget.databinding.converters.BooleanSafeUnboxConversions"/>
 
     </data>
     <LinearLayout

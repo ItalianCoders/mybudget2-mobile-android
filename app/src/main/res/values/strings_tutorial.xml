@@ -28,6 +28,7 @@
 
 <resources>
 
+    <!-- MAIN -->
     <!-- Period -->
     <string name="tutorial_main_period_title">Periodo</string>
     <string name="tutorial_main_period_description">Seleziona il periodo che desideri</string>
@@ -42,5 +43,18 @@
 
     <!-- Last movements button -->
     <string name="tutorial_main_last_movements_button_title">Ultimi movimenti</string>
-    <string name="tutorial_main_last_movements_button_description">Consulta gli ultimi movimenti che hai inserito</string>
+    <string name="tutorial_main_last_movements_button_description">Consulta gli ultimi movimenti\nche hai inserito</string>
+
+    <!-- CATEGORIES -->
+    <!-- New -->
+    <string name="tutorial_categories_new_title">Nuova categoria</string>
+    <string name="tutorial_categories_new_description">Aggiungi una nuova categoria</string>
+
+    <!-- refresh -->
+    <string name="tutorial_categories_refresh_title">Aggiorna le categorie</string>
+    <string name="tutorial_categories_refresh_description">Aggiorna la lista delle categorie\nscorrendo verso il basso</string>
+
+    <!-- update delete -->
+    <string name="tutorial_categories_update_delete_title">Modifica o cancella</string>
+    <string name="tutorial_categories_update_delete_description">Seleziona la categoria per\nmodificarla o cancellarla</string>
 </resources>

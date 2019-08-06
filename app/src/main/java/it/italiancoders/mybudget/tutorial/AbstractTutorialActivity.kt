@@ -31,6 +31,7 @@ import android.content.Context
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import androidx.databinding.ViewDataBinding
+import com.takusemba.spotlight.OnSpotlightStateChangedListener
 import com.takusemba.spotlight.Spotlight
 import com.takusemba.spotlight.target.Target
 import it.italiancoders.mybudget.R
@@ -51,7 +52,7 @@ abstract class AbstractTutorialActivity<T : ViewDataBinding>(protected val activ
     /**
      * Check if the tutorial is never show
      */
-    fun isNeverShow(): Boolean {
+    open fun isNeverShow(): Boolean {
         val alreadyShow = activity.getSharedPreferences(TUTORIAL_PREF_FILE, Context.MODE_PRIVATE)
             .getBoolean(getTutorailPreferenceKey(), false)
 
@@ -68,9 +69,13 @@ abstract class AbstractTutorialActivity<T : ViewDataBinding>(protected val activ
             .setAnimation(DecelerateInterpolator(2f))
             .setTargets(getTargets())
             .setClosedOnTouchedOutside(true)
+            .setOnSpotlightStateListener(object : OnSpotlightStateChangedListener {
+                override fun onStarted() {}
+                override fun onEnded() {
+                    saveTutorialAsShow()
+                }
+            })
             .start()
-
-        saveTutorialAsShow()
     }
 
     /**

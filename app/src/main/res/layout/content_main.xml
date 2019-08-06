@@ -31,6 +31,7 @@
         <import type="java.text.NumberFormat"/>
         <import type="android.text.format.DateUtils"/>
         <import type="android.view.View"/>
+        <import type="it.italiancoders.mybudget.databinding.converters.BooleanSafeUnboxConversions"/>
         <variable name="model"
                   type="it.italiancoders.mybudget.activity.main.MainViewModel"/>
     </data>
@@ -103,7 +104,7 @@
                         style="@style/SpinKitView.Large.ThreeBounce"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:visibility="@{ model.loadingData ? View.VISIBLE : View.GONE}"
+                        android:visibility="@{BooleanSafeUnboxConversions.unbox(model.loadingData) ? View.VISIBLE : View.GONE}"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -124,8 +125,6 @@
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
                     android:elevation="4dp"
-                    android:minWidth="0dp"
-                    android:minHeight="0dp"
                     android:textColor="@android:color/white"
                     android:text="@string/last_movements"
                     style="@android:style/Widget.Material.Light.Button.Borderless.Small"/>

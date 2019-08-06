@@ -34,20 +34,24 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import it.italiancoders.mybudget.db.converter.BigDecimalConverter
 import it.italiancoders.mybudget.db.dao.CategoryDao
+import it.italiancoders.mybudget.db.dao.ExpenseSummaryDao
 import it.italiancoders.mybudget.db.dao.MovementDao
 import it.italiancoders.mybudget.db.entity.Category
+import it.italiancoders.mybudget.db.entity.CategoryMovementOverview
+import it.italiancoders.mybudget.db.entity.ExpenseSummary
 import it.italiancoders.mybudget.db.entity.Movement
 
 @Database(
-    entities = [Category::class, Movement::class],
-    version = 2,
-    exportSchema = false
+    entities = [Category::class, Movement::class, ExpenseSummary::class, CategoryMovementOverview::class],
+    version = 4,
+    exportSchema = true
 )
 @TypeConverters(BigDecimalConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun categoryDao(): CategoryDao
     abstract fun movementDao(): MovementDao
+    abstract fun expenseSummaryDao(): ExpenseSummaryDao
 
     companion object {
 
