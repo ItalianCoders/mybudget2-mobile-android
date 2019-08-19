@@ -31,6 +31,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.databinding.DataBindingUtil
@@ -103,13 +104,25 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
         super.onDestroy()
     }
 
+    protected fun initToolbar(toolbar: Toolbar) {
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+    }
+
     private fun syncNetworkStateOption() {
         if (SessionData.networkAvailable.value == false) {
             showOption(R.id.action_network_offline)
         } else {
             hideOption(R.id.action_network_offline)
         }
+        onNetworkStateChange(SessionData.networkAvailable.value ?: false)
     }
+
+    /**
+     * Invoked on network state change
+     */
+    open fun onNetworkStateChange(networkAvailable: Boolean) {}
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()

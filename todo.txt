@@ -2,3 +2,5 @@ finire launch screen
 validazioni nuova/modifica categoria
 catch exception su login se non esiste internet
 finire last movements
+indicatore caricamento su lista movimenti
+endless recyclerview su lista movimenti

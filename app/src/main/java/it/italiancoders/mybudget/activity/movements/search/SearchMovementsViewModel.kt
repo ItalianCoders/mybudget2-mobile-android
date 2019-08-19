@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: ExpenseSummary.kt
+ * File: SearchMovementsViewModel.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,41 +25,30 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget.rest.models
+package it.italiancoders.mybudget.activity.movements.search
 
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import it.italiancoders.mybudget.rest.models.Category
+import java.util.*
 
 /**
- *
- * @param totalAmount
- * @param categoryOverview
- * @param lastMovements
+ * @author fattazzo
+ *         <p/>
+ *         date: 18/07/19
  */
-data class ExpenseSummary(
-    val totalAmount: Double? = null,
-    val categoryOverview: Array<CategoryMovementOverview>?,
-    val lastMovements: MovementListPage
-) {
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is ExpenseSummary) return false
+class SearchMovementsViewModel : ViewModel() {
 
-        if (totalAmount != other.totalAmount) return false
-        if (categoryOverview != null) {
-            if (other.categoryOverview == null) return false
-            if (!categoryOverview.contentEquals(other.categoryOverview)) return false
-        } else if (other.categoryOverview != null) return false
-        if (lastMovements != other.lastMovements) return false
+    val year = MutableLiveData<Int?>(Calendar.getInstance().get(Calendar.YEAR))
+    val month = MutableLiveData<Int?>(Calendar.getInstance().get(Calendar.MONTH)+1)
+    val day: MutableLiveData<Int?> = MutableLiveData(null)
 
-        return true
+    val category: MutableLiveData<Category?> = MutableLiveData(null)
+
+    fun reset() {
+        year.value = Calendar.getInstance().get(Calendar.YEAR)
+        month.value = Calendar.getInstance().get(Calendar.MONTH)+1
+        day.value = null
+        category.value = null
     }
-
-    override fun hashCode(): Int {
-        var result = totalAmount?.hashCode() ?: 0
-        result = 31 * result + (categoryOverview?.contentHashCode() ?: 0)
-        result = 31 * result + lastMovements.hashCode()
-        return result
-    }
-
-
 }
-

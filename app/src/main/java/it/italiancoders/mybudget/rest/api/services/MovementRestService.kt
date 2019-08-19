@@ -30,7 +30,6 @@ package it.italiancoders.mybudget.rest.api.services
 import it.italiancoders.mybudget.rest.models.ExpenseSummary
 import it.italiancoders.mybudget.rest.models.Movement
 import it.italiancoders.mybudget.rest.models.MovementListPage
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -48,7 +47,7 @@ interface MovementRestService {
      * @return The Movement object created
      */
     @POST("movements")
-    fun create(@Body movement: Movement): Call<Movement>
+    suspend fun create(@Body movement: Movement): Response<Movement>
 
     /**
      * Returns paged list of Movements
@@ -80,7 +79,7 @@ interface MovementRestService {
      * @return The Movement loaded
      */
     @GET("movements/{id}")
-    fun load(@Path("id") id: Int): Call<Movement>
+    suspend fun load(@Path("id") id: Int): Response<Movement>
 
     /**
      * Update an existing movement
@@ -89,7 +88,7 @@ interface MovementRestService {
      * @param movement new Movement data
      */
     @PUT("movements/{id}")
-    fun update(@Path("id") id: Int, @Body movement: Movement)
+    suspend fun update(@Path("id") id: Int, @Body movement: Movement): Response<Void>
 
     /**
      * Delete an existing movement
@@ -97,7 +96,7 @@ interface MovementRestService {
      * @param id movement id to delete
      */
     @DELETE("movements/{id}")
-    fun delete(@Path("id") id: Int)
+    suspend fun delete(@Path("id") id: Int): Response<Void>
 
     /**
      * Return the expense summary

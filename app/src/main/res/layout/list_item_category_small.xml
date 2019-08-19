@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Project: mybudget2-mobile-android
-  ~ File: strings_movements.xml
+  ~ File: list_item_category_small.xml
   ~
   ~ Created by fattazzo
   ~ Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -26,16 +26,31 @@
   ~ SOFTWARE.
   -->
 
-<resources>
-    <string name="activity_movements_title">Movimenti</string>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+                name="category"
+                type="it.italiancoders.mybudget.rest.models.Category"/>
 
-    <string name="movements_search_parameters_data_required">Anno e mese non validi</string>
+    </data>
+    <LinearLayout
+            xmlns:bind="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:id="@+id/rootLayout">
 
-    <string name="movements_search_parameters">Parametri di ricerca</string>
-    
-    <string name="movement_new">Nuovo movimento</string>
-    <string name="movement_edit">Modifica movimento</string>
-    <string name="movement_amount">Importo</string>
 
-    <string name="movement_all_data_required">Valori inseriti non corretti</string>
-</resources>
+            <TextView
+                    android:id="@+id/nameTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{category.name}"
+                    android:layout_margin="8dp"
+                    bind:layout_constraintEnd_toEndOf="parent"
+                    bind:layout_constraintTop_toTopOf="parent"
+                    bind:layout_constraintStart_toStartOf="parent"
+                    android:textAppearance="@style/TextAppearance.Medium"/>
+
+    </LinearLayout>
+</layout>

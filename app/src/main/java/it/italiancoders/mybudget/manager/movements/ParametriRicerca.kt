@@ -27,7 +27,7 @@
 
 package it.italiancoders.mybudget.manager.movements
 
-import it.italiancoders.mybudget.rest.models.Category
+import it.italiancoders.mybudget.AppConstants
 
 /**
  * @author fattazzo
@@ -38,11 +38,13 @@ data class ParametriRicerca(
     val year: Int,
     val month: Int,
     val day: Int?,
-    val category: Category?,
+    val categoryId: Long?,
     val page: Int,
     val size: Int,
     val sort: Array<String>?
 ) {
+
+    constructor(year: Int,month: Int,day: Int?,categoryId: Long?): this(year,month,day,categoryId,0,AppConstants.DEFAULT_PAGE_SIZE,null)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -51,7 +53,7 @@ data class ParametriRicerca(
         if (year != other.year) return false
         if (month != other.month) return false
         if (day != other.day) return false
-        if (category != other.category) return false
+        if (categoryId != other.categoryId) return false
         if (page != other.page) return false
         if (size != other.size) return false
         if (sort != null) {
@@ -66,7 +68,7 @@ data class ParametriRicerca(
         var result = year
         result = 31 * result + month
         result = 31 * result + (day ?: 0)
-        result = 31 * result + (category?.hashCode() ?: 0)
+        result = 31 * result + (categoryId?.hashCode() ?: 0)
         result = 31 * result + page
         result = 31 * result + size
         result = 31 * result + (sort?.contentHashCode() ?: 0)

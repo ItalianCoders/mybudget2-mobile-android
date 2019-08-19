@@ -33,10 +33,11 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.LifecycleOwner
 import it.italiancoders.mybudget.R
-import it.italiancoders.mybudget.activity.movements.model.MovementsViewModel
+import it.italiancoders.mybudget.adapters.CategoryAdapter
 import it.italiancoders.mybudget.databinding.ViewSearchMovementsBinding
+import it.italiancoders.mybudget.manager.categories.CategoriesManager
+import it.italiancoders.mybudget.rest.models.Category
 import java.util.*
 
 /**
@@ -55,8 +56,6 @@ class SearchMovementsView : LinearLayout {
         ) as ViewSearchMovementsBinding
     }
 
-    var lifecycleOwner: LifecycleOwner? = null
-
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle) {
         initView()
     }
@@ -71,17 +70,25 @@ class SearchMovementsView : LinearLayout {
 
     private fun initView() {
         addView(binding.root)
-        binding.lifecycleOwner = lifecycleOwner
 
+        binding.model = SearchMovementsViewModel()
         binding.datePickerButton.setOnClickListener { showDatePickerDialog() }
         binding.clearButton.setOnClickListener {
-            binding.searchModel?.reset()
+            binding.model?.reset()
             binding.invalidateAll()
         }
-    }
 
-    fun setSearchModel(searchModel: MovementsViewModel) {
-        binding.searchModel = searchModel
+        val allCategory = Category().apply {
+            name = context.getString(R.string.category_all)
+        }
+
+        CategoriesManager(context).loadAll({
+            val categoryAdapter = CategoryAdapter(context, it ?: listOf(), allCategory)
+            binding.categorySpinner.adapter = categoryAdapter
+        }, {
+            val categoryAdapter = CategoryAdapter(context, listOf(), allCategory)
+            binding.categorySpinner.adapter = categoryAdapter
+        })
     }
 
     private fun showDatePickerDialog() {
@@ -91,9 +98,9 @@ class SearchMovementsView : LinearLayout {
         DatePickerDialog(
             context,
             DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-                binding.searchModel?.year?.value = year
-                binding.searchModel?.month?.value = month
-                binding.searchModel?.day?.value = dayOfMonth
+                binding.model?.year?.value = year
+                binding.model?.month?.value = month + 1
+                binding.model?.day?.value = dayOfMonth
                 binding.invalidateAll()
             },
             newCalendar.get(Calendar.YEAR),
@@ -102,5 +109,13 @@ class SearchMovementsView : LinearLayout {
         ).show()
     }
 
-    fun isParametersValid() : Boolean = binding.searchModel?.year?.value != null && binding.searchModel?.month?.value != null
+    fun isParametersValid(): Boolean = binding.model?.year?.value != null && binding.model?.month?.value != null
+
+    fun getYear(): Int? = binding.model?.year?.value
+    fun getMonth(): Int? = binding.model?.month?.value
+    fun getDay(): Int? = binding.model?.day?.value
+    fun getCategory(): Category? {
+        val category: Category? = binding.categorySpinner.selectedItem as Category?
+        return if (category?.id == null) null else category
+    }
 }

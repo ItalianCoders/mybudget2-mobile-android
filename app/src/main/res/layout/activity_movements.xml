@@ -29,10 +29,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools">
-    <data>
-        <variable name="model"
-                  type="it.italiancoders.mybudget.activity.movements.model.MovementsViewModel"/>
-    </data>
+    <data/>
     <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -84,18 +81,6 @@
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
-        <include layout="@layout/content_movements"
-                 android:id="@+id/contentLayout"/>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/fab_margin"
-                app:layout_anchor="@id/appBar"
-                app:layout_anchorGravity="bottom|end"
-                app:srcCompat="@drawable/ic_add"/>
-
         <FrameLayout
                 android:id="@+id/arc_shape_layout"
                 android:layout_width="match_parent"
@@ -105,11 +90,22 @@
                 app:layout_anchorGravity="bottom"
                 android:layout_gravity="bottom"/>
 
+        <include layout="@layout/content_movements"
+                 android:id="@+id/contentLayout"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/new_movement_fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/fab_margin"
+                app:layout_anchor="@id/appBar"
+                app:layout_anchorGravity="bottom|end"
+                app:srcCompat="@drawable/ic_add"/>
+
         <it.italiancoders.mybudget.activity.movements.search.SearchMovementsView
                 app:behavior_hideable="false"
                 app:behavior_peekHeight="36dp"
                 app:behavior_skipCollapsed="true"
-                app:searchModel="@{model}"
                 android:id="@+id/search_movements_view"
                 app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
                 android:layout_height="wrap_content"

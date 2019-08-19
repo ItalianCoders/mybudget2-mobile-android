@@ -42,6 +42,8 @@ class MovementCache(val context: Context) {
 
     private val movementDao = AppDatabase(context).movementDao()
 
+    fun get(id: Int): Movement? = movementDao.load(id.toLong())?.toModel()
+
     fun get(parametri: ParametriRicerca): MovementListPage {
 
         val dateFilter = createDateFiler(parametri)
@@ -61,6 +63,8 @@ class MovementCache(val context: Context) {
     }
 
     fun remove(parametri: ParametriRicerca) = movementDao.delete(createDateFiler(parametri))
+
+    fun remove(id: Int) = movementDao.delete(id.toLong())
 
     fun addAll(movements: List<Movement>) = movementDao.insertAll(*movements.map { it.toEntity() }.toTypedArray())
 

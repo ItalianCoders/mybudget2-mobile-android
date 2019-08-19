@@ -32,4 +32,6 @@
     <string name="category">Categoria</string>
     <string name="new_category">Nuova categoria</string>
     <string name="edit_category">Modifica categoria</string>
+
+    <string name="category_all">Tutte</string>
 </resources>

@@ -67,7 +67,30 @@ abstract class AppDatabase : RoomDatabase() {
         private fun buildDatabase(context: Context) = Room.databaseBuilder(
             context,
             AppDatabase::class.java, "myBudget.db"
-            ).fallbackToDestructiveMigration()
+        ).fallbackToDestructiveMigration()
             .build()
+
+        /**
+         * Delete e rebuld the database
+         */
+        fun clearAllData(context: Context) {
+            context.deleteDatabase(instance?.openHelper?.databaseName)
+            instance = null
+            invoke(context)
+        }
+
+        /**
+         * Get the database file size in MB
+         */
+        fun getSize(context: Context): Float? =
+            try {
+                val dbFile = context.getDatabasePath(instance?.openHelper?.databaseName)
+                val dbFileWal = context.getDatabasePath("${instance?.openHelper?.databaseName}-wal")
+                val dbFileShm = context.getDatabasePath("${instance?.openHelper?.databaseName}-shm")
+                (dbFile.length() + dbFileWal.length() + dbFileShm.length()) / (1024f * 1024f)
+            } catch (e: Exception) {
+                null
+            }
     }
+
 }

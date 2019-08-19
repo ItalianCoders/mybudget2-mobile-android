@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: ExpenseSummary.kt
+ * File: CategoryAdapter.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,41 +25,24 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget.rest.models
+package it.italiancoders.mybudget.adapters
 
+import android.content.Context
+import it.italiancoders.mybudget.adapters.base.BaseFilterAdapter
+import it.italiancoders.mybudget.adapters.base.BindableView
+import it.italiancoders.mybudget.rest.models.Category
+import it.italiancoders.mybudget.view.CategoryView
 
-/**
- *
- * @param totalAmount
- * @param categoryOverview
- * @param lastMovements
- */
-data class ExpenseSummary(
-    val totalAmount: Double? = null,
-    val categoryOverview: Array<CategoryMovementOverview>?,
-    val lastMovements: MovementListPage
-) {
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is ExpenseSummary) return false
+class CategoryAdapter(context: Context, mValues: List<Category>, extraItem: Category? = null) :
+    BaseFilterAdapter<Category>(context, mValues, extraItem) {
 
-        if (totalAmount != other.totalAmount) return false
-        if (categoryOverview != null) {
-            if (other.categoryOverview == null) return false
-            if (!categoryOverview.contentEquals(other.categoryOverview)) return false
-        } else if (other.categoryOverview != null) return false
-        if (lastMovements != other.lastMovements) return false
-
-        return true
+    override fun matchFilter(item: Category, constraint: CharSequence?): Boolean {
+        return if (constraint != null) item.name.toLowerCase().contains(constraint) else true
     }
 
-    override fun hashCode(): Int {
-        var result = totalAmount?.hashCode() ?: 0
-        result = 31 * result + (categoryOverview?.contentHashCode() ?: 0)
-        result = 31 * result + lastMovements.hashCode()
-        return result
+    override fun convertObjectToString(item: Category): String? {
+        return item.name
     }
 
-
+    override fun buidView(): BindableView<Category> = CategoryView(context)
 }
-

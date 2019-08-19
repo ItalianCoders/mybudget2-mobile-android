@@ -37,9 +37,14 @@ package it.italiancoders.mybudget
  */
 object AppConstants {
 
+    // Rest API
     const val REST_API_BASE_URL_PUBLIC = "https://mybudgetfin.herokuapp.com/public/v1/"
     const val REST_API_BASE_URL = "https://mybudgetfin.herokuapp.com/v1/"
 
+    const val DEFAULT_PAGE_SIZE = 10
+
+    // Privacy
     const val PRIVACY_POLICY_URL =
         "https://raw.githubusercontent.com/wiki/ItalianCoders/myBudget-mobile-android/privacy/privacy_policy.pdf"
+
 }

@@ -70,11 +70,11 @@ class MainViewModel : ViewModel() {
         loadingData.value = true
 
         movementsManager.getExpenseSummary(
-            year.value!!, month.value!!, null,
+            year.value!!, month.value!!+1, null,
             { summary ->
                 total.postValue(summary?.totalAmount?.toBigDecimal() ?: BigDecimal.ZERO)
                 categoryOverview.postValue(summary?.categoryOverview?.toList() ?: listOf())
-                lastMovements.postValue(summary?.lastMovements?.toList() ?: listOf())
+                lastMovements.postValue(summary?.lastMovements?.contents?.toList() ?: listOf())
             },
             {
                 total.postValue(BigDecimal.ZERO)

@@ -34,6 +34,7 @@ import it.italiancoders.mybudget.manager.AbstractRestManager
 import it.italiancoders.mybudget.rest.api.RetrofitBuilder
 import it.italiancoders.mybudget.rest.api.services.MovementRestService
 import it.italiancoders.mybudget.rest.models.ExpenseSummary
+import it.italiancoders.mybudget.rest.models.Movement
 import it.italiancoders.mybudget.rest.models.MovementListPage
 import it.italiancoders.mybudget.utils.NetworkChecker
 import kotlinx.coroutines.CoroutineScope
@@ -53,6 +54,35 @@ class MovementsManager(context: Context) : AbstractRestManager(context) {
     private val movementCache = MovementCache(context)
     private val expenseSummaryCache = ExpenseSummaryCache(context)
 
+    fun load(id: Int, onSuccessAction: (Movement?) -> Unit, onFailureAction: () -> Unit) {
+        val networkAvailable = NetworkChecker().isNetworkAvailable(context)
+        CoroutineScope(Dispatchers.IO).launch {
+
+            val movementCached = movementCache.get(id)
+
+            if (networkAvailable && (movementCached == null)) {
+                val response = movementService.load(id)
+
+                movementCache.remove(id)
+                withContext(Dispatchers.Main) {
+                    val onLoadAllSuccessAction: ((Movement?) -> Unit)? = { loadResponse ->
+                        onSuccessAction.invoke(loadResponse)
+                        loadResponse?.let {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                movementCache.addAll(listOf(it))
+                            }
+                        }
+                    }
+                    processResponse(response, onLoadAllSuccessAction, onFailureAction)
+                }
+            } else {
+                withContext(Dispatchers.Main) {
+                    onSuccessAction.invoke(movementCached)
+                }
+            }
+        }
+    }
+
     fun search(
         parametri: ParametriRicerca,
         onSuccessAction: (MovementListPage?) -> Unit,
@@ -69,7 +99,7 @@ class MovementsManager(context: Context) : AbstractRestManager(context) {
                     parametri.year,
                     parametri.month,
                     parametri.day,
-                    null,
+                    parametri.categoryId?.toInt(),
                     parametri.page,
                     parametri.size,
                     null
@@ -123,6 +153,68 @@ class MovementsManager(context: Context) : AbstractRestManager(context) {
                 withContext(Dispatchers.Main) {
                     onSuccessAction.invoke(expenseSummary)
                 }
+            }
+        }
+    }
+
+    fun delete(id: Int, onSuccessAction: ((Void?) -> Unit)? = null, onFailureAction: (() -> Unit?)? = null) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = movementService.delete(id)
+
+            val onDeleteSuccessAction: ((Void?) -> Unit)? = { summary ->
+                onSuccessAction?.invoke(summary)
+                CoroutineScope(Dispatchers.IO).launch {
+                    movementCache.remove(id)
+                }
+            }
+
+            withContext(Dispatchers.Main) {
+                processResponse(response, onDeleteSuccessAction, onFailureAction)
+            }
+        }
+    }
+
+    fun update(
+        id: Int,
+        movement: Movement,
+        onSuccessAction: ((Void?) -> Unit)? = null,
+        onFailureAction: (() -> Unit)? = null
+    ) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = movementService.update(id, movement)
+
+            val onUpdateSuccessAction: ((Void?) -> Unit)? = { summary ->
+                onSuccessAction?.invoke(summary)
+                CoroutineScope(Dispatchers.IO).launch {
+                    movementCache.addAll(listOf(movement))
+                }
+            }
+
+            withContext(Dispatchers.Main) {
+                processResponse(response, onUpdateSuccessAction, onFailureAction)
+            }
+        }
+    }
+
+    fun create(
+        movement: Movement,
+        onSuccessAction: ((Movement?) -> Unit)? = null,
+        onFailureAction: (() -> Unit)? = null
+    ) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = movementService.create(movement)
+
+            val onCreateSuccessAction: ((Movement?) -> Unit)? = { summary ->
+                onSuccessAction?.invoke(summary)
+                summary?.let {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        movementCache.addAll(listOf(it))
+                    }
+                }
+            }
+
+            withContext(Dispatchers.Main) {
+                processResponse(response, onCreateSuccessAction, onFailureAction)
             }
         }
     }

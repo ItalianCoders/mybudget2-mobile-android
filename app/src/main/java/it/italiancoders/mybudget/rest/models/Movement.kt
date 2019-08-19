@@ -35,15 +35,23 @@ import java.util.*
 /**
  * Movement
  */
-data class Movement(val id: Long?, val amount: BigDecimal, val category: Category, val executedAt: String) {
+data class Movement(val id: Long?, var amount: BigDecimal, var category: Category, var executedAt: String) {
 
-    val executedAtDate: Date?
+    var executedAtDate: Date? = null
         get() =
             try {
                 SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault()).parse(executedAt)
             } catch (e: Exception) {
                 null
             }
+        set(value) {
+            field = value
+            executedAt = try {
+                SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault()).format(value)
+            } catch (e: Exception) {
+                ""
+            }
+        }
 
 
     constructor() : this(null, BigDecimal.ZERO, Category(), "")

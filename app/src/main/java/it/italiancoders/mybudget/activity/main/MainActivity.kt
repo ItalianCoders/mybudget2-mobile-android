@@ -27,6 +27,7 @@
 
 package it.italiancoders.mybudget.activity.main
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -35,7 +36,7 @@ import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.navigation.NavigationView
 import com.whiteelephant.monthpicker.MonthPickerDialog
@@ -47,6 +48,7 @@ import it.italiancoders.mybudget.activity.login.LoginActivity
 import it.italiancoders.mybudget.activity.main.chart.CategoryPieChartManager
 import it.italiancoders.mybudget.activity.main.view.lastmovements.LastMovementsView
 import it.italiancoders.mybudget.activity.movements.MovementsActivity
+import it.italiancoders.mybudget.activity.movements.edit.MovementActivity
 import it.italiancoders.mybudget.activity.settings.SettingsActivity
 import it.italiancoders.mybudget.databinding.ActivityMainBinding
 import it.italiancoders.mybudget.manager.AuthManager
@@ -74,7 +76,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), NavigationView.OnNavig
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
 
-        binding.model = ViewModelProviders.of(this).get(MainViewModel::class.java)
+        binding.model = ViewModelProvider(this).get(MainViewModel::class.java)
         binding.contentMain.lastMovementsView.lifecycleOwner = this
 
         setSupportActionBar(binding.toolbar)
@@ -104,6 +106,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), NavigationView.OnNavig
             mBottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
         }
 
+        binding.contentMain.addMovementButton.setOnClickListener {
+            startActivityForResult(
+                Intent(this@MainActivity, MovementActivity::class.java),
+                MovementActivity.REQUEST_CODE_MOVEMENT
+            )
+        }
+
         initLastMovementsSlidingPanel()
     }
 
@@ -113,6 +122,15 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), NavigationView.OnNavig
             mBottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED -> mBottomSheetBehavior?.state =
                 BottomSheetBehavior.STATE_COLLAPSED
             else -> super.onBackPressed()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when {
+            requestCode != MovementActivity.REQUEST_CODE_MOVEMENT -> return
+            resultCode == Activity.RESULT_OK -> binding.model?.loadExpenseSummary(movementsManager)
         }
     }
 

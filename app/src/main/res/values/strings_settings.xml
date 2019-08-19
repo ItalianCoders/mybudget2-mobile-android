@@ -38,8 +38,13 @@
     <string name="settings_tutorial_reset">Reset tutorial</string>
     <string name="settings_tutorial_reset_summary">Visualizza nuovamente il tutorial introduttivo nelle sezioni dell\'app</string>
 
+    <string name="settings_clear_data">Cancella dati in memoria</string>
+    <string name="settings_cleared_data_title">Dati in memoria</string>
+    <string name="settings_cleared_data_message">Dati cancellati correttamente</string>
+
     <!-- Settings keys -->
     <string name="pref_key_privacy">pref_key_privacy</string>
     <string name="pref_key_version">pref_key_version</string>
     <string name="pref_key_tutorial">pref_key_tutorial</string>
+    <string name="pref_key_clear_data">pref_key_clear_data</string>
 </resources>

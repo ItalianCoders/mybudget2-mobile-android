@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: MovementsViewModel.kt
+ * File: ListMovementsViewModel.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,47 +25,61 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget.activity.movements.model
+package it.italiancoders.mybudget.activity.movements.list
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import it.italiancoders.mybudget.AppConstants
 import it.italiancoders.mybudget.manager.movements.MovementsManager
 import it.italiancoders.mybudget.manager.movements.ParametriRicerca
-import it.italiancoders.mybudget.rest.models.Category
-import it.italiancoders.mybudget.rest.models.Movement
+import it.italiancoders.mybudget.rest.models.MovementListPage
 import java.util.*
 
-/**
- * @author fattazzo
- *         <p/>
- *         date: 18/07/19
- */
-class MovementsViewModel : ViewModel() {
+class ListMovementsViewModel : ViewModel() {
 
     val year = MutableLiveData<Int?>(Calendar.getInstance().get(Calendar.YEAR))
     val month = MutableLiveData<Int?>(Calendar.getInstance().get(Calendar.MONTH))
     val day: MutableLiveData<Int?> = MutableLiveData(null)
 
-    val category: MutableLiveData<Category?> = MutableLiveData(null)
+    val categoryId: MutableLiveData<Long?> = MutableLiveData(null)
 
-    var movements: MutableLiveData<List<Movement>> = MutableLiveData(listOf())
+    val page: MutableLiveData<MovementListPage?> = MutableLiveData(null)
 
-    fun reset() {
-        year.value = Calendar.getInstance().get(Calendar.YEAR)
-        month.value = Calendar.getInstance().get(Calendar.MONTH)
-        day.value = null
-        category.value = null
-    }
+    fun search(movementsManager: MovementsManager?, forceReload: Boolean = false) {
 
-    fun search(movementsManager: MovementsManager, forceReload: Boolean = false) {
-
-        val parametri = ParametriRicerca(year.value!!, month.value!!, day.value, category.value, 0, 50, null)
-
-        movementsManager.search(
-            parametri,
-            { page -> movements.postValue(page?.contents ?: listOf()) },
-            { movements.postValue(listOf()) },
+        movementsManager?.search(
+            buildParameters(),
+            { pageResult -> page.postValue(pageResult ?: MovementListPage()) },
+            { page.postValue(MovementListPage()) },
             forceReload
         )
+    }
+
+    /**
+     * Return true if the parameters are ok for parform a search
+     */
+    fun isValidParams(): Boolean = year.value != null && month.value != null
+
+    fun isLastPage(): Boolean = page.value?.isLast ?: false
+
+    private fun buildParameters(): ParametriRicerca {
+
+        // Build default parameters
+        var parametri = ParametriRicerca(year.value!!, month.value!!, day.value, categoryId.value)
+
+        // If a page exist build the parameters from it
+        page.value?.let {
+            parametri = ParametriRicerca(
+                year.value!!,
+                month.value!!,
+                day.value,
+                categoryId.value,
+                (it.number ?: 0).plus(1),
+                it.size ?: AppConstants.DEFAULT_PAGE_SIZE,
+                null
+            )
+        }
+
+        return parametri
     }
 }

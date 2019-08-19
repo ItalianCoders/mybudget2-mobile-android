@@ -27,25 +27,20 @@
 
 package it.italiancoders.mybudget.activity.movements
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.activity.BaseActivity
-import it.italiancoders.mybudget.activity.main.view.lastmovements.MovementsDataAdapter
-import it.italiancoders.mybudget.activity.movements.model.MovementsViewModel
+import it.italiancoders.mybudget.activity.movements.edit.MovementActivity
+import it.italiancoders.mybudget.activity.movements.list.ListMovementsFragment
 import it.italiancoders.mybudget.activity.movements.search.SearchMovementsView
 import it.italiancoders.mybudget.databinding.ActivityMovementsBinding
-import it.italiancoders.mybudget.manager.movements.MovementsManager
-import it.italiancoders.mybudget.rest.models.Movement
-import kotlinx.android.synthetic.main.content_movements.view.*
-import kotlinx.android.synthetic.main.view_search_movements.view.*
 
 /**
  * @author fattazzo
@@ -55,10 +50,6 @@ import kotlinx.android.synthetic.main.view_search_movements.view.*
 class MovementsActivity : BaseActivity<ActivityMovementsBinding>() {
 
     private var mBottomSheetBehavior: BottomSheetBehavior<SearchMovementsView?>? = null
-
-    val movementsDataAdapter = MovementsDataAdapter()
-
-    private val movementsManager by lazy { MovementsManager(this) }
 
     override fun getLayoutResID(): Int = R.layout.activity_movements
 
@@ -74,22 +65,11 @@ class MovementsActivity : BaseActivity<ActivityMovementsBinding>() {
         binding.toolbarLayout.setExpandedTitleTypeface(typeface)
         binding.toolbarLayout.setCollapsedTitleTypeface(typeface)
 
-        binding.model = ViewModelProviders.of(this).get(MovementsViewModel::class.java)
-
-        binding.searchMovementsView.lifecycleOwner = this
-
-        // recycler view
-        binding.contentLayout.movements_recycler_view.layoutManager = LinearLayoutManager(this)
-        binding.contentLayout.movements_recycler_view.setHasFixedSize(true)
-        binding.contentLayout.movements_recycler_view.adapter = movementsDataAdapter
-        binding.model?.movements?.observe(this, Observer<List<Movement>> {
-            movementsDataAdapter.setMovements(it)
-        })
-        movementsDataAdapter.movementRecyclerViewAdapterListener = object :
-            MovementsDataAdapter.MovementRecyclerViewAdapterListener {
-            override fun onListItemSelected(movement: Movement) {
-
-            }
+        binding.newMovementFab.setOnClickListener {
+            startActivityForResult(
+                Intent(this@MovementsActivity, MovementActivity::class.java),
+                MovementActivity.REQUEST_CODE_MOVEMENT
+            )
         }
 
         // Show option menu when appbar is collapsed
@@ -114,12 +94,34 @@ class MovementsActivity : BaseActivity<ActivityMovementsBinding>() {
         initSearchMovementsSlidingPanel()
     }
 
-    fun search(view: View) {
+    fun search(view: View?) {
         if (binding.searchMovementsView.isParametersValid()) {
-            mBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
-            binding.model?.search(movementsManager, true)
+
+            val listMovementsFragment =
+                supportFragmentManager.findFragmentById(R.id.list_movements_fragment) as ListMovementsFragment?
+
+            listMovementsFragment?.let {
+                val year = binding.searchMovementsView.getYear()!!
+                val month = binding.searchMovementsView.getMonth()!!
+                val day = binding.searchMovementsView.getDay()
+                val categoryId = binding.searchMovementsView.getCategory()?.id
+
+                it.setParams(year, month, day, categoryId)
+                it.search()
+
+                mBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+            }
         } else {
             Toast.makeText(this, R.string.movements_search_parameters_data_required, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when {
+            requestCode != MovementActivity.REQUEST_CODE_MOVEMENT -> return
+            resultCode == Activity.RESULT_OK -> search(null)
         }
     }
 
@@ -127,7 +129,7 @@ class MovementsActivity : BaseActivity<ActivityMovementsBinding>() {
         BottomSheetBehavior.from(binding.searchMovementsView)?.let { bsb ->
             bsb.state = BottomSheetBehavior.STATE_EXPANDED
 
-            binding.searchMovementsView.title_view.setOnClickListener { toggleSearchView() }
+            binding.searchMovementsView.binding.titleView.setOnClickListener { toggleSearchView() }
 
             mBottomSheetBehavior = bsb
         }

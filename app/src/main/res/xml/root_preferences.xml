@@ -32,6 +32,10 @@
     <PreferenceCategory
             app:title="@string/settings_global_section">
 
+        <Preference
+                android:icon="@drawable/ic_storage"
+                android:key="@string/pref_key_clear_data"
+                android:title="@string/settings_clear_data"/>
 
     </PreferenceCategory>
 

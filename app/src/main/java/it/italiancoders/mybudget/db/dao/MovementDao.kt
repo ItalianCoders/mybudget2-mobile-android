@@ -52,4 +52,10 @@ interface MovementDao {
 
     @Query("DELETE FROM movements where executedAt like :dateFilter || '%'")
     fun delete(dateFilter: String)
+
+    @Query("DELETE FROM movements where id = :id")
+    fun delete(id: Long)
+
+    @Query("SELECT * FROM movements where id = :id")
+    fun load(id: Long): Movement?
 }

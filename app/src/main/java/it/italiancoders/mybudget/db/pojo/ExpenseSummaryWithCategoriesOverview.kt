@@ -31,6 +31,7 @@ import androidx.room.Embedded
 import androidx.room.Relation
 import it.italiancoders.mybudget.db.entity.CategoryMovementOverview
 import it.italiancoders.mybudget.db.entity.ExpenseSummary
+import it.italiancoders.mybudget.rest.models.MovementListPage
 
 /**
  * @author fattazzo
@@ -56,7 +57,7 @@ data class ExpenseSummaryWithCategoriesOverview(
         return it.italiancoders.mybudget.rest.models.ExpenseSummary(
             this.expenseSummary.totalAmount,
             categoryOverviewModel,
-            emptyArray()
+            MovementListPage()
         )
     }
 }

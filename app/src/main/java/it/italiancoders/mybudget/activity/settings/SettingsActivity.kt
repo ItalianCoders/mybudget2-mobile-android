@@ -38,8 +38,10 @@ import androidx.preference.PreferenceFragmentCompat
 import com.afollestad.materialdialogs.MaterialDialog
 import com.crashlytics.android.Crashlytics
 import it.italiancoders.mybudget.R
+import it.italiancoders.mybudget.db.AppDatabase
 import it.italiancoders.mybudget.tutorial.AbstractTutorialActivity
 import it.italiancoders.mybudget.utils.PrivacyPolicyManager
+import java.text.DecimalFormat
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -58,6 +60,7 @@ class SettingsActivity : AppCompatActivity() {
         private var prefKeyPrivacy: Preference? = null
         private var prefVersion: Preference? = null
         private var prefResetTutorial: Preference? = null
+        private var prefKeyClearData: Preference? = null
 
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey)
@@ -69,17 +72,10 @@ class SettingsActivity : AppCompatActivity() {
             prefKeyPrivacy = findPreference(resources.getString(R.string.pref_key_privacy))
             prefVersion = findPreference(resources.getString(R.string.pref_key_version))
             prefResetTutorial = findPreference(resources.getString(R.string.pref_key_tutorial))
+            prefKeyClearData = findPreference(resources.getString(R.string.pref_key_clear_data))
 
-            try {
-                prefVersion?.summary = this.context!!.packageManager.getPackageInfo(
-                    this.context!!.packageName,
-                    0
-                ).versionName
-            } catch (ex: PackageManager.NameNotFoundException) {
-                Crashlytics.logException(ex)
-                Log.e("Preferences", ex.message.orEmpty())
-                prefVersion?.summary = "Nd."
-            }
+            updatePrefVersion()
+            updatePrefClearData()
         }
 
         @SuppressLint("ApplySharedPref")
@@ -99,6 +95,18 @@ class SettingsActivity : AppCompatActivity() {
                             cancelable(true)
                         }
                     }
+                    prefKeyClearData?.key.orEmpty() -> {
+
+                        AppDatabase.clearAllData(it)
+
+                        MaterialDialog(it).show {
+                            title(R.string.settings_cleared_data_title)
+                            message(R.string.settings_cleared_data_message)
+                            icon(R.drawable.ic_storage)
+                            positiveButton(android.R.string.ok)
+                        }
+                        updatePrefClearData()
+                    }
                     else -> {
                         /** Non used **/
                     }
@@ -106,6 +114,28 @@ class SettingsActivity : AppCompatActivity() {
             }
 
             return super.onPreferenceTreeClick(preference)
+        }
+
+        private fun updatePrefVersion() {
+            try {
+                prefVersion?.summary = this.context!!.packageManager.getPackageInfo(
+                    this.context!!.packageName,
+                    0
+                ).versionName
+            } catch (ex: PackageManager.NameNotFoundException) {
+                Crashlytics.logException(ex)
+                Log.e("Preferences", ex.message.orEmpty())
+                prefVersion?.summary = "Nd."
+            }
+        }
+
+        private fun updatePrefClearData() {
+            val dbSize = AppDatabase.getSize(this.context!!)
+            if (dbSize != null) {
+                prefKeyClearData?.summary = "Dimensione: ${DecimalFormat("0.00").format(dbSize)} MB"
+            } else {
+                prefVersion?.summary = "Nd."
+            }
         }
     }
 }

@@ -88,7 +88,7 @@ object CategoryPieChartManager {
 
         val entries = buildEntries(categoryOverview)
 
-        val dataSet = PieDataSet(entries, "")
+        val dataSet = PieDataSet(entries, "Test")
 
         dataSet.sliceSpace = 3f
         dataSet.iconsOffset = MPPointF(-0f, 0f)
