@@ -39,5 +39,5 @@ object SessionData {
 
     var session: Session? = null
 
-    var networkAvailable: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { true }
+    var networkAvailable: MutableLiveData<Boolean> = MutableLiveData( true )
 }

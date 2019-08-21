@@ -32,7 +32,7 @@ import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.os.Bundle
 import android.view.View
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.activity.BaseActivity
 import it.italiancoders.mybudget.databinding.ActivityLoginBinding
@@ -49,11 +49,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //setSupportActionBar(binding.toolbar)
-        //supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        //supportActionBar?.setDisplayShowHomeEnabled(true)
-
-        binding.viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
+        binding.viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
 
         // Animate header and footer slide in
         LoginHeaderFooterAnimator.start(binding.headerContainer)
@@ -100,12 +96,13 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
         anim.start()
 
         // Login text animation from alpha 1 to 0 and progress bar visibility at the end
-        binding.signInText.animate().alpha(0f).setDuration(250).setListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator?) {
-                binding.progressBar.visibility = View.VISIBLE
+        binding.signInText.animate().alpha(0f).setDuration(250)
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator?) {
+                    binding.progressBar.visibility = View.VISIBLE
+                }
             }
-        }
-        ).start()
+            ).start()
     }
 
     override fun onBackPressed() {

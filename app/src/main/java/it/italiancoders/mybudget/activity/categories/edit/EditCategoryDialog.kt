@@ -83,7 +83,7 @@ class EditCategoryDialogBuilder() {
         return object : DialogCallback {
             override fun invoke(dialog: MaterialDialog) {
                 if (category.id != null)
-                    CategoriesManager(dialog.context).delete(category.id!!.toInt())
+                    CategoriesManager(dialog.context).delete(category.id.toInt())
                 dialog.dismiss()
             }
         }

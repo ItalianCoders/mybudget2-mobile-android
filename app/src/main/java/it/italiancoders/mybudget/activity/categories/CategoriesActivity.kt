@@ -32,7 +32,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.callbacks.onDismiss
 import com.google.android.material.appbar.AppBarLayout
@@ -51,7 +51,7 @@ class CategoriesActivity : BaseActivity<ActivityCategoriesBinding>() {
 
     private val categoriesDataAdapter: CategoriesDataAdapter = CategoriesDataAdapter()
 
-    private val categoriesViewModel by lazy { ViewModelProviders.of(this).get(CategoriesViewModel::class.java) }
+    private val categoriesViewModel by lazy { ViewModelProvider(this).get(CategoriesViewModel::class.java) }
 
     override fun getLayoutResID(): Int = R.layout.activity_categories
 
@@ -93,7 +93,7 @@ class CategoriesActivity : BaseActivity<ActivityCategoriesBinding>() {
                 binding.contentLayout.categoriesRecyclerView.scheduleLayoutAnimation()
             })
 
-        binding.fab.setOnClickListener { view ->
+        binding.fab.setOnClickListener {
             EditCategoryDialogBuilder().build(this@CategoriesActivity).show {
                 onDismiss { loadAllCategories(true) }
             }
