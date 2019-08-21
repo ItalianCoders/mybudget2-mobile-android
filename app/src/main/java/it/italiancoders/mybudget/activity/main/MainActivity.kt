@@ -102,10 +102,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), NavigationView.OnNavig
 
         binding.model?.loadExpenseSummary(movementsManager)
 
-        binding.contentMain.lastMovementsButton.setOnClickListener {
-            mBottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
-        }
-
         binding.contentMain.addMovementButton.setOnClickListener {
             startActivityForResult(
                 Intent(this@MainActivity, MovementActivity::class.java),
@@ -130,7 +126,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), NavigationView.OnNavig
 
         when {
             requestCode != MovementActivity.REQUEST_CODE_MOVEMENT -> return
-            resultCode == Activity.RESULT_OK -> binding.model?.loadExpenseSummary(movementsManager)
+            resultCode == Activity.RESULT_OK -> binding.model?.loadExpenseSummary(movementsManager,true)
         }
     }
 
@@ -163,12 +159,17 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), NavigationView.OnNavig
         BottomSheetBehavior.from(binding.contentMain.lastMovementsView)?.let { bsb ->
             bsb.state = BottomSheetBehavior.STATE_HIDDEN
 
-            binding.contentMain.lastMovementsButton.setOnClickListener {
-                bsb.state = BottomSheetBehavior.STATE_EXPANDED
-            }
+            binding.contentMain.lastMovementsView.binding.titleView.setOnClickListener { toggleLastMovementsView() }
 
             mBottomSheetBehavior = bsb
         }
+    }
+
+    private fun toggleLastMovementsView() {
+        mBottomSheetBehavior?.state =
+            if (mBottomSheetBehavior?.state == BottomSheetBehavior.STATE_COLLAPSED)
+                BottomSheetBehavior.STATE_EXPANDED else
+                BottomSheetBehavior.STATE_COLLAPSED
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -27,6 +27,7 @@
 
 package it.italiancoders.mybudget.activity.movements.list
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -35,7 +36,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.activity.main.view.lastmovements.MovementsDataAdapter
@@ -57,13 +58,14 @@ class ListMovementsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.list_movements_fragment, container, false)
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.list_movements_fragment, container, false)
         return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        binding.model = ViewModelProviders.of(this).get(ListMovementsViewModel::class.java)
+        binding.model = ViewModelProvider(this).get(ListMovementsViewModel::class.java)
 
         activity?.let {
             movementsManager = MovementsManager(it)
@@ -82,13 +84,29 @@ class ListMovementsFragment : Fragment() {
                 context?.let {
                     val intent = Intent(it, MovementActivity::class.java)
                     intent.putExtra(MovementActivity.EXTRA_MOVEMENT_ID, movement.id)
-                    startActivity(intent)
+
+                    startActivityForResult(intent, MovementActivity.REQUEST_CODE_MOVEMENT)
                 }
             }
         }
     }
 
-    fun setParams(year: Int, month: Int, day: Int?, categoryId: Long?, page: MovementListPage? = null) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when {
+            requestCode != MovementActivity.REQUEST_CODE_MOVEMENT -> return
+            resultCode == Activity.RESULT_OK -> search(true)
+        }
+    }
+
+    fun setParams(
+        year: Int,
+        month: Int,
+        day: Int?,
+        categoryId: Long?,
+        page: MovementListPage? = null
+    ) {
         binding.model?.year?.value = year
         binding.model?.month?.value = month
         binding.model?.day?.value = day
@@ -96,9 +114,9 @@ class ListMovementsFragment : Fragment() {
         binding.model?.page?.value = page
     }
 
-    fun search() {
+    fun search(fromFirstPage: Boolean) {
         binding.model?.isValidParams()?.let {
-            binding.model?.search(movementsManager, true)
+            binding.model?.search(movementsManager, true,fromFirstPage)
         }
     }
 }

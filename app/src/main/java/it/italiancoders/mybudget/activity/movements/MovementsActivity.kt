@@ -30,6 +30,8 @@ package it.italiancoders.mybudget.activity.movements
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
@@ -65,12 +67,7 @@ class MovementsActivity : BaseActivity<ActivityMovementsBinding>() {
         binding.toolbarLayout.setExpandedTitleTypeface(typeface)
         binding.toolbarLayout.setCollapsedTitleTypeface(typeface)
 
-        binding.newMovementFab.setOnClickListener {
-            startActivityForResult(
-                Intent(this@MovementsActivity, MovementActivity::class.java),
-                MovementActivity.REQUEST_CODE_MOVEMENT
-            )
-        }
+        binding.newMovementFab.setOnClickListener { openNewMovement() }
 
         // Show option menu when appbar is collapsed
         binding.appBar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
@@ -107,12 +104,16 @@ class MovementsActivity : BaseActivity<ActivityMovementsBinding>() {
                 val categoryId = binding.searchMovementsView.getCategory()?.id
 
                 it.setParams(year, month, day, categoryId)
-                it.search()
+                it.search(false)
 
                 mBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
             }
         } else {
-            Toast.makeText(this, R.string.movements_search_parameters_data_required, Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this,
+                R.string.movements_search_parameters_data_required,
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
@@ -140,6 +141,30 @@ class MovementsActivity : BaseActivity<ActivityMovementsBinding>() {
             if (mBottomSheetBehavior?.state == BottomSheetBehavior.STATE_COLLAPSED)
                 BottomSheetBehavior.STATE_EXPANDED else
                 BottomSheetBehavior.STATE_COLLAPSED
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        super.onCreateOptionsMenu(menu)
+        menuInflater.inflate(R.menu.movements, menu)
+        hideOption(R.id.action_add)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_add -> {
+                openNewMovement()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun openNewMovement() {
+        startActivityForResult(
+            Intent(this@MovementsActivity, MovementActivity::class.java),
+            MovementActivity.REQUEST_CODE_MOVEMENT
+        )
     }
 
     override fun onBackPressed() {

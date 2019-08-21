@@ -28,10 +28,13 @@
 package it.italiancoders.mybudget.manager
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 /**
  * @author fattazzo
@@ -40,20 +43,24 @@ import retrofit2.Response
  */
 abstract class AbstractRestManager(protected val context: Context) {
 
-    protected fun <T> enqueueRequest(call: Call<T>, onSuccessAction: (T?) -> Unit, onFailureAction: () -> Unit) {
+    protected fun <T> enqueueRequest(
+        call: Call<T>,
+        onSuccessAction: (T?) -> Unit,
+        onFailureAction: () -> Unit
+    ) {
         call.enqueue(object : Callback<T> {
             override fun onResponse(call: Call<T>, response: Response<T>) {
 
                 if (response.isSuccessful) {
                     onSuccessAction.invoke(response.body())
                 } else {
-                    Toast.makeText(context, "ERRORE! ${response.message()}", Toast.LENGTH_SHORT).show()
+                    showError(response.message())
                     onFailureAction.invoke()
                 }
             }
 
             override fun onFailure(call: Call<T>?, t: Throwable?) {
-                Toast.makeText(context, "ERRORE!!", Toast.LENGTH_SHORT).show()
+                showError()
                 onFailureAction.invoke()
             }
         })
@@ -68,13 +75,18 @@ abstract class AbstractRestManager(protected val context: Context) {
             if (response.isSuccessful) {
                 onSuccessAction?.invoke(response.body())
             } else {
-                Toast.makeText(context, "ERRORE! ${response.message()}", Toast.LENGTH_SHORT).show()
+                showError(response.message())
                 onFailureAction?.invoke()
             }
         } catch (e: Exception) {
-            Toast.makeText(context, "ERRORE!!", Toast.LENGTH_SHORT).show()
+            showError()
             onFailureAction?.invoke()
         }
+    }
 
+    private fun showError(message: String = "Errore!") {
+        Handler(Looper.getMainLooper()).post {
+            Toast.makeText(context, "ERRORE! $message", Toast.LENGTH_SHORT).show()
+        }
     }
 }

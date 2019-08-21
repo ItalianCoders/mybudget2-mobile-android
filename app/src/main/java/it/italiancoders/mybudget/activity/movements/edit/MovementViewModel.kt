@@ -51,10 +51,12 @@ class MovementViewModel : ViewModel() {
 
     fun init(movement: Movement) {
         amount.postValue(movement.amount)
-        category.postValue(movement.category)
+        category.value = movement.category
         date.postValue(movement.executedAtDate ?: Calendar.getInstance().time)
         this.movement = movement
     }
+
+    fun isNewMovement(): Boolean = movement.id == null
 
     fun isMovementValid(): Boolean = amount.value != null && category.value != null && date.value != null
 

@@ -47,7 +47,7 @@ interface MovementRestService {
      * @return The Movement object created
      */
     @POST("movements")
-    suspend fun create(@Body movement: Movement): Response<Movement>
+    suspend fun create(@Body movement: Movement): Response<Void>
 
     /**
      * Returns paged list of Movements

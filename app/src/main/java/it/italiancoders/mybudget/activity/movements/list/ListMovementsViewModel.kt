@@ -45,10 +45,14 @@ class ListMovementsViewModel : ViewModel() {
 
     val page: MutableLiveData<MovementListPage?> = MutableLiveData(null)
 
-    fun search(movementsManager: MovementsManager?, forceReload: Boolean = false) {
+    fun search(
+        movementsManager: MovementsManager?,
+        forceReload: Boolean = false,
+        fromFirstPage: Boolean = false
+    ) {
 
         movementsManager?.search(
-            buildParameters(),
+            buildParameters(fromFirstPage),
             { pageResult -> page.postValue(pageResult ?: MovementListPage()) },
             { page.postValue(MovementListPage()) },
             forceReload
@@ -62,7 +66,7 @@ class ListMovementsViewModel : ViewModel() {
 
     fun isLastPage(): Boolean = page.value?.isLast ?: false
 
-    private fun buildParameters(): ParametriRicerca {
+    private fun buildParameters(fromFirstPage: Boolean): ParametriRicerca {
 
         // Build default parameters
         var parametri = ParametriRicerca(year.value!!, month.value!!, day.value, categoryId.value)
@@ -74,7 +78,7 @@ class ListMovementsViewModel : ViewModel() {
                 month.value!!,
                 day.value,
                 categoryId.value,
-                (it.number ?: 0).plus(1),
+                if (fromFirstPage) 0 else (it.number ?: 0).plus(1),
                 it.size ?: AppConstants.DEFAULT_PAGE_SIZE,
                 null
             )

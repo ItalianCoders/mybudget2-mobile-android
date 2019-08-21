@@ -41,7 +41,8 @@
             android:layout_height="match_parent">
 
         <RelativeLayout android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                android:paddingBottom="36dp">
 
             <RelativeLayout
                     android:id="@+id/header_layout"
@@ -88,7 +89,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_below="@+id/header_layout"
-                    android:layout_above="@+id/last_movements_button">
+                    android:layout_above="@+id/add_movement_button">
 
                 <com.github.mikephil.charting.charts.PieChart
                         android:id="@+id/categories_pie_chart"
@@ -112,22 +113,6 @@
                         app:SpinKit_Color="@color/primaryDarkColor"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <Button android:id="@+id/last_movements_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="8dp"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:background="@drawable/box_round_top_empty"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:elevation="4dp"
-                    android:textColor="@android:color/white"
-                    android:text="@string/last_movements"
-                    style="@android:style/Widget.Material.Light.Button.Borderless.Small"/>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/add_movement_button"
@@ -159,9 +144,8 @@
                 android:layout_height="match_parent">
 
             <it.italiancoders.mybudget.activity.main.view.lastmovements.LastMovementsView
-                    app:behavior_hideable="true"
-                    app:behavior_peekHeight="0dp"
-                    android:layout_marginTop="?attr/actionBarSize"
+                    app:behavior_hideable="false"
+                    app:behavior_peekHeight="36dp"
                     app:behavior_skipCollapsed="true"
                     app:model="@{model}"
                     android:id="@+id/last_movements_view"

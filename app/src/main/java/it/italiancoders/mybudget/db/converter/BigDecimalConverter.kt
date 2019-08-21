@@ -30,14 +30,21 @@ package it.italiancoders.mybudget.db.converter
 import androidx.room.TypeConverter
 
 import java.math.BigDecimal
+import java.math.MathContext
+import java.math.RoundingMode
 
 class BigDecimalConverter {
 
     @TypeConverter
     fun fromLong(value: Long?): BigDecimal? {
-        return if (value == null) null else BigDecimal(value).divide(BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP)
+        return if (value == null) null else BigDecimal(value).divide(
+            BigDecimal(100),
+            2,
+            BigDecimal.ROUND_HALF_UP
+        )
     }
 
     @TypeConverter
-    fun fromBigDecimal(value: BigDecimal?): Long? = value?.multiply(BigDecimal(100))?.longValueExact()
+    fun fromBigDecimal(value: BigDecimal?): Long? =
+        value?.multiply(BigDecimal(100), MathContext(2, RoundingMode.HALF_UP))?.longValueExact()
 }

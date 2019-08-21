@@ -67,6 +67,9 @@ class MovementActivity : BaseActivity<ActivityMovementBinding>(), View.OnFocusCh
         initToolbar(binding.toolbar)
         initCategoryTextView()
 
+        binding.deleteButton.visibility =
+            if (binding.model?.isNewMovement() != true) View.VISIBLE else View.GONE
+
         if (!model.initialized) {
             model.initialized = true
             val movementId = intent.extras?.getLong(EXTRA_MOVEMENT_ID)
@@ -77,7 +80,10 @@ class MovementActivity : BaseActivity<ActivityMovementBinding>(), View.OnFocusCh
             } else {
                 MovementsManager(this).load(
                     movementId.toInt(),
-                    { binding.model?.init(it ?: Movement()) },
+                    {
+                        binding.model?.init(it ?: Movement())
+                        binding.categotyTextView.setText(it?.category?.name)
+                    },
                     { binding.model?.init(Movement()) })
                 setTitle(R.string.movement_edit)
             }
@@ -94,7 +100,10 @@ class MovementActivity : BaseActivity<ActivityMovementBinding>(), View.OnFocusCh
                     { finishWithResultOk() },
                     { finishWithResultCanceled() })
             } else {
-                MovementsManager(this).create(movementToSave, { finishWithResultOk() }, { finishWithResultCanceled() })
+                MovementsManager(this).create(
+                    movementToSave,
+                    { finishWithResultOk() },
+                    { finishWithResultCanceled() })
             }
         } else {
             MaterialDialog(this).show {
@@ -131,7 +140,8 @@ class MovementActivity : BaseActivity<ActivityMovementBinding>(), View.OnFocusCh
     }
 
     override fun onNetworkStateChange(networkAvailable: Boolean) {
-        binding.deleteButton.visibility = if (networkAvailable) View.VISIBLE else View.GONE
+        binding.deleteButton.visibility =
+            if (networkAvailable && binding.model?.isNewMovement() != true) View.VISIBLE else View.GONE
         binding.saveButton.visibility = if (networkAvailable) View.VISIBLE else View.GONE
     }
 
@@ -147,7 +157,9 @@ class MovementActivity : BaseActivity<ActivityMovementBinding>(), View.OnFocusCh
         })
 
         binding.categotyTextView.onItemClickListener =
-            OnItemClickListener { parent, _, pos, _ -> binding.model?.category?.postValue(parent.adapter.getItem(pos) as Category?) }
+            OnItemClickListener { parent, _, pos, _ ->
+                binding.model?.category?.postValue(parent.adapter.getItem(pos) as Category?)
+            }
 
         //we have to add check for 0 number of character in edit text. When that
         //happens, we will show pop up manually

@@ -27,6 +27,7 @@
 
 package it.italiancoders.mybudget.tutorial
 
+import android.widget.TextView
 import com.takusemba.spotlight.shape.Circle
 import com.takusemba.spotlight.shape.RoundedRectangle
 import com.takusemba.spotlight.target.SimpleTarget
@@ -104,7 +105,8 @@ class TutorialMainActivity(activity: BaseActivity<ActivityMainBinding>) :
     }
 
     private fun createLastMovementsTarget(): Target {
-        val view = activity.binding.contentMain.lastMovementsButton
+        val view =
+            activity.binding.contentMain.lastMovementsView.findViewById<TextView>(R.id.title_view)
         val location = getCenterLocation(view)
         val pointX = location[0]
         val pointY = location[1]
@@ -112,7 +114,13 @@ class TutorialMainActivity(activity: BaseActivity<ActivityMainBinding>) :
 
         return SimpleTarget.Builder(activity)
             .setPoint(pointX, pointY)
-            .setShape(RoundedRectangle(view.layout.height.toFloat() + 70, view.layout.width.toFloat() + 70, 5f))
+            .setShape(
+                RoundedRectangle(
+                    view.layout.height.toFloat() + 70,
+                    view.layout.width.toFloat() + 70,
+                    5f
+                )
+            )
             .setTitle(activity.getString(R.string.tutorial_main_last_movements_button_title))
             .setDescription(activity.getString(R.string.tutorial_main_last_movements_button_description))
             .setOverlayPoint(100f, pointY - oneRadius * 2 - 200f)

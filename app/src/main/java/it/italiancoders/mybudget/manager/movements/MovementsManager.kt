@@ -198,23 +198,14 @@ class MovementsManager(context: Context) : AbstractRestManager(context) {
 
     fun create(
         movement: Movement,
-        onSuccessAction: ((Movement?) -> Unit)? = null,
+        onSuccessAction: ((Void?) -> Unit)? = null,
         onFailureAction: (() -> Unit)? = null
     ) {
         CoroutineScope(Dispatchers.IO).launch {
             val response = movementService.create(movement)
 
-            val onCreateSuccessAction: ((Movement?) -> Unit)? = { summary ->
-                onSuccessAction?.invoke(summary)
-                summary?.let {
-                    CoroutineScope(Dispatchers.IO).launch {
-                        movementCache.addAll(listOf(it))
-                    }
-                }
-            }
-
             withContext(Dispatchers.Main) {
-                processResponse(response, onCreateSuccessAction, onFailureAction)
+                processResponse(response, onSuccessAction, onFailureAction)
             }
         }
     }
