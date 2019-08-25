@@ -61,9 +61,9 @@ class LoginViewModel : ViewModel() {
 
     private fun checkDataValid(): Boolean {
         val usernameValid =
-            LoginValidationRules.USERNAME.isValid(Editable.Factory.getInstance().newEditable(username.value.orEmpty()))
+            UserValidationRules.USERNAME.isValid(Editable.Factory.getInstance().newEditable(username.value.orEmpty()))
         val passwordValid =
-            LoginValidationRules.PASSWORD.isValid(Editable.Factory.getInstance().newEditable(password.value.orEmpty()))
+            UserValidationRules.PASSWORD.isValid(Editable.Factory.getInstance().newEditable(password.value.orEmpty()))
         return usernameValid && passwordValid && policyAccepted.value?:false
     }
 }

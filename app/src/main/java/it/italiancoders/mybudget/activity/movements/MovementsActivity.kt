@@ -104,7 +104,7 @@ class MovementsActivity : BaseActivity<ActivityMovementsBinding>() {
                 val categoryId = binding.searchMovementsView.getCategory()?.id
 
                 it.setParams(year, month, day, categoryId)
-                it.search(false)
+                it.search()
 
                 mBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
             }

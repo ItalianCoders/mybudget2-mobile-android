@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: SessionRestService.kt
+ * File: RegistrationUserInfoRestService.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -27,37 +27,38 @@
 
 package it.italiancoders.mybudget.rest.api.services
 
-import it.italiancoders.mybudget.rest.models.LoginRequest
-import it.italiancoders.mybudget.rest.models.Session
-import retrofit2.Call
+import it.italiancoders.mybudget.rest.models.UserRegistrationInfo
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.POST
-import retrofit2.http.Path
-
+import retrofit2.http.*
 
 /**
  * @author fattazzo
  *         <p/>
- *         date: 16/07/19
+ *         date: 23/08/19
  */
-interface SessionRestService {
+interface RegistrationUserInfoRestService {
 
     /**
-     * Obtain AccessToken, RefreshToken and the user session
+     * Registrate anew User
      *
-     * @param loginRequest The login request data
-     * @return The session object
+     * @param userRegistrationInfo user
      */
-    @POST("session")
-    suspend fun login(@Body loginRequest: LoginRequest): Response<Session>
+    @POST("registration-user")
+    suspend fun create(@Body userRegistrationInfo: UserRegistrationInfo): Response<Void>
 
     /**
-     * Obtain a new AccessToken and user session using RefreshToken
+     * Resend confirm registration mail
      *
-     * @param refreshToken The refresh token
-     * @return The session object
+     * @param username username of user
      */
-    @POST("session/refresh/{refreshToken}")
-    fun refresh(@Path("refreshToken") refreshToken: String): Call<Session>
+    @POST("resend-confirm-registration-mail")
+    suspend fun resend(@Query("username") username: String): Response<Void>
+
+    /**
+     * Confirm Registration
+     *
+     * @param token token for confirmation
+     */
+    @GET("confirm-registration/{token}")
+    suspend fun confirm(@Path("token") token: String): Response<Void>
 }

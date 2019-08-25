@@ -104,11 +104,15 @@ interface MovementRestService {
      * @param year The year of movement
      * @param month The month of movement
      * @param day The day of movement
+     * @param week The week number
+     * @param category The id of category
      */
     @GET("expense-summary")
     suspend fun getExpenseSummary(
         @Query("year") year: Int,
         @Query("month") month: Int,
-        @Query("day") day: Int?
+        @Query("day") day: Int?,
+        @Query("week") week: Int?,
+        @Query("category") category: Int?
     ): Response<ExpenseSummary>
 }

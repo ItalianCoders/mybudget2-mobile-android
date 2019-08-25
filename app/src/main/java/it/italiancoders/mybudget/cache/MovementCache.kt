@@ -57,8 +57,8 @@ class MovementCache(val context: Context) {
             size = movements.size
             number = parametri.page
             contents = movements.map { it.toModel() }
-            isLast = totalPages == parametri.page
-            isFirst = parametri.page == 0
+            last = totalPages == parametri.page
+            first = parametri.page == 0
         }
     }
 

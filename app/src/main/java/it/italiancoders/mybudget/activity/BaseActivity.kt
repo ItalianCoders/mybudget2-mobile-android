@@ -27,6 +27,8 @@
 
 package it.italiancoders.mybudget.activity
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -40,6 +42,8 @@ import androidx.lifecycle.Observer
 import com.afollestad.materialdialogs.MaterialDialog
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.SessionData
+import it.italiancoders.mybudget.activity.login.LoginActivity
+import it.italiancoders.mybudget.manager.AuthManager
 import it.italiancoders.mybudget.tutorial.AbstractTutorialActivity
 
 
@@ -74,7 +78,7 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
     protected open fun createTutorial(): AbstractTutorialActivity<T>? = null
 
     private fun getTutorial(): AbstractTutorialActivity<T>? {
-        if(tutorial == null) {
+        if (tutorial == null) {
             tutorial = createTutorial()
         }
         return tutorial
@@ -97,7 +101,18 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
         if (getTutorial() != null && getTutorial()!!.isNeverShow()) {
             binding.root.post { getTutorial()?.start() }
         }
+
+        if (checkUserSession()) {
+            SessionData.session = AuthManager(this.applicationContext).getLastSession()
+            if (SessionData.session == null) {
+                val intent = Intent(this.applicationContext, LoginActivity::class.java)
+                //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivityForResult(intent, LoginActivity.REQUEST_CODE_LOGIN)
+            }
+        }
     }
+
+    protected open fun checkUserSession(): Boolean = true
 
     override fun onDestroy() {
         SessionData.networkAvailable.removeObserver(networkAvailabilityObserver)
@@ -142,6 +157,16 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
         syncNetworkStateOption()
         return true
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == LoginActivity.REQUEST_CODE_LOGIN && resultCode == Activity.RESULT_OK) {
+            onUserLoggedIn()
+        }
+    }
+
+    protected open fun onUserLoggedIn() {}
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {

@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Project: mybudget2-mobile-android
-  ~ File: strings_login.xml
+  ~ File: progress.xml
   ~
   ~ Created by fattazzo
   ~ Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -26,16 +25,24 @@
   ~ SOFTWARE.
   -->
 
-<resources>
-    <string name="login_activity_title">Login</string>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <string name="login_sign_in">Sign In</string>
+    <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:indeterminate="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <string name="login_username_hint">Username</string>
-    <string name="login_password_hint">Password</string>
-
-    <string name="login_error">Utente o password non validi</string>
-
-    <string name="login_user_not_activated_title">Utente non attivo!</string>
-    <string name="login_user_not_activated_message">Controlla la tua email e attiva il tuo account oppure richiedi l\' invio di un nuovo codice di attivazione.</string>
-</resources>
+</LinearLayout>

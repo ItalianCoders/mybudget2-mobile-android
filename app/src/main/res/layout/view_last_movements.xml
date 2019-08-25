@@ -26,8 +26,7 @@
   ~ SOFTWARE.
   -->
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <variable name="model"
                   type="it.italiancoders.mybudget.activity.main.MainViewModel"/>
@@ -56,14 +55,10 @@
                       android:background="@color/light_gray"
                       android:orientation="vertical">
 
-            <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/last_movements_recycler_view"
-                    android:layout_width="match_parent"
+            <fragment android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    tools:listitem="@layout/list_item_movement"
-                    android:paddingTop="18dp">
-
-            </androidx.recyclerview.widget.RecyclerView>
+                    android:id="@+id/last_movements_fragment"
+                    android:name="it.italiancoders.mybudget.activity.movements.list.ListMovementsFragment"/>
 
         </LinearLayout>
 

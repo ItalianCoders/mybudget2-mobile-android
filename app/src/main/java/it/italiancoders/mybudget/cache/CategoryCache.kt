@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: AuthManager.kt
+ * File: CategoryCache.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,56 +25,36 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget.manager
+package it.italiancoders.mybudget.cache
 
 import android.content.Context
-import com.beust.klaxon.Klaxon
-import it.italiancoders.mybudget.SessionData
-import it.italiancoders.mybudget.rest.models.Session
+import it.italiancoders.mybudget.db.AppDatabase
+import it.italiancoders.mybudget.rest.models.Category
 
 /**
  * @author fattazzo
  *         <p/>
- *         date: 16/07/19
+ *         date: 23/08/19
  */
-class AuthManager(private val context: Context) {
+class CategoryCache(val context: Context) {
 
-    fun getLastSession(): Session? {
+    private val categoryDao = AppDatabase(context).categoryDao()
 
-        val lastSessionJson =
-            context.getSharedPreferences(AUTH_PREF_FILE, Context.MODE_PRIVATE).getString(
-                ACCESS_TOKEN_KEY, ""
-            )
+    fun getAll(): List<Category> = categoryDao.loadAll().map { it.toModel() }
 
-        return try {
-            Klaxon().parse<Session>(lastSessionJson!!)
-        } catch (e: Exception) {
-            null
-        }
+    fun removeAll() {
+        categoryDao.deleteAll()
     }
 
-    fun setSession(session: Session?) {
-
-        val sessionJson = Klaxon().toJsonString(session ?: "")
-
-        context.getSharedPreferences(AUTH_PREF_FILE, Context.MODE_PRIVATE).edit()
-            .putString(ACCESS_TOKEN_KEY, sessionJson)
-            .apply()
-        SessionData.session = session
+    fun remove(id: Int) {
+        categoryDao.delete(id.toLong())
     }
 
-    fun removeSession() {
-
-        context.getSharedPreferences(AUTH_PREF_FILE, Context.MODE_PRIVATE).edit().clear()
-            .apply()
-
-        SessionData.session = null
+    fun addAll(categories: List<Category>) {
+        categoryDao.insertAll(*categories.map { it.toEntity() }.toTypedArray())
     }
 
-    companion object {
-
-        private const val AUTH_PREF_FILE = "auth_prefs"
-
-        private const val ACCESS_TOKEN_KEY = "accessToken"
+    fun add(category: Category) {
+        categoryDao.insert(category.toEntity())
     }
 }

@@ -27,6 +27,7 @@
 
 package it.italiancoders.mybudget.activity.movements.list
 
+import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import it.italiancoders.mybudget.AppConstants
@@ -45,16 +46,45 @@ class ListMovementsViewModel : ViewModel() {
 
     val page: MutableLiveData<MovementListPage?> = MutableLiveData(null)
 
+    val loadingData: ObservableBoolean = ObservableBoolean(false)
+
     fun search(
         movementsManager: MovementsManager?,
-        forceReload: Boolean = false,
-        fromFirstPage: Boolean = false
+        forceReload: Boolean = false
     ) {
+        loadingData.set(true)
+        movementsManager?.search(
+            buildParameters(true),
+            { pageResult ->
+                page.postValue(pageResult ?: MovementListPage())
+                loadingData.set(false)
+            },
+            {
+                page.postValue(MovementListPage())
+                loadingData.set(false)
+            },
+            forceReload
+        )
+    }
+
+    fun loadNextPage(
+        movementsManager: MovementsManager?,
+        forceReload: Boolean = false
+    ) {
+        if (isLastPage()) return
+
+        loadingData.set(true)
 
         movementsManager?.search(
-            buildParameters(fromFirstPage),
-            { pageResult -> page.postValue(pageResult ?: MovementListPage()) },
-            { page.postValue(MovementListPage()) },
+            buildParameters(false),
+            { pageResult ->
+                page.postValue(pageResult ?: MovementListPage())
+                loadingData.set(false)
+            },
+            {
+                page.postValue(MovementListPage())
+                loadingData.set(false)
+            },
             forceReload
         )
     }
@@ -64,12 +94,12 @@ class ListMovementsViewModel : ViewModel() {
      */
     fun isValidParams(): Boolean = year.value != null && month.value != null
 
-    fun isLastPage(): Boolean = page.value?.isLast ?: false
+    fun isLastPage(): Boolean = page.value?.last ?: true
 
     private fun buildParameters(fromFirstPage: Boolean): ParametriRicerca {
 
         // Build default parameters
-        var parametri = ParametriRicerca(year.value!!, month.value!!, day.value, categoryId.value)
+        var parametri = ParametriRicerca(year.value!!, month.value!!, day.value, null, categoryId.value)
 
         // If a page exist build the parameters from it
         page.value?.let {
@@ -77,6 +107,7 @@ class ListMovementsViewModel : ViewModel() {
                 year.value!!,
                 month.value!!,
                 day.value,
+                null,
                 categoryId.value,
                 if (fromFirstPage) 0 else (it.number ?: 0).plus(1),
                 it.size ?: AppConstants.DEFAULT_PAGE_SIZE,

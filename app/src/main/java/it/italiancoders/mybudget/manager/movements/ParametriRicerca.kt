@@ -38,13 +38,14 @@ data class ParametriRicerca(
     val year: Int,
     val month: Int,
     val day: Int?,
+    val week: Int?,
     val categoryId: Long?,
     val page: Int,
     val size: Int,
     val sort: Array<String>?
 ) {
 
-    constructor(year: Int,month: Int,day: Int?,categoryId: Long?): this(year,month,day,categoryId,0,AppConstants.DEFAULT_PAGE_SIZE,null)
+    constructor(year: Int,month: Int,day: Int?,week: Int?,categoryId: Long?): this(year,month,day,week,categoryId,0,AppConstants.DEFAULT_PAGE_SIZE,null)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -53,6 +54,7 @@ data class ParametriRicerca(
         if (year != other.year) return false
         if (month != other.month) return false
         if (day != other.day) return false
+        if (week != other.week) return false
         if (categoryId != other.categoryId) return false
         if (page != other.page) return false
         if (size != other.size) return false
@@ -68,6 +70,7 @@ data class ParametriRicerca(
         var result = year
         result = 31 * result + month
         result = 31 * result + (day ?: 0)
+        result = 31 * result + (week ?: 0)
         result = 31 * result + (categoryId?.hashCode() ?: 0)
         result = 31 * result + page
         result = 31 * result + size

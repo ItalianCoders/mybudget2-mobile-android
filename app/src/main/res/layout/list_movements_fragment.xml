@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Project: mybudget2-mobile-android
   ~ File: list_movements_fragment.xml
   ~
@@ -27,28 +26,43 @@
   -->
 
 <layout>
-    <data>
-        <variable name="model"
-                  type="it.italiancoders.mybudget.activity.movements.list.ListMovementsViewModel"/>
-    </data>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_height="match_parent"
-              android:layout_width="match_parent"
-              android:orientation="vertical"
-              tools:showIn="@layout/activity_movements"
-              app:layout_behavior="@string/appbar_scrolling_view_behavior"
-              tools:context=".activity.movements.MovementsActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/movements_recycler_view"
+    <data>
+        <import type="android.view.View"/>
+        <import type="it.italiancoders.mybudget.databinding.converters.BooleanSafeUnboxConversions"/>
+        <variable
+                name="model"
+                type="it.italiancoders.mybudget.activity.movements.list.ListMovementsViewModel" />
+    </data>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layoutAnimation="@anim/layout_animation_from_bottom"
-            android:paddingTop="18dp">
+            android:orientation="vertical"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:context=".activity.movements.MovementsActivity"
+            tools:showIn="@layout/activity_movements">
 
-    </androidx.recyclerview.widget.RecyclerView>
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/movements_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layoutAnimation="@anim/layout_animation_from_bottom"
+                android:paddingTop="18dp">
 
-</LinearLayout>
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <com.github.ybq.android.spinkit.SpinKitView
+                android:id="@+id/loading_spin"
+                style="@style/SpinKitView.Large.ThreeBounce"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="40dp"
+                android:visibility="@{BooleanSafeUnboxConversions.unbox(model.loadingData) ? View.VISIBLE : View.GONE}"
+                android:layout_centerInParent="true"
+                app:SpinKit_Color="@color/primaryDarkColor"/>
+
+    </RelativeLayout>
 </layout>

@@ -27,7 +27,10 @@
 
 package it.italiancoders.mybudget.activity.main
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.app.Activity
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -55,9 +58,11 @@ import it.italiancoders.mybudget.manager.AuthManager
 import it.italiancoders.mybudget.manager.movements.MovementsManager
 import it.italiancoders.mybudget.tutorial.TutorialMainActivity
 import it.italiancoders.mybudget.utils.NetworkChecker
+import java.math.BigDecimal
 
 
-class MainActivity : BaseActivity<ActivityMainBinding>(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : BaseActivity<ActivityMainBinding>(),
+    NavigationView.OnNavigationItemSelectedListener {
 
     private val movementsManager by lazy { MovementsManager(this) }
 
@@ -72,6 +77,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), NavigationView.OnNavig
     override fun onCreate(savedInstanceState: Bundle?) {
         SessionData.session = AuthManager(this.applicationContext).getLastSession()
         NetworkChecker().isNetworkAvailable(this)
+
+        /**
+        if (SessionData.session == null) {
+        val intent = Intent(this.applicationContext, LoginActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        }
+         **/
 
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
@@ -91,16 +104,18 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), NavigationView.OnNavig
 
         binding.navView.setNavigationItemSelectedListener(this)
 
-        if (SessionData.session == null) {
-            startActivity(Intent(this, LoginActivity::class.java))
-        }
-
         CategoryPieChartManager.configure(binding.contentMain.categoriesPieChart)
         binding.model?.categoryOverview?.observe(this, Observer {
-            CategoryPieChartManager.setData(binding.contentMain.categoriesPieChart, it)
+            CategoryPieChartManager.setData(
+                binding.contentMain.categoriesPieChart,
+                it,
+                binding.model?.total?.value ?: BigDecimal.ZERO
+            )
         })
 
-        binding.model?.loadExpenseSummary(movementsManager)
+        if (SessionData.session != null) {
+            binding.model?.loadExpenseSummary(movementsManager)
+        }
 
         binding.contentMain.addMovementButton.setOnClickListener {
             startActivityForResult(
@@ -114,7 +129,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), NavigationView.OnNavig
 
     override fun onBackPressed() {
         when {
-            binding.drawerLayout.isDrawerOpen(GravityCompat.START) -> binding.drawerLayout.closeDrawer(GravityCompat.START)
+            binding.drawerLayout.isDrawerOpen(GravityCompat.START) -> binding.drawerLayout.closeDrawer(
+                GravityCompat.START
+            )
             mBottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED -> mBottomSheetBehavior?.state =
                 BottomSheetBehavior.STATE_COLLAPSED
             else -> super.onBackPressed()
@@ -124,25 +141,68 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), NavigationView.OnNavig
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        when {
-            requestCode != MovementActivity.REQUEST_CODE_MOVEMENT -> return
-            resultCode == Activity.RESULT_OK -> binding.model?.loadExpenseSummary(movementsManager,true)
+        if (requestCode == MovementActivity.REQUEST_CODE_MOVEMENT && resultCode == Activity.RESULT_OK) {
+            binding.model?.loadExpenseSummary(movementsManager, true)
         }
+    }
+
+    override fun onUserLoggedIn() {
+        binding.model?.loadExpenseSummary(movementsManager)
+    }
+
+    fun nextPeriodType(view: View) {
+        binding.contentMain.periodoTextView.alpha = 0f
+
+        val flip = ObjectAnimator.ofFloat(
+            binding.contentMain.periodoContainer,
+            "rotationX",
+            0f,
+            360f
+        ).apply { duration = 1000 }
+
+        val alpha1TextAnimator =
+            ObjectAnimator.ofFloat(binding.contentMain.periodoTextView, "alpha", 0f, 1f)
+                .apply { duration = 1000 }
+
+
+        val set = AnimatorSet()
+        set.play(flip).with(alpha1TextAnimator)
+        set.start()
+
+        binding.model?.periodType?.value =
+            binding.model?.periodType?.value?.nextType() ?: PeriodType.MONTH
+        binding.model?.loadExpenseSummary(movementsManager)
     }
 
     fun changePeriod(view: View) {
         mBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
 
-        MonthPickerDialog.Builder(
-            this,
-            MonthPickerDialog.OnDateSetListener { selectedMonth, selectedYear ->
-                binding.model?.year?.value = selectedYear
-                binding.model?.month?.value = selectedMonth
-                binding.model?.loadExpenseSummary(movementsManager)
-            },
-            binding.model?.year?.value!!,
-            binding.model?.month?.value!!
-        ).build().show()
+        if (binding.model?.periodType?.value == PeriodType.MONTH) {
+            MonthPickerDialog.Builder(
+                this,
+                MonthPickerDialog.OnDateSetListener { selectedMonth, selectedYear ->
+                    binding.model?.year?.value = selectedYear
+                    binding.model?.month?.value = selectedMonth
+                    binding.model?.day?.value = 1
+                    binding.model?.loadExpenseSummary(movementsManager)
+                },
+                binding.model?.year?.value!!,
+                binding.model?.month?.value!!
+            ).build().show()
+        } else {
+            DatePickerDialog(
+                this,
+                DatePickerDialog.OnDateSetListener { _, selectedYear, selectedMonth, selectedDay ->
+                    binding.model?.year?.value = selectedYear
+                    binding.model?.month?.value = selectedMonth
+                    binding.model?.day?.value = selectedDay
+                    binding.model?.loadExpenseSummary(movementsManager)
+                },
+                binding.model?.year?.value!!,
+                binding.model?.month?.value!!,
+                binding.model?.day?.value!!
+            ).show()
+        }
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -150,6 +210,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), NavigationView.OnNavig
             R.id.nav_settings -> startActivity(Intent(this, SettingsActivity::class.java))
             R.id.nav_categories -> startActivity(Intent(this, CategoriesActivity::class.java))
             R.id.nav_movements -> startActivity(Intent(this, MovementsActivity::class.java))
+            R.id.nav_logout -> {
+                AuthManager(this).removeSession()
+                startActivity(Intent(this.applicationContext, LoginActivity::class.java))
+            }
         }
         binding.drawerLayout.closeDrawer(GravityCompat.START)
         return true

@@ -36,11 +36,11 @@ import it.italiancoders.mybudget.databinding.ListItemMovementBinding
 import it.italiancoders.mybudget.rest.models.Movement
 import kotlinx.android.synthetic.main.list_item_category.view.*
 
-class MovementsDataAdapter : RecyclerView.Adapter<MovementsDataAdapter.MovementViewHolder>() {
+class MovementsDataAdapter(private val movements: MutableList<Movement>) :
+    RecyclerView.Adapter<MovementsDataAdapter.MovementViewHolder>() {
 
     var movementRecyclerViewAdapterListener: MovementRecyclerViewAdapterListener? = null
 
-    private var movements: MutableList<Movement>? = null
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): MovementViewHolder {
         val listItemMovementBinding = DataBindingUtil.inflate<ListItemMovementBinding>(
@@ -57,7 +57,13 @@ class MovementsDataAdapter : RecyclerView.Adapter<MovementsDataAdapter.MovementV
     override fun getItemCount(): Int = movements?.size ?: 0
 
     fun setMovements(movements: List<Movement>) {
-        this.movements = movements.toMutableList()
+        this.movements.clear()
+        this.movements.addAll(movements.toMutableList())
+        notifyDataSetChanged()
+    }
+
+    fun addMovements(movements: List<Movement>) {
+        this.movements.addAll(movements.toMutableList())
         notifyDataSetChanged()
     }
 

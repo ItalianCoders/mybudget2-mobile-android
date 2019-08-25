@@ -70,10 +70,11 @@ abstract class AbstractTutorialActivity<T : ViewDataBinding>(protected val activ
             .setTargets(getTargets())
             .setClosedOnTouchedOutside(true)
             .setOnSpotlightStateListener(object : OnSpotlightStateChangedListener {
-                override fun onStarted() {}
-                override fun onEnded() {
+                override fun onStarted() {
                     saveTutorialAsShow()
                 }
+
+                override fun onEnded() {}
             })
             .start()
     }

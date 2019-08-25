@@ -69,18 +69,21 @@ abstract class AbstractRestManager(protected val context: Context) {
     protected fun <T> processResponse(
         response: Response<T>,
         onSuccessAction: ((T?) -> Unit)?,
-        onFailureAction: (() -> Unit?)?
+        onFailureAction: ((Int?) -> Unit?)?,
+        showErrorMessage: Boolean = true
     ) {
         try {
             if (response.isSuccessful) {
                 onSuccessAction?.invoke(response.body())
             } else {
-                showError(response.message())
-                onFailureAction?.invoke()
+                if (showErrorMessage)
+                    showError(response.message())
+                onFailureAction?.invoke(response.code())
             }
         } catch (e: Exception) {
-            showError()
-            onFailureAction?.invoke()
+            if (showErrorMessage)
+                showError()
+            onFailureAction?.invoke(null)
         }
     }
 

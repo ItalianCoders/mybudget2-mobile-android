@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Project: mybudget2-mobile-android
+  ~ File: strings_registration.xml
+  ~
+  ~ Created by fattazzo
+  ~ Copyright © 2019 Gianluca Fattarsi. All rights reserved.
+  ~
+  ~ MIT License
+  ~ Permission is hereby granted, free of charge, to any person obtaining a copy
+  ~ of this software and associated documentation files (the "Software"), to deal
+  ~ in the Software without restriction, including without limitation the rights
+  ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  ~ copies of the Software, and to permit persons to whom the Software is
+  ~ furnished to do so, subject to the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be included in all
+  ~ copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  ~ SOFTWARE.
+  -->
+
+<resources>
+
+    <string name="registration_login_message">Non hai un account?\nClicca qui e crealo ora!</string>
+    <string name="registration_resend_login_message">Account creato ma non attivo?\nRichiedi il rinvio del codice di attivazione.</string>
+
+    <string name="registration_firstname_hint">Nome</string>
+    <string name="registration_lastname_hint">Cognome</string>
+    <string name="registration_username_hint">Username</string>
+    <string name="registration_password_hint">Password</string>
+    <string name="registration_password_confirm_hint">Conferma password</string>
+    <string name="registration_email_hint">Email</string>
+
+    <string name="registration_sign_up">Registrami</string>
+
+    <string name="registration_created_title">Registrazione creata</string>
+    <string name="registration_created_message">Controlla l\'indirizzo email che hai utilizzato.\nTi sarà inviato un messaggio con la procedura per attivare il tuo account.</string>
+
+    <string name="registration_created_failure_title">Registrazione fallita</string>
+    <string name="registration_created_failure_message">La registrazione non è andata a buon fine. Si prega di riprovare più tardi o contattare il supporto</string>
+</resources>

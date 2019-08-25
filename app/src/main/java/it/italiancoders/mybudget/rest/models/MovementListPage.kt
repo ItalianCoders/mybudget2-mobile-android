@@ -35,9 +35,9 @@ import java.util.*
  */
 class MovementListPage : Serializable {
 
-    var isFirst: Boolean? = null
+    var first: Boolean? = null
 
-    var isLast: Boolean? = null
+    var last: Boolean? = null
 
     var size: Int? = null
 
@@ -58,8 +58,8 @@ class MovementListPage : Serializable {
             return false
         }
         val movementListPage = other as MovementListPage?
-        return this.isFirst == movementListPage!!.isFirst &&
-                this.isLast == movementListPage.isLast &&
+        return this.first == movementListPage!!.first &&
+                this.last == movementListPage.last &&
                 this.size == movementListPage.size &&
                 this.totalElements == movementListPage.totalElements &&
                 this.totalPages == movementListPage.totalPages &&
@@ -68,15 +68,15 @@ class MovementListPage : Serializable {
     }
 
     override fun hashCode(): Int {
-        return Objects.hash(isFirst, isLast, size, totalElements, totalPages, number, contents)
+        return Objects.hash(first, last, size, totalElements, totalPages, number, contents)
     }
 
     override fun toString(): String {
         val sb = StringBuilder()
         sb.append("class MovementListPage {\n")
 
-        sb.append("    first: ").append(toIndentedString(isFirst)).append("\n")
-        sb.append("    last: ").append(toIndentedString(isLast)).append("\n")
+        sb.append("    first: ").append(toIndentedString(first)).append("\n")
+        sb.append("    last: ").append(toIndentedString(last)).append("\n")
         sb.append("    size: ").append(toIndentedString(size)).append("\n")
         sb.append("    totalElements: ").append(toIndentedString(totalElements)).append("\n")
         sb.append("    totalPages: ").append(toIndentedString(totalPages)).append("\n")

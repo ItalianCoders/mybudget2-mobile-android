@@ -34,6 +34,10 @@ import it.italiancoders.mybudget.rest.api.RetrofitBuilder
 import it.italiancoders.mybudget.rest.api.services.SessionRestService
 import it.italiancoders.mybudget.rest.models.LoginRequest
 import it.italiancoders.mybudget.rest.models.Session
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * @author fattazzo
@@ -47,7 +51,7 @@ class SessionManager(context: Context) : AbstractRestManager(context) {
         password: String,
         locale: String,
         onSuccessAction: (Session?) -> Unit,
-        onFailureAction: () -> Unit
+        onFailureAction: (Int?) -> Unit
     ) {
 
         val loginRequest = LoginRequest(username, password, locale)
@@ -59,6 +63,11 @@ class SessionManager(context: Context) : AbstractRestManager(context) {
             onSuccessAction.invoke(it)
         }
 
-        enqueueRequest(sessionService.login(loginRequest), loginOnSuccessAction, onFailureAction)
+        CoroutineScope(Dispatchers.IO).launch {
+            val response = sessionService.login(loginRequest)
+            withContext(Dispatchers.Main) {
+                processResponse(response, loginOnSuccessAction, onFailureAction, false)
+            }
+        }
     }
 }

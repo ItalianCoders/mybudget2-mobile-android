@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: LoginValidationRules.kt
+ * File: ValidationBindingAdapter.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,37 +25,40 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget.activity.login
+package it.italiancoders.mybudget.databinding.adapters
 
 import android.text.Editable
+import android.text.TextWatcher
+import androidx.databinding.BindingAdapter
+import com.google.android.material.textfield.TextInputLayout
+import it.italiancoders.mybudget.activity.login.UserValidationRules
 
-object LoginValidationRules {
+/**
+ * @author fattazzo
+ *         <p/>
+ *         date: 10/07/19
+ */
+object ValidationBindingAdapter {
 
     @JvmStatic
-    var USERNAME: Rule = object : Rule {
-        override fun isValid(s: Editable?): Boolean {
-            // Check length
-            //return s?.toString().orEmpty().length >= 8
-            return s?.toString().orEmpty().length >= 3
+    @BindingAdapter("app:validation", "app:errorMsg")
+    fun setErrorEnable(textInputLayout: TextInputLayout, stringRule: UserValidationRules.Rule, errorMsg: String) {
+        textInputLayout.editText?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
 
-        }
-    }
+            }
 
-    @JvmStatic
-    var PASSWORD: Rule = object : Rule {
-        override fun isValid(s: Editable?): Boolean {
-            // Check if contains at least one upper case char
-            val upperCaseChar = """.*[A-Z].*""".toRegex().containsMatchIn(s?.toString().orEmpty())
-            // Check if contains at least one digit char
-            val digitChar = """.*[0-9].*""".toRegex().containsMatchIn(s?.toString().orEmpty())
-            // Check length
-            val length = s?.toString().orEmpty().length >= 8
-            //return length && upperCaseChar && digitChar
-            return s?.toString().orEmpty().length > 3
-        }
-    }
+            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
 
-    interface Rule {
-        fun isValid(s: Editable?): Boolean
+            }
+
+            override fun afterTextChanged(editable: Editable) {
+                if (stringRule.isValid(textInputLayout.editText?.text)) {
+                    textInputLayout.editText?.error = null
+                } else {
+                    textInputLayout.editText?.error = errorMsg
+                }
+            }
+        })
     }
 }

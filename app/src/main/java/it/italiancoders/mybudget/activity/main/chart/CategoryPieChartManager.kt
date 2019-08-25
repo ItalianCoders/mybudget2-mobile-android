@@ -28,6 +28,8 @@
 package it.italiancoders.mybudget.activity.main.chart
 
 import android.graphics.Color
+import android.text.SpannableString
+import android.text.style.RelativeSizeSpan
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.PieData
@@ -37,6 +39,9 @@ import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.github.mikephil.charting.utils.MPPointF
 import it.italiancoders.mybudget.rest.models.CategoryMovementOverview
+import java.math.BigDecimal
+import java.text.DecimalFormat
+
 
 /**
  * @author fattazzo
@@ -84,11 +89,15 @@ object CategoryPieChartManager {
     /**
      * Create and set dataset
      */
-    fun setData(chart: PieChart, categoryOverview: List<CategoryMovementOverview>) {
+    fun setData(
+        chart: PieChart,
+        categoryOverview: List<CategoryMovementOverview>,
+        total: BigDecimal
+    ) {
 
         val entries = buildEntries(categoryOverview)
 
-        val dataSet = PieDataSet(entries, "Test")
+        val dataSet = PieDataSet(entries, "")
 
         dataSet.sliceSpace = 3f
         dataSet.iconsOffset = MPPointF(-0f, 0f)
@@ -109,10 +118,13 @@ object CategoryPieChartManager {
         data.setValueTextColor(Color.BLACK)
         chart.data = data
 
-        // undo all highlights
         chart.highlightValues(null)
 
+        chart.centerText = generateCenterSpannableText(total)
+
         chart.invalidate()
+
+        chart.animateY(1400, Easing.EaseInOutQuad)
     }
 
     /**
@@ -122,6 +134,27 @@ object CategoryPieChartManager {
 
         return categoryOverview.map {
             PieEntry(it.totalAmount?.toFloat() ?: 0f, it.category.name)
+        }
+    }
+
+    /**
+     *
+     */
+    private fun generateCenterSpannableText(total: BigDecimal): SpannableString {
+
+        return when {
+            total.compareTo(BigDecimal.ZERO) == 0 -> SpannableString("")
+            else -> {
+                val intPart = DecimalFormat("#,##0").format(total)
+                val decPart =
+                    total.remainder(BigDecimal.ONE).movePointRight(total.scale()).abs().toBigInteger()
+                        .toString().padStart(2,'0')
+
+                val s = SpannableString("${intPart}.$decPart €")
+                s.setSpan(RelativeSizeSpan(1.7f), 0, intPart.length, 0)
+                s.setSpan(RelativeSizeSpan(1.7f), intPart.length + 1 + decPart.length, s.length, 0)
+                s
+            }
         }
     }
 }

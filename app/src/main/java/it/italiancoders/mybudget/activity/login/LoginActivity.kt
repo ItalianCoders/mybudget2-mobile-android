@@ -30,19 +30,36 @@ package it.italiancoders.mybudget.activity.login
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.text.InputType
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.WhichButton
+import com.afollestad.materialdialogs.actions.setActionButtonEnabled
+import com.afollestad.materialdialogs.input.getInputField
+import com.afollestad.materialdialogs.input.input
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.activity.BaseActivity
+import it.italiancoders.mybudget.activity.registration.RegistrationUserInfoActivity
 import it.italiancoders.mybudget.databinding.ActivityLoginBinding
+import it.italiancoders.mybudget.manager.registrationuserinfo.RegistrationUserInfoManager
 import it.italiancoders.mybudget.manager.session.SessionManager
 import it.italiancoders.mybudget.rest.models.Session
 import it.italiancoders.mybudget.utils.PrivacyPolicyManager
 import java.util.*
 
-
 class LoginActivity : BaseActivity<ActivityLoginBinding>() {
+
+    companion object {
+
+        const val REQUEST_CODE_LOGIN = 2000
+    }
 
     override fun getLayoutResID(): Int = R.layout.activity_login
 
@@ -69,8 +86,24 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
             val username = binding.usernameET.text.toString()
             val password = binding.passwordET.text.toString()
             val locale = Locale.getDefault().language
-            val successAction: (Session?) -> Unit = { this@LoginActivity.finish() }
-            val failureAction = { this@LoginActivity.recreate() }
+            val successAction: (Session?) -> Unit = {
+                setResult(Activity.RESULT_OK, Intent())
+                this@LoginActivity.finish()
+            }
+            val failureAction: (Int?) -> Unit = {
+                if (it == 403) {
+                    Handler(Looper.getMainLooper()).post {
+                        MaterialDialog(this).show {
+                            title(R.string.login_user_not_activated_title)
+                            message(R.string.login_user_not_activated_message)
+                            icon(R.drawable.ic_error)
+                            positiveButton { this@LoginActivity.recreate() }
+                        }
+                    }
+                } else
+                    Toast.makeText(this,R.string.login_error,Toast.LENGTH_SHORT).show()
+                    this@LoginActivity.recreate()
+            }
 
             SessionManager(this)
                 .login(username, password, locale, successAction, failureAction)
@@ -79,6 +112,37 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
 
     fun showPrivacyPolicy(view: View) {
         PrivacyPolicyManager.showContent(this)
+    }
+
+    fun openRegistrationActicity(view: View) {
+        val intent = Intent(this.applicationContext, RegistrationUserInfoActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    fun resendRegistration(view: View) {
+
+        MaterialDialog(this).show {
+            input(
+                inputType = InputType.TYPE_CLASS_TEXT,
+                waitForPositiveButton = false
+            ) { dialog, text ->
+                val inputField = dialog.getInputField()
+                val valid = UserValidationRules.USERNAME.isValid(inputField.editableText)
+
+                inputField.error =
+                    if (valid) null else inputField.context.getString(R.string.error_username_invalid)
+                dialog.setActionButtonEnabled(WhichButton.POSITIVE, valid)
+            }
+            title(R.string.login_username_hint)
+            positiveButton(R.string.submit){
+                RegistrationUserInfoManager(this@LoginActivity).resend(
+                    it.getInputField().editableText.toString(),
+                    {Toast.makeText(this@LoginActivity,"Inviato correttamente",Toast.LENGTH_SHORT).show()}
+                )
+            }
+            negativeButton(android.R.string.cancel)
+        }
     }
 
     private fun animateLoginButton() {
@@ -104,6 +168,8 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
             }
             ).start()
     }
+
+    override fun checkUserSession(): Boolean = false
 
     override fun onBackPressed() {
         when {

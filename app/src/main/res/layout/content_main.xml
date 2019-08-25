@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Project: mybudget2-mobile-android
   ~ File: content_main.xml
   ~
@@ -27,78 +26,99 @@
   -->
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <data>
-        <import type="java.text.NumberFormat"/>
-        <import type="android.text.format.DateUtils"/>
-        <import type="android.view.View"/>
-        <import type="it.italiancoders.mybudget.databinding.converters.BooleanSafeUnboxConversions"/>
-        <variable name="model"
-                  type="it.italiancoders.mybudget.activity.main.MainViewModel"/>
+        <import type="androidx.core.content.ContextCompat" />
+
+        <import type="android.text.format.DateUtils" />
+
+        <import type="android.view.View" />
+
+        <import type="it.italiancoders.mybudget.databinding.converters.BooleanSafeUnboxConversions" />
+
+        <variable
+                name="model"
+                type="it.italiancoders.mybudget.activity.main.MainViewModel" />
     </data>
+
     <FrameLayout
             android:id="@+id/footer_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <RelativeLayout android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:paddingBottom="36dp">
 
             <RelativeLayout
                     android:id="@+id/header_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_alignParentStart="true"
                     android:layout_margin="4dp"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="8dp"
-                    android:paddingTop="4dp"
-                    android:paddingBottom="4dp"
-                    android:elevation="4dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:onClick="changePeriod"
-                    android:background="@color/primaryColor">
+                    android:elevation="4dp">
 
-                <TextView android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:id="@+id/periodo_text_view"
-                          android:layout_alignParentTop="true"
-                          android:layout_alignParentStart="true"
-                          android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                          android:text="@{DateUtils.formatDateTime(context, model.periodDate.getTime(), DateUtils.FORMAT_SHOW_YEAR | DateUtils.FORMAT_NO_MONTH_DAY)}"
-                          android:textColor="@android:color/white"
-                          android:textStyle="bold"
-                          android:textAllCaps="true"/>
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/change_period_type_fab"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:backgroundTint="@color/primaryColor"
+                        android:elevation="4dp"
+                        android:onClick="nextPeriodType"
+                        android:src="@{ContextCompat.getDrawable(context, model.periodType.getImageRes())}"
+                        android:tint="@android:color/white"
+                        app:rippleColor="@color/primaryLightColor" />
 
-                <TextView android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:id="@+id/total_text_view"
-                          android:layout_alignParentTop="true"
-                          android:layout_alignParentEnd="true"
-                          android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                          android:text="@{NumberFormat.getCurrencyInstance().format(model.total)}"
-                          android:textColor="@android:color/white"
-                          android:textStyle="bold"/>
+                <LinearLayout
+                        android:id="@+id/periodo_container"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:background="@color/primaryColor"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="-10dp"
+                        android:layout_toEndOf="@+id/change_period_type_fab">
+                <TextView
+                        android:id="@+id/periodo_text_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:onClick="changePeriod"
+                        android:paddingStart="20dp"
+                        android:paddingTop="4dp"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="4dp"
+                        android:text="@{model.periodDescription}"
+                        android:textAllCaps="true"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="@android:color/white"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
             </RelativeLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/movement_chart_layout"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_below="@+id/header_layout"
-                    android:layout_above="@+id/add_movement_button">
+                    android:layout_above="@+id/add_movement_button"
+                    android:layout_below="@+id/header_layout">
 
                 <com.github.mikephil.charting.charts.PieChart
                         android:id="@+id/categories_pie_chart"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                 <com.github.ybq.android.spinkit.SpinKitView
                         android:id="@+id/loading_spin"
@@ -106,11 +126,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:visibility="@{BooleanSafeUnboxConversions.unbox(model.loadingData) ? View.VISIBLE : View.GONE}"
-                        app:layout_constraintTop_toTopOf="parent"
+                        app:SpinKit_Color="@color/primaryDarkColor"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:SpinKit_Color="@color/primaryDarkColor"/>
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -118,25 +138,25 @@
                     android:id="@+id/add_movement_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:elevation="4dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:src="@drawable/ic_add"
-                    android:layout_margin="@dimen/fab_margin"
+                    android:layout_alignParentStart="true"
                     android:layout_alignParentBottom="true"
-                    android:layout_alignParentStart="true"/>
+                    android:layout_margin="@dimen/fab_margin"
+                    android:clickable="true"
+                    android:elevation="4dp"
+                    android:focusable="true"
+                    android:src="@drawable/ic_add" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/add_scheduled_movement_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:elevation="4dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:src="@drawable/ic_time"
-                    android:layout_margin="@dimen/fab_margin"
+                    android:layout_alignParentEnd="true"
                     android:layout_alignParentBottom="true"
-                    android:layout_alignParentEnd="true"/>
+                    android:layout_margin="@dimen/fab_margin"
+                    android:clickable="true"
+                    android:elevation="4dp"
+                    android:focusable="true"
+                    android:src="@drawable/ic_time" />
         </RelativeLayout>
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -144,14 +164,14 @@
                 android:layout_height="match_parent">
 
             <it.italiancoders.mybudget.activity.main.view.lastmovements.LastMovementsView
+                    android:id="@+id/last_movements_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     app:behavior_hideable="false"
                     app:behavior_peekHeight="36dp"
                     app:behavior_skipCollapsed="true"
-                    app:model="@{model}"
-                    android:id="@+id/last_movements_view"
                     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-                    android:layout_height="match_parent"
-                    android:layout_width="match_parent"/>
+                    app:model="@{model}" />
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

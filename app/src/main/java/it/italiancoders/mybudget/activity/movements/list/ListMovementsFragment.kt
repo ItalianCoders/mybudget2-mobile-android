@@ -38,6 +38,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.activity.main.view.lastmovements.MovementsDataAdapter
 import it.italiancoders.mybudget.activity.movements.edit.MovementActivity
@@ -52,7 +53,9 @@ class ListMovementsFragment : Fragment() {
 
     var movementsManager: MovementsManager? = null
 
-    val movementsDataAdapter = MovementsDataAdapter()
+    val movementsDataAdapter = MovementsDataAdapter(mutableListOf())
+
+    var layoutManager: LinearLayoutManager? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,15 +70,21 @@ class ListMovementsFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         binding.model = ViewModelProvider(this).get(ListMovementsViewModel::class.java)
 
+        layoutManager = LinearLayoutManager(binding.root.context)
+
         activity?.let {
             movementsManager = MovementsManager(it)
-            binding.movementsRecyclerView.layoutManager = LinearLayoutManager(it)
         }
 
         binding.movementsRecyclerView.setHasFixedSize(true)
+        binding.movementsRecyclerView.layoutManager = layoutManager
         binding.movementsRecyclerView.adapter = movementsDataAdapter
         binding.model?.page?.observe(this, Observer {
-            movementsDataAdapter.setMovements(it?.contents.orEmpty())
+            if(it?.number ?: 0 == 0) {
+                movementsDataAdapter.setMovements(it?.contents.orEmpty())
+            } else {
+                movementsDataAdapter.addMovements(it?.contents.orEmpty())
+            }
         })
 
         movementsDataAdapter.movementRecyclerViewAdapterListener = object :
@@ -84,11 +93,22 @@ class ListMovementsFragment : Fragment() {
                 context?.let {
                     val intent = Intent(it, MovementActivity::class.java)
                     intent.putExtra(MovementActivity.EXTRA_MOVEMENT_ID, movement.id)
-
                     startActivityForResult(intent, MovementActivity.REQUEST_CODE_MOVEMENT)
                 }
             }
         }
+
+        binding.movementsRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                if(dy>0) {
+                    if(binding.model?.loadingData?.get() != true && binding.model?.isLastPage() != true) {
+                        binding.model?.loadNextPage(movementsManager,true)
+                    }
+                }
+            }
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -96,7 +116,7 @@ class ListMovementsFragment : Fragment() {
 
         when {
             requestCode != MovementActivity.REQUEST_CODE_MOVEMENT -> return
-            resultCode == Activity.RESULT_OK -> search(true)
+            resultCode == Activity.RESULT_OK -> search()
         }
     }
 
@@ -114,9 +134,9 @@ class ListMovementsFragment : Fragment() {
         binding.model?.page?.value = page
     }
 
-    fun search(fromFirstPage: Boolean) {
+    fun search() {
         binding.model?.isValidParams()?.let {
-            binding.model?.search(movementsManager, true,fromFirstPage)
+            binding.model?.search(movementsManager, true)
         }
     }
 }

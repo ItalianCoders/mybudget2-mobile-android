@@ -49,12 +49,13 @@ import kotlinx.coroutines.withContext
  */
 class MovementsManager(context: Context) : AbstractRestManager(context) {
 
-    private val movementService = RetrofitBuilder.getSecureClient(context).create(MovementRestService::class.java)
+    private val movementService =
+        RetrofitBuilder.getSecureClient(context).create(MovementRestService::class.java)
 
     private val movementCache = MovementCache(context)
     private val expenseSummaryCache = ExpenseSummaryCache(context)
 
-    fun load(id: Int, onSuccessAction: (Movement?) -> Unit, onFailureAction: () -> Unit) {
+    fun load(id: Int, onSuccessAction: (Movement?) -> Unit, onFailureAction: (Int?) -> Unit) {
         val networkAvailable = NetworkChecker().isNetworkAvailable(context)
         CoroutineScope(Dispatchers.IO).launch {
 
@@ -86,7 +87,7 @@ class MovementsManager(context: Context) : AbstractRestManager(context) {
     fun search(
         parametri: ParametriRicerca,
         onSuccessAction: (MovementListPage?) -> Unit,
-        onFailureAction: () -> Unit,
+        onFailureAction: (Int?) -> Unit,
         forceReload: Boolean = false
     ) {
         val networkAvailable = NetworkChecker().isNetworkAvailable(context)
@@ -124,40 +125,55 @@ class MovementsManager(context: Context) : AbstractRestManager(context) {
     }
 
     fun getExpenseSummary(
-        year: Int,
-        month: Int,
-        day: Int?,
+        parametri: ParametriRicerca,
         onSuccessAction: (ExpenseSummary?) -> Unit,
-        onFailureAction: () -> Unit,
+        onFailureAction: (Int?) -> Unit,
         forceReload: Boolean = false
     ) {
         val networkAvailable = NetworkChecker().isNetworkAvailable(context)
         CoroutineScope(Dispatchers.IO).launch {
 
-            val expenseSummary = expenseSummaryCache.get(year, month)
+            //val expenseSummary = expenseSummaryCache.get(year, month)
 
-            if (networkAvailable && (expenseSummary == null || forceReload)) {
-                val response = movementService.getExpenseSummary(year, month, day)
+            if (networkAvailable) { // && (expenseSummary == null || forceReload)) {
+                val response = movementService.getExpenseSummary(
+                    parametri.year,
+                    parametri.month,
+                    parametri.day,
+                    parametri.week,
+                    null // Category not managed now
+                )
 
-                expenseSummaryCache.remove(year, month)
+                //expenseSummaryCache.remove(year, month)
+                /**
                 val onLoadAllSuccessAction: ((ExpenseSummary?) -> Unit)? = { summary ->
-                    onSuccessAction.invoke(summary)
-                    summary?.let {
-                        CoroutineScope(Dispatchers.IO).launch {
-                            expenseSummaryCache.add(it, year, month)
-                        }
-                    }
+                onSuccessAction.invoke(summary)
+                summary?.let {
+                CoroutineScope(Dispatchers.IO).launch {
+                expenseSummaryCache.add(it, year, month)
                 }
-                processResponse(response, onLoadAllSuccessAction, onFailureAction)
+                }
+                }
+                 **/
+                processResponse(response, onSuccessAction, onFailureAction)
             } else {
                 withContext(Dispatchers.Main) {
-                    onSuccessAction.invoke(expenseSummary)
+                    onSuccessAction.invoke(
+                        ExpenseSummary(
+                            0.0, arrayOf(),
+                            MovementListPage()
+                        )
+                    )
                 }
             }
         }
     }
 
-    fun delete(id: Int, onSuccessAction: ((Void?) -> Unit)? = null, onFailureAction: (() -> Unit?)? = null) {
+    fun delete(
+        id: Int,
+        onSuccessAction: ((Void?) -> Unit)? = null,
+        onFailureAction: ((Int?) -> Unit?)? = null
+    ) {
         CoroutineScope(Dispatchers.IO).launch {
             val response = movementService.delete(id)
 
@@ -178,7 +194,7 @@ class MovementsManager(context: Context) : AbstractRestManager(context) {
         id: Int,
         movement: Movement,
         onSuccessAction: ((Void?) -> Unit)? = null,
-        onFailureAction: (() -> Unit)? = null
+        onFailureAction: ((Int?) -> Unit)? = null
     ) {
         CoroutineScope(Dispatchers.IO).launch {
             val response = movementService.update(id, movement)
@@ -199,7 +215,7 @@ class MovementsManager(context: Context) : AbstractRestManager(context) {
     fun create(
         movement: Movement,
         onSuccessAction: ((Void?) -> Unit)? = null,
-        onFailureAction: (() -> Unit)? = null
+        onFailureAction: ((Int?) -> Unit)? = null
     ) {
         CoroutineScope(Dispatchers.IO).launch {
             val response = movementService.create(movement)

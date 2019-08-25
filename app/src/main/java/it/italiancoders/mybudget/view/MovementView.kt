@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: AuthManager.kt
+ * File: MovementView.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,56 +25,55 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget.manager
+package it.italiancoders.mybudget.view
 
 import android.content.Context
-import com.beust.klaxon.Klaxon
-import it.italiancoders.mybudget.SessionData
-import it.italiancoders.mybudget.rest.models.Session
+import android.util.AttributeSet
+import android.view.LayoutInflater
+import android.widget.LinearLayout
+import androidx.databinding.DataBindingUtil
+import it.italiancoders.mybudget.R
+import it.italiancoders.mybudget.adapters.base.BindableView
+import it.italiancoders.mybudget.databinding.ListItemMovementBinding
+import it.italiancoders.mybudget.rest.models.Movement
 
 /**
  * @author fattazzo
  *         <p/>
- *         date: 16/07/19
+ *         date: 06/08/19
  */
-class AuthManager(private val context: Context) {
+class MovementView : LinearLayout, BindableView<Movement> {
 
-    fun getLastSession(): Session? {
-
-        val lastSessionJson =
-            context.getSharedPreferences(AUTH_PREF_FILE, Context.MODE_PRIVATE).getString(
-                ACCESS_TOKEN_KEY, ""
-            )
-
-        return try {
-            Klaxon().parse<Session>(lastSessionJson!!)
-        } catch (e: Exception) {
-            null
-        }
+    val binding: ListItemMovementBinding by lazy {
+        DataBindingUtil.inflate(
+            context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater,
+            R.layout.list_item_movement,
+            this as LinearLayout,
+            false
+        ) as ListItemMovementBinding
     }
 
-    fun setSession(session: Session?) {
-
-        val sessionJson = Klaxon().toJsonString(session ?: "")
-
-        context.getSharedPreferences(AUTH_PREF_FILE, Context.MODE_PRIVATE).edit()
-            .putString(ACCESS_TOKEN_KEY, sessionJson)
-            .apply()
-        SessionData.session = session
+    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(
+        context,
+        attrs,
+        defStyle
+    ) {
+        initView()
     }
 
-    fun removeSession() {
-
-        context.getSharedPreferences(AUTH_PREF_FILE, Context.MODE_PRIVATE).edit().clear()
-            .apply()
-
-        SessionData.session = null
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
+        initView()
     }
 
-    companion object {
+    constructor(context: Context) : super(context) {
+        initView()
+    }
 
-        private const val AUTH_PREF_FILE = "auth_prefs"
+    private fun initView() {
+        addView(binding.root)
+    }
 
-        private const val ACCESS_TOKEN_KEY = "accessToken"
+    override fun bind(objectToBind: Movement) {
+        binding.movement = objectToBind
     }
 }

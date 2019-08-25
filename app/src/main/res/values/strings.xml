@@ -71,7 +71,15 @@
 
     <string name="search">Search</string>
     <string name="reset">Reimposta</string>
+    <string name="submit">Invia</string>
+    <string name="logout">Logout</string>
 
     <string name="attention">Attenzione</string>
+
+    <string name="error_firstname_invalid">Il nome deve avere minimo 5 caratteri</string>
+    <string name="error_lastname_invalid">Il cognome deve avere minimo 5 caratteri</string>
+    <string name="error_username_invalid">L\'username deve avere minimo 5 caratteri</string>
+    <string name="error_password_invalid">La password deve avere minimo 8 caratteri e contenere almeno una maiuscola e un numero</string>
+    <string name="error_email_invalid">L\'email deve essere valida</string>
 
 </resources>

@@ -34,11 +34,12 @@ import android.widget.LinearLayout
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
 import it.italiancoders.mybudget.R
+import it.italiancoders.mybudget.activity.main.MainActivity
 import it.italiancoders.mybudget.activity.main.MainViewModel
+import it.italiancoders.mybudget.activity.movements.list.ListMovementsFragment
 import it.italiancoders.mybudget.databinding.ViewLastMovementsBinding
-import it.italiancoders.mybudget.rest.models.Movement
+import it.italiancoders.mybudget.rest.models.MovementListPage
 
 
 /**
@@ -57,11 +58,15 @@ class LastMovementsView : LinearLayout {
         ) as ViewLastMovementsBinding
     }
 
-    val movementsDataAdapter = MovementsDataAdapter()
+    val movementsDataAdapter = MovementsDataAdapter(mutableListOf())
 
     var lifecycleOwner: LifecycleOwner? = null
 
-    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle) {
+    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(
+        context,
+        attrs,
+        defStyle
+    ) {
         initView()
     }
 
@@ -77,21 +82,34 @@ class LastMovementsView : LinearLayout {
         addView(binding.root)
 
         // recycler view
+        /**
         binding.lastMovementsRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.lastMovementsRecyclerView.setHasFixedSize(true)
         binding.lastMovementsRecyclerView.adapter = movementsDataAdapter
         movementsDataAdapter.movementRecyclerViewAdapterListener = object :
-            MovementsDataAdapter.MovementRecyclerViewAdapterListener {
-            override fun onListItemSelected(movement: Movement) {
+        MovementsDataAdapter.MovementRecyclerViewAdapterListener {
+        override fun onListItemSelected(movement: Movement) {
 
-            }
         }
+        }
+         **/
     }
 
     fun setModel(model: MainViewModel) {
         binding.model = model
-        binding.model?.lastMovements?.observe(lifecycleOwner!!, Observer<List<Movement>> {
-            movementsDataAdapter.setMovements(it)
+        binding.model?.lastMovements?.observe(lifecycleOwner!!, Observer<MovementListPage> { page ->
+            //movementsDataAdapter.setMovements(it)
+            val listMovementsFragment =
+                (context as MainActivity).supportFragmentManager.findFragmentById(R.id.last_movements_fragment) as ListMovementsFragment?
+
+            listMovementsFragment?.let {
+                val year = binding.model?.year?.value!!
+                val month = binding.model?.month?.value!!
+                val day = null
+                val categoryId = null
+
+                it.setParams(year, month, day, categoryId, page)
+            }
         })
     }
 }

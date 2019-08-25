@@ -47,7 +47,7 @@ data class Movement(val id: Long?, var amount: BigDecimal, var category: Categor
         set(value) {
             field = value
             executedAt = try {
-                SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault()).format(value)
+                SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault()).format(value!!)
             } catch (e: Exception) {
                 ""
             }

@@ -39,8 +39,8 @@ android {
         applicationId "it.italiancoders.mybudget"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 43
-        versionName "0.7"
+        versionCode 46
+        versionName "0.9.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         multiDexEnabled true
@@ -108,6 +108,7 @@ dependencies {
     // https://github.com/afollestad/material-dialogs
     implementation 'com.afollestad.material-dialogs:core:3.1.0'
     implementation 'com.afollestad.material-dialogs:bottomsheets:3.1.0'
+    implementation 'com.afollestad.material-dialogs:input:3.1.0'
 
     // Room
     implementation 'androidx.room:room-runtime:2.2.0-alpha02'

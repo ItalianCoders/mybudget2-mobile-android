@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: LoginBindingAdapter.kt
+ * File: MovementsAdapter.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,39 +25,23 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget.activity.login
+package it.italiancoders.mybudget.activity.main.view.lastmovements
 
-import android.text.Editable
-import android.text.TextWatcher
-import androidx.databinding.BindingAdapter
-import com.google.android.material.textfield.TextInputLayout
+import android.content.Context
+import it.italiancoders.mybudget.adapters.base.BindableView
+import it.italiancoders.mybudget.adapters.recyclerview.EndlessRecyclerViewAdapter
+import it.italiancoders.mybudget.rest.models.Movement
+import it.italiancoders.mybudget.view.MovementView
 
 /**
  * @author fattazzo
  *         <p/>
- *         date: 10/07/19
+ *         date: 21/08/19
  */
-object LoginBindingAdapter {
+class MovementsAdapter(values: List<Movement>) : EndlessRecyclerViewAdapter<Movement>(values) {
 
-    @JvmStatic
-    @BindingAdapter("app:validation", "app:errorMsg")
-    fun setErrorEnable(textInputLayout: TextInputLayout, stringRule: LoginValidationRules.Rule, errorMsg: String) {
-        textInputLayout.editText?.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+    override fun buildItemView(context: Context, viewType: Int): BindableView<in Movement> =
+        MovementView(context)
 
-            }
-
-            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
-
-            }
-
-            override fun afterTextChanged(editable: Editable) {
-                if (stringRule.isValid(textInputLayout.editText?.text)) {
-                    textInputLayout.editText?.error = null
-                } else {
-                    textInputLayout.editText?.error = errorMsg
-                }
-            }
-        })
-    }
+    override fun isGroupItem(item: Movement): Boolean = false
 }

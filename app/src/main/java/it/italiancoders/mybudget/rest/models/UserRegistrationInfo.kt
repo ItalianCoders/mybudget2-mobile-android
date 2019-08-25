@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: SessionRestService.kt
+ * File: UserRegistrationInfo.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,39 +25,22 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget.rest.api.services
-
-import it.italiancoders.mybudget.rest.models.LoginRequest
-import it.italiancoders.mybudget.rest.models.Session
-import retrofit2.Call
-import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.POST
-import retrofit2.http.Path
-
+package it.italiancoders.mybudget.rest.models
 
 /**
  * @author fattazzo
  *         <p/>
- *         date: 16/07/19
+ *         date: 23/08/19
  */
-interface SessionRestService {
+data class UserRegistrationInfo(
+    val username: String,
+    val password: String,
+    val firstName: String,
+    val lastName: String,
+    val email: String
+) {
 
-    /**
-     * Obtain AccessToken, RefreshToken and the user session
-     *
-     * @param loginRequest The login request data
-     * @return The session object
-     */
-    @POST("session")
-    suspend fun login(@Body loginRequest: LoginRequest): Response<Session>
+    constructor() : this("", "", "", "", "")
 
-    /**
-     * Obtain a new AccessToken and user session using RefreshToken
-     *
-     * @param refreshToken The refresh token
-     * @return The session object
-     */
-    @POST("session/refresh/{refreshToken}")
-    fun refresh(@Path("refreshToken") refreshToken: String): Call<Session>
+    fun isValid() = username.isNotBlank() && password.isNotBlank() && email.isNotBlank()
 }

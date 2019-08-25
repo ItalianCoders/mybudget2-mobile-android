@@ -29,6 +29,8 @@ package it.italiancoders.mybudget.activity.movements.edit
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -46,6 +48,7 @@ import it.italiancoders.mybudget.manager.categories.CategoriesManager
 import it.italiancoders.mybudget.manager.movements.MovementsManager
 import it.italiancoders.mybudget.rest.models.Category
 import it.italiancoders.mybudget.rest.models.Movement
+import java.util.*
 
 
 class MovementActivity : BaseActivity<ActivityMovementBinding>(), View.OnFocusChangeListener {
@@ -88,6 +91,40 @@ class MovementActivity : BaseActivity<ActivityMovementBinding>(), View.OnFocusCh
                 setTitle(R.string.movement_edit)
             }
         }
+    }
+
+    fun changeDate(view: View) {
+        val calData = Calendar.getInstance()
+        model.date.value?.let { calData.time = it }
+
+        DatePickerDialog(
+            this,
+            DatePickerDialog.OnDateSetListener { _, selectedYear, selectedMonth, selectedDay ->
+                val calData = Calendar.getInstance()
+                calData.set(selectedYear,selectedMonth,selectedDay)
+                model.date.postValue(calData.time)
+            },
+            calData.get(Calendar.YEAR),
+            calData.get(Calendar.MONTH),
+            calData.get(Calendar.DAY_OF_MONTH)
+        ).show()
+    }
+
+    fun changeTime(view: View) {
+        val calData = Calendar.getInstance()
+        model.date.value?.let { calData.time = it }
+
+        TimePickerDialog(
+            this,
+            TimePickerDialog.OnTimeSetListener { _, selectedHour, selectedMinutes ->
+                calData.set(Calendar.HOUR_OF_DAY,selectedHour)
+                calData.set(Calendar.MINUTE,selectedMinutes)
+                model.date.postValue(calData.time)
+            },
+            calData.get(Calendar.HOUR_OF_DAY),
+            calData.get(Calendar.MINUTE),
+            true
+        ).show()
     }
 
     fun save(view: View) {

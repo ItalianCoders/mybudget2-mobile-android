@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Project: mybudget2-mobile-android
-  ~ File: strings_login.xml
+  ~ File: ic_person_add.xml
   ~
   ~ Created by fattazzo
   ~ Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -26,16 +25,12 @@
   ~ SOFTWARE.
   -->
 
-<resources>
-    <string name="login_activity_title">Login</string>
-
-    <string name="login_sign_in">Sign In</string>
-
-    <string name="login_username_hint">Username</string>
-    <string name="login_password_hint">Password</string>
-
-    <string name="login_error">Utente o password non validi</string>
-
-    <string name="login_user_not_activated_title">Utente non attivo!</string>
-    <string name="login_user_not_activated_message">Controlla la tua email e attiva il tuo account oppure richiedi l\' invio di un nuovo codice di attivazione.</string>
-</resources>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+        android:width="24dp"
+        android:height="24dp"
+        android:viewportWidth="24.0"
+        android:viewportHeight="24.0">
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M15,12c2.21,0 4,-1.79 4,-4s-1.79,-4 -4,-4 -4,1.79 -4,4 1.79,4 4,4zM6,10L6,7L4,7v3L1,10v2h3v3h2v-3h3v-2L6,10zM15,14c-2.67,0 -8,1.34 -8,4v2h16v-2c0,-2.66 -5.33,-4 -8,-4z"/>
+</vector>

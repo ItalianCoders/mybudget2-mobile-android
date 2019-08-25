@@ -31,8 +31,9 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import it.italiancoders.mybudget.manager.movements.MovementsManager
+import it.italiancoders.mybudget.manager.movements.ParametriRicerca
 import it.italiancoders.mybudget.rest.models.CategoryMovementOverview
-import it.italiancoders.mybudget.rest.models.Movement
+import it.italiancoders.mybudget.rest.models.MovementListPage
 import java.math.BigDecimal
 import java.util.*
 
@@ -45,43 +46,78 @@ class MainViewModel : ViewModel() {
 
     var year: MutableLiveData<Int> = MutableLiveData(Calendar.getInstance().get(Calendar.YEAR))
     var month: MutableLiveData<Int> = MutableLiveData(Calendar.getInstance().get(Calendar.MONTH))
+    var day: MutableLiveData<Int> =
+        MutableLiveData(Calendar.getInstance().get(Calendar.DAY_OF_MONTH))
+
+    var periodType: MutableLiveData<PeriodType> = MutableLiveData(PeriodType.MONTH)
 
     var total: MutableLiveData<BigDecimal> = MutableLiveData(BigDecimal.ZERO)
 
-    val periodDate = MediatorLiveData<Date>().apply {
-        addSource(year) { setValue(parseDate()) }
-        addSource(month) { setValue(parseDate()) }
+    val periodDescription: MediatorLiveData<String> = MediatorLiveData<String>().apply {
+        addSource(year) { setValue(formatDate()) }
+        addSource(month) { setValue(formatDate()) }
+        addSource(day) { setValue(formatDate()) }
+        addSource(periodType) { setValue(formatDate()) }
     }.also { it.observeForever { /* empty */ } }
+
+    private fun formatDate(): String {
+        val date = parseDate()
+        return periodType.value?.formatDate(date) ?: ""
+    }
 
     private fun parseDate(): Date {
         val calendar = Calendar.getInstance()
-        calendar.set(year.value!!, month.value!!, 1)
+        calendar.set(year.value!!, month.value!!, day.value!!)
         return calendar.time
     }
 
-    var lastMovements: MutableLiveData<List<Movement>> = MutableLiveData(listOf())
-    var categoryOverview: MutableLiveData<List<CategoryMovementOverview>> = MutableLiveData(listOf())
+    var lastMovements: MutableLiveData<MovementListPage> = MutableLiveData(MovementListPage())
+    var categoryOverview: MutableLiveData<List<CategoryMovementOverview>> =
+        MutableLiveData(listOf())
 
     var loadingData: MediatorLiveData<Boolean> = MediatorLiveData<Boolean>().apply {
         addSource(categoryOverview) { setValue(false) }
     }
 
-    fun loadExpenseSummary(movementsManager: MovementsManager,forceReload: Boolean = false) {
+    fun loadExpenseSummary(movementsManager: MovementsManager, forceReload: Boolean = false) {
         loadingData.value = true
 
         movementsManager.getExpenseSummary(
-            year.value!!, month.value!!+1, null,
+            buildParametriRicerca(),
             { summary ->
                 total.postValue(summary?.totalAmount?.toBigDecimal() ?: BigDecimal.ZERO)
                 categoryOverview.postValue(summary?.categoryOverview?.toList() ?: listOf())
-                lastMovements.postValue(summary?.lastMovements?.contents?.toList() ?: listOf())
+                lastMovements.postValue(summary?.lastMovements ?: MovementListPage())
             },
             {
                 total.postValue(BigDecimal.ZERO)
                 categoryOverview.postValue(listOf())
-                lastMovements.postValue(listOf())
+                lastMovements.postValue(MovementListPage())
             },
             forceReload
         )
+    }
+
+    private fun buildParametriRicerca(): ParametriRicerca {
+
+        return when (periodType.value ?: PeriodType.MONTH) {
+            PeriodType.MONTH -> {
+                ParametriRicerca(year.value!!, month.value!!+1, null, null, null)
+            }
+            PeriodType.WEEK -> {
+                val calDate = Calendar.getInstance()
+                calDate.time = parseDate()
+                ParametriRicerca(
+                    year.value!!,
+                    month.value!!+1,
+                    null,
+                    calDate.get(Calendar.WEEK_OF_MONTH),
+                    null
+                )
+            }
+            PeriodType.DAY -> {
+                ParametriRicerca(year.value!!, month.value!!+1, day.value!!, null, null)
+            }
+        }
     }
 }

@@ -32,7 +32,7 @@
     <data>
         <variable name="viewModel"
                   type="it.italiancoders.mybudget.activity.login.LoginViewModel"/>
-        <import type="it.italiancoders.mybudget.activity.login.LoginValidationRules"/>
+        <import type="it.italiancoders.mybudget.activity.login.UserValidationRules"/>
         <import type="it.italiancoders.mybudget.databinding.converters.BooleanSafeUnboxConversions"/>
 
     </data>
@@ -95,7 +95,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
                         app:errorEnabled="false"
-                        app:validation="@{LoginValidationRules.USERNAME}"
+                        app:validation="@{UserValidationRules.USERNAME}"
                         app:errorMsg='@{@string/error_username_invalid}'>
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -114,7 +114,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
                         app:errorEnabled="false"
-                        app:validation="@{LoginValidationRules.PASSWORD}"
+                        app:validation="@{UserValidationRules.PASSWORD}"
                         app:errorMsg='@{@{@string/error_password_invalid}}'>
 
                     <com.google.android.material.textfield.TextInputEditText
