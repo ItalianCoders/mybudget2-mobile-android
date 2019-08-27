@@ -40,6 +40,8 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.navigation.NavigationView
 import com.whiteelephant.monthpicker.MonthPickerDialog
@@ -48,7 +50,7 @@ import it.italiancoders.mybudget.SessionData
 import it.italiancoders.mybudget.activity.BaseActivity
 import it.italiancoders.mybudget.activity.categories.CategoriesActivity
 import it.italiancoders.mybudget.activity.login.LoginActivity
-import it.italiancoders.mybudget.activity.main.chart.CategoryPieChartManager
+import it.italiancoders.mybudget.activity.main.chart.ChartsCategoryOverviewAdapter
 import it.italiancoders.mybudget.activity.main.view.lastmovements.LastMovementsView
 import it.italiancoders.mybudget.activity.movements.MovementsActivity
 import it.italiancoders.mybudget.activity.movements.edit.MovementActivity
@@ -57,6 +59,7 @@ import it.italiancoders.mybudget.databinding.ActivityMainBinding
 import it.italiancoders.mybudget.manager.AuthManager
 import it.italiancoders.mybudget.manager.movements.MovementsManager
 import it.italiancoders.mybudget.tutorial.TutorialMainActivity
+import it.italiancoders.mybudget.utils.LinePagerIndicatorDecoration
 import it.italiancoders.mybudget.utils.NetworkChecker
 import java.math.BigDecimal
 
@@ -104,10 +107,15 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
 
         binding.navView.setNavigationItemSelectedListener(this)
 
-        CategoryPieChartManager.configure(binding.contentMain.categoriesPieChart)
+        val snapHelper = PagerSnapHelper()
+        snapHelper.attachToRecyclerView(binding.contentMain.chartsRecyclerView)
+
+        binding.contentMain.chartsRecyclerView.layoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false)
+        binding.contentMain.chartsRecyclerView.adapter = ChartsCategoryOverviewAdapter(this)
+        binding.contentMain.chartsRecyclerView.addItemDecoration(LinePagerIndicatorDecoration())
+
         binding.model?.categoryOverview?.observe(this, Observer {
-            CategoryPieChartManager.setData(
-                binding.contentMain.categoriesPieChart,
+            (binding.contentMain.chartsRecyclerView.adapter as ChartsCategoryOverviewAdapter).updateCharts(
                 it,
                 binding.model?.total?.value ?: BigDecimal.ZERO
             )

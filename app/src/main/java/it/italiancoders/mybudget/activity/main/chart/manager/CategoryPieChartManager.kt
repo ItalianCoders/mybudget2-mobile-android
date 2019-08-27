@@ -25,8 +25,9 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget.activity.main.chart
+package it.italiancoders.mybudget.activity.main.chart.manager
 
+import android.content.Context
 import android.graphics.Color
 import android.text.SpannableString
 import android.text.style.RelativeSizeSpan
@@ -36,8 +37,8 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
-import com.github.mikephil.charting.utils.ColorTemplate
 import com.github.mikephil.charting.utils.MPPointF
+import it.italiancoders.mybudget.manager.AppPreferenceManager
 import it.italiancoders.mybudget.rest.models.CategoryMovementOverview
 import java.math.BigDecimal
 import java.text.DecimalFormat
@@ -77,8 +78,6 @@ object CategoryPieChartManager {
         chart.isRotationEnabled = true
         chart.isHighlightPerTapEnabled = true
 
-        chart.animateY(1400, Easing.EaseInOutQuad)
-
         chart.legend.isEnabled = false
 
         // entry label styling
@@ -95,7 +94,10 @@ object CategoryPieChartManager {
         total: BigDecimal
     ) {
 
-        val entries = buildEntries(categoryOverview)
+        val entries =
+            buildEntries(
+                categoryOverview
+            )
 
         val dataSet = PieDataSet(entries, "")
 
@@ -110,7 +112,8 @@ object CategoryPieChartManager {
         dataSet.xValuePosition = PieDataSet.ValuePosition.OUTSIDE_SLICE
         dataSet.yValuePosition = PieDataSet.ValuePosition.OUTSIDE_SLICE
 
-        dataSet.colors = ColorTemplate.MATERIAL_COLORS.asList()
+        dataSet.colors =
+            AppPreferenceManager.getChartColorTheme(chart.context).colors.toMutableList()
 
         val data = PieData(dataSet)
         data.setValueFormatter(PercentFormatter(chart))
@@ -120,7 +123,11 @@ object CategoryPieChartManager {
 
         chart.highlightValues(null)
 
-        chart.centerText = generateCenterSpannableText(total)
+        chart.centerText =
+            generateCenterSpannableText(
+                chart.context,
+                total
+            )
 
         chart.invalidate()
 
@@ -140,17 +147,19 @@ object CategoryPieChartManager {
     /**
      *
      */
-    private fun generateCenterSpannableText(total: BigDecimal): SpannableString {
+    private fun generateCenterSpannableText(context: Context, total: BigDecimal): SpannableString {
 
         return when {
             total.compareTo(BigDecimal.ZERO) == 0 -> SpannableString("")
             else -> {
-                val intPart = DecimalFormat("#,##0").format(total)
+                val intPart = DecimalFormat("#,##0").format(total.toBigInteger())
                 val decPart =
-                    total.remainder(BigDecimal.ONE).movePointRight(total.scale()).abs().toBigInteger()
-                        .toString().padStart(2,'0')
+                    total.remainder(BigDecimal.ONE).movePointRight(total.scale()).abs()
+                        .toBigInteger()
+                        .toString().padStart(2, '0')
+                val symbol = AppPreferenceManager.getCurrencySymbol(context)
 
-                val s = SpannableString("${intPart}.$decPart €")
+                val s = SpannableString("${intPart}.$decPart $symbol")
                 s.setSpan(RelativeSizeSpan(1.7f), 0, intPart.length, 0)
                 s.setSpan(RelativeSizeSpan(1.7f), intPart.length + 1 + decPart.length, s.length, 0)
                 s

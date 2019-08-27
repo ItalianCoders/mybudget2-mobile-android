@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: MovementsAdapter.kt
+ * File: CategoryRadarChartView.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,23 +25,31 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget.activity.main.view.lastmovements
+package it.italiancoders.mybudget.activity.main.chart.view
 
 import android.content.Context
-import it.italiancoders.mybudget.adapters.base.BindableView
-import it.italiancoders.mybudget.adapters.recyclerview.EndlessRecyclerViewAdapter
-import it.italiancoders.mybudget.rest.models.Movement
-import it.italiancoders.mybudget.view.MovementView
+import android.util.AttributeSet
+import com.github.mikephil.charting.charts.RadarChart
+import it.italiancoders.mybudget.activity.main.chart.manager.CategoryRadarChartManager
+import it.italiancoders.mybudget.rest.models.CategoryMovementOverview
+import java.math.BigDecimal
 
 /**
  * @author fattazzo
  *         <p/>
- *         date: 21/08/19
+ *         date: 26/08/19
  */
-class MovementsAdapter(values: List<Movement>) : EndlessRecyclerViewAdapter<Movement>(values) {
+class CategoryRadarChartView @JvmOverloads constructor(
+    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+) : ChartView<RadarChart>(context, attrs, defStyleAttr) {
 
-    override fun buildItemView(context: Context, viewType: Int): BindableView<in Movement> =
-        MovementView(context)
+    override fun create(): RadarChart = RadarChart(context)
 
-    override fun isGroupItem(item: Movement): Boolean = false
+    override fun configure(chart: RadarChart) {
+        CategoryRadarChartManager.configure(chart)
+    }
+
+    override fun updateChart(categoryOverview: List<CategoryMovementOverview>, total: BigDecimal) {
+        CategoryRadarChartManager.setData(chart, categoryOverview, total)
+    }
 }

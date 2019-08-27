@@ -76,10 +76,18 @@
 
     <string name="attention">Attenzione</string>
 
+    <string name="current">Corrente</string>
+
+    <string name="size">Dimensione</string>
+
+    <string name="charts_color_theme">Tema grafici</string>
+
     <string name="error_firstname_invalid">Il nome deve avere minimo 5 caratteri</string>
     <string name="error_lastname_invalid">Il cognome deve avere minimo 5 caratteri</string>
     <string name="error_username_invalid">L\'username deve avere minimo 5 caratteri</string>
     <string name="error_password_invalid">La password deve avere minimo 8 caratteri e contenere almeno una maiuscola e un numero</string>
     <string name="error_email_invalid">L\'email deve essere valida</string>
+
+    <string name="no_data_for_period">Nessuna dato per il periodo scelto</string>
 
 </resources>

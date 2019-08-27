@@ -35,7 +35,11 @@ import androidx.databinding.DataBindingUtil
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.adapters.base.BindableView
 import it.italiancoders.mybudget.databinding.ListItemMovementBinding
+import it.italiancoders.mybudget.manager.AppPreferenceManager
 import it.italiancoders.mybudget.rest.models.Movement
+import java.text.DecimalFormat
+import java.text.NumberFormat
+
 
 /**
  * @author fattazzo
@@ -75,5 +79,9 @@ class MovementView : LinearLayout, BindableView<Movement> {
 
     override fun bind(objectToBind: Movement) {
         binding.movement = objectToBind
+
+        val formatter = NumberFormat.getCurrencyInstance() as DecimalFormat
+        formatter.decimalFormatSymbols.currencySymbol = AppPreferenceManager.getCurrencySymbol(context)
+
     }
 }

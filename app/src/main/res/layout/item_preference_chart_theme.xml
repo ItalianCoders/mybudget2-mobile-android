@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Project: mybudget2-mobile-android
+  ~ File: item_preference_chart_theme.xml
+  ~
+  ~ Created by fattazzo
+  ~ Copyright © 2019 Gianluca Fattarsi. All rights reserved.
+  ~
+  ~ MIT License
+  ~ Permission is hereby granted, free of charge, to any person obtaining a copy
+  ~ of this software and associated documentation files (the "Software"), to deal
+  ~ in the Software without restriction, including without limitation the rights
+  ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  ~ copies of the Software, and to permit persons to whom the Software is
+  ~ furnished to do so, subject to the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be included in all
+  ~ copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  ~ SOFTWARE.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?android:attr/listPreferredItemHeight"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingEnd="?android:attr/scrollbarSize"
+        android:paddingStart="0dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:baselineAligned="false">
+
+    <LinearLayout
+            android:id="@+id/icon_frame_aaa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="60dp"
+            android:gravity="start|center_vertical"
+            android:orientation="horizontal"
+            android:paddingEnd="12dp"
+            android:paddingStart="0dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp">
+
+        <ImageView
+                android:id="@+id/icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxHeight="48dp"
+                android:maxWidth="48dp"/>
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="-4dip"
+            android:layout_marginEnd="6dip"
+            android:layout_marginTop="6dip"
+            android:layout_marginBottom="6dip">
+
+        <TextView android:id="@+id/title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:ellipsize="marquee"
+                android:fadingEdge="horizontal"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView android:id="@+id/summary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="?android:attr/textColorSecondary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:maxLines="4" />
+
+        <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_below="@android:id/summary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/summary"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_alignStart="@android:id/title">
+
+            <ImageView
+                    android:id="@+id/color5"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginBottom="6dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginTop="6dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="ContentDescription"
+                    tools:layout_constraintLeft_creator="1"
+                    tools:layout_constraintTop_creator="1" />
+
+            <ImageView
+                    android:id="@+id/color1"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginBottom="6dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginTop="6dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toLeftOf="@+id/color2"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="ContentDescription"
+                    tools:layout_constraintLeft_creator="1"
+                    tools:layout_constraintTop_creator="1" />
+
+            <ImageView
+                    android:id="@+id/color4"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginBottom="6dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginTop="6dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toLeftOf="@+id/color5"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="ContentDescription"
+                    tools:layout_constraintLeft_creator="1"
+                    tools:layout_constraintTop_creator="1" />
+
+            <ImageView
+                    android:id="@+id/color3"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginBottom="6dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginTop="6dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toLeftOf="@+id/color4"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="ContentDescription"
+                    tools:layout_constraintLeft_creator="1"
+                    tools:layout_constraintTop_creator="1" />
+
+            <ImageView
+                    android:id="@+id/color2"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginBottom="6dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginTop="6dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toLeftOf="@+id/color3"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="ContentDescription"
+                    tools:layout_constraintLeft_creator="1"
+                    tools:layout_constraintTop_creator="1" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Preference should place its actual preference widget here. -->
+    <LinearLayout android:id="@+id/widget_frame"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="vertical" />
+
+</LinearLayout>

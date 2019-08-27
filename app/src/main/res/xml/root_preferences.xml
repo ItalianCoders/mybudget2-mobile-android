@@ -33,6 +33,18 @@
             app:title="@string/settings_global_section">
 
         <Preference
+                android:icon="@drawable/ic_money"
+                android:key="@string/pref_key_currency_symbol"
+                android:title="@string/settings_currency_symbol"/>
+
+        <it.italiancoders.mybudget.preferences.chart.ChartColorThemePickerPreference
+                android:defaultValue="3"
+                android:key="@string/pref_key_chart_color_theme"
+                android:layout="@layout/item_preference_chart_theme"
+                android:icon="@drawable/ic_color_lens"
+                android:title="@string/charts_color_theme" />
+
+        <Preference
                 android:icon="@drawable/ic_storage"
                 android:key="@string/pref_key_clear_data"
                 android:title="@string/settings_clear_data"/>

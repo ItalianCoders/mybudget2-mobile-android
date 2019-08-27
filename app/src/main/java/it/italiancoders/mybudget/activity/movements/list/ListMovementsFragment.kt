@@ -80,7 +80,7 @@ class ListMovementsFragment : Fragment() {
         binding.movementsRecyclerView.layoutManager = layoutManager
         binding.movementsRecyclerView.adapter = movementsDataAdapter
         binding.model?.page?.observe(this, Observer {
-            if(it?.number ?: 0 == 0) {
+            if (it?.number ?: 0 == 0) {
                 movementsDataAdapter.setMovements(it?.contents.orEmpty())
             } else {
                 movementsDataAdapter.addMovements(it?.contents.orEmpty())
@@ -102,10 +102,15 @@ class ListMovementsFragment : Fragment() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
-                if(dy>0) {
-                    if(binding.model?.loadingData?.get() != true && binding.model?.isLastPage() != true) {
-                        binding.model?.loadNextPage(movementsManager,true)
+                if (dy > 0) {
+                    if (binding.model?.loadingData?.get() != true && binding.model?.isLastPage() != true) {
+                        binding.model?.loadNextPage(movementsManager, true)
                     }
+                } else if (binding.model?.isLastPage() != true && layoutManager?.findLastVisibleItemPosition() != -1 &&
+                    layoutManager?.findLastVisibleItemPosition() == (layoutManager?.childCount
+                        ?: 0) - 1
+                ) {
+                    binding.model?.loadNextPage(movementsManager, true)
                 }
             }
         })

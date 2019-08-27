@@ -31,9 +31,13 @@
         <import type="java.text.NumberFormat"/>
         <import type="android.text.format.DateUtils"/>
         <import type="java.text.DateFormat"/>
+        <import type="it.italiancoders.mybudget.databinding.converters.AmountStringConversion"/>
         <variable
                 name="movement"
                 type="it.italiancoders.mybudget.rest.models.Movement"/>
+        <variable
+                name="formattedAmount"
+                type="String" />
 
     </data>
     <LinearLayout
@@ -79,7 +83,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="@{NumberFormat.getCurrencyInstance().format(movement.amount)}"
+                    android:text="@{AmountStringConversion.toString(context,movement.amount)}"
                     bind:layout_constraintEnd_toEndOf="parent"
                     bind:layout_constraintTop_toBottomOf="@+id/category_text_view"
                     android:textAppearance="@style/TextAppearance.Small"/>

@@ -111,8 +111,8 @@
                     android:layout_above="@+id/add_movement_button"
                     android:layout_below="@+id/header_layout">
 
-                <com.github.mikephil.charting.charts.PieChart
-                        android:id="@+id/categories_pie_chart"
+                <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/charts_recycler_view"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         app:layout_constraintBottom_toBottomOf="parent"
