@@ -291,7 +291,7 @@ class MainViewModelTest : AbstractViewModelTest<MainViewModel>() {
             it.lastMovements.contents.forEachIndexed { index, mov ->
                 val modelMov = viewModel.lastMovements.value?.contents?.get(index)
                 assertThat(modelMov?.amount, `is`(mov.amount))
-                assertThat(modelMov?.category?.id, `is`(mov.category?.id))
+                assertThat(modelMov?.category?.id, `is`(mov.category.id))
                 assertThat(modelMov?.executedAt, `is`(mov.executedAt))
                 assertThat(modelMov?.id, `is`(mov.id))
             }

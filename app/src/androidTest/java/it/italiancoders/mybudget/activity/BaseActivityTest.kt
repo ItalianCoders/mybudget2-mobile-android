@@ -30,7 +30,6 @@ package it.italiancoders.mybudget.activity
 import androidx.arch.core.executor.testing.CountingTaskExecutorRule
 import androidx.test.platform.app.InstrumentationRegistry
 import it.italiancoders.mybudget.app.TestApplication
-import it.italiancoders.mybudget.app.component.DaggerTestAppComponent
 import it.italiancoders.mybudget.app.component.TestAppComponent
 import it.italiancoders.mybudget.manager.categories.CategoriesManager
 import it.italiancoders.mybudget.manager.expensesummary.ExpenseSummaryManager

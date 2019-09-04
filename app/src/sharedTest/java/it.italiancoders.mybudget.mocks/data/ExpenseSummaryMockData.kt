@@ -30,7 +30,6 @@ package it.italiancoders.mybudget.mocks.data
 import com.nhaarman.mockitokotlin2.doReturn
 import it.italiancoders.mybudget.manager.expensesummary.ExpenseSummaryManager
 import it.italiancoders.mybudget.manager.movements.ParametriRicerca
-import it.italiancoders.mybudget.mock.data.AbstractMockData
 import it.italiancoders.mybudget.mocks.config.ExpenseSummaryConfig
 import it.italiancoders.mybudget.rest.models.ExpenseSummary
 import org.mockito.Mockito.`when`

@@ -31,7 +31,6 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.doReturnConsecutively
 import it.italiancoders.mybudget.manager.categories.CategoriesManager
-import it.italiancoders.mybudget.mock.data.AbstractMockData
 import it.italiancoders.mybudget.mocks.config.CategoriesConfig
 import it.italiancoders.mybudget.rest.models.Category
 import org.mockito.Mockito.`when`

@@ -25,7 +25,7 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget.mock.data
+package it.italiancoders.mybudget.mocks.data
 
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import com.beust.klaxon.*

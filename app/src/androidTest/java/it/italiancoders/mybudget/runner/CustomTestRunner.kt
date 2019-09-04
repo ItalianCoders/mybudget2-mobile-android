@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: CustomTestRunner
+ * File: CustomTestRunner.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,27 +25,32 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget.runner;
+package it.italiancoders.mybudget.runner
 
-import android.app.Application;
-import android.content.Context;
+import android.app.Application
+import android.content.Context
 
-import androidx.test.runner.AndroidJUnitRunner;
+import androidx.test.runner.AndroidJUnitRunner
 
-import it.italiancoders.mybudget.app.TestApplication;
+import it.italiancoders.mybudget.app.TestApplication
 
 /**
- * Here I'm extending RESTMockTestRunner to change the Application class used within app while testing.
- * <p>
- * Created by andrzejchm on 23/04/16.
+ * Extending AndroidJUnitRunner to change the Application class used within app while testing.
+ *
+ *
+ * TestApplication use [it.italiancoders.mybudget.app.component.TestAppComponent] for inject all mocked modules
  */
-public class CustomTestRunner extends AndroidJUnitRunner {
-    @Override
-    public Application newApplication(ClassLoader cl,
-                                      String className,
-                                      Context context) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+@Suppress("unused")
+class CustomTestRunner : AndroidJUnitRunner() {
+    @Throws(
+        InstantiationException::class,
+        IllegalAccessException::class,
+        ClassNotFoundException::class
+    )
+    override fun newApplication(cl: ClassLoader, className: String, context: Context): Application {
 
-        String testApplicationClassName = TestApplication.class.getCanonicalName();
-        return super.newApplication(cl, testApplicationClassName, context);
+        val testApplicationClassName = TestApplication::class.java.canonicalName
+
+        return super.newApplication(cl, testApplicationClassName, context)
     }
 }

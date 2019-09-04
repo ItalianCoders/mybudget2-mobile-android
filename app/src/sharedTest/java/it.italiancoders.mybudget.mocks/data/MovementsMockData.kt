@@ -31,7 +31,6 @@ import com.nhaarman.mockitokotlin2.doReturn
 import it.italiancoders.mybudget.app.AppConstants
 import it.italiancoders.mybudget.manager.movements.MovementsManager
 import it.italiancoders.mybudget.manager.movements.ParametriRicerca
-import it.italiancoders.mybudget.mock.data.AbstractMockData
 import it.italiancoders.mybudget.mocks.config.MovementsConfig
 import it.italiancoders.mybudget.rest.models.MovementListPage
 import org.mockito.Mockito.`when`

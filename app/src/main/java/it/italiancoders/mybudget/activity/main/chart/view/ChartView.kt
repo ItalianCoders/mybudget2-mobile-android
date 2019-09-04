@@ -72,7 +72,7 @@ abstract class ChartView<T : Chart<*>> : LinearLayout {
 
     val chart: T by lazy { create() }
 
-    val noDataLabel: TextView by lazy { TextView(context) }
+    private val noDataLabel: TextView by lazy { TextView(context) }
 
     private fun initView() {
 

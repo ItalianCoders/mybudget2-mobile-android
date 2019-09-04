@@ -76,7 +76,7 @@ interface CategoryRestService {
     /**
      * Delete an existing category
      *
-     * @param category id to delete
+     * @param id category id to delete
      */
     @DELETE("categories/{id}")
     fun delete(@Path("id") id: Int): Call<Void>

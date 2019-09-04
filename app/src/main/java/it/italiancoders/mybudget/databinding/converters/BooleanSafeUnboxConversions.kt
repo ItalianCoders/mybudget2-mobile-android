@@ -32,7 +32,7 @@ import androidx.databinding.InverseMethod
 /**
  * Safe box and unbox for two-way databinding.
  *
- * @see https://stackoverflow.com/a/47337166
+ * @see [https://stackoverflow.com/a/47337166]
  */
 object BooleanSafeUnboxConversions {
 

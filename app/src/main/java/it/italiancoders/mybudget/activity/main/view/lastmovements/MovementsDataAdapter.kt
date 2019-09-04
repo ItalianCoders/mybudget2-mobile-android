@@ -51,10 +51,10 @@ class MovementsDataAdapter(private val movements: MutableList<Movement>) :
     }
 
     override fun onBindViewHolder(movementViewHolder: MovementViewHolder, i: Int) {
-        movementViewHolder.listItemMovementBinding.movement = movements!![i]
+        movementViewHolder.listItemMovementBinding.movement = movements[i]
     }
 
-    override fun getItemCount(): Int = movements?.size ?: 0
+    override fun getItemCount(): Int = movements.size
 
     fun setMovements(movements: List<Movement>) {
         this.movements.clear()
@@ -72,7 +72,7 @@ class MovementsDataAdapter(private val movements: MutableList<Movement>) :
 
         init {
             listItemMovementBinding.root.rootLayout.setOnClickListener {
-                movementRecyclerViewAdapterListener?.onListItemSelected(movements!![layoutPosition])
+                movementRecyclerViewAdapterListener?.onListItemSelected(movements[layoutPosition])
             }
         }
     }

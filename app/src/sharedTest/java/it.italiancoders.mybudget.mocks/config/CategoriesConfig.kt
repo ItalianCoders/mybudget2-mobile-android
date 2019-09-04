@@ -35,8 +35,8 @@ package it.italiancoders.mybudget.mocks.config
 object CategoriesConfig {
 
     // MOCK DATA
-    val DATA_ALL_OK = "mocks/categories/categories_all_ok.json"
-    val DATA_NO_ID_2_OK = "mocks/categories/categories_no_id_2_ok.json"
-    val DATA_NEW_ID_10_OK = "mocks/categories/categories_new_id_10_ok.json"
-    val DATA_ID_2_UPDATED_OK = "mocks/categories/categories_id_2_updated_ok.json"
+    const val DATA_ALL_OK = "mocks/categories/categories_all_ok.json"
+    const val DATA_NO_ID_2_OK = "mocks/categories/categories_no_id_2_ok.json"
+    const val DATA_NEW_ID_10_OK = "mocks/categories/categories_new_id_10_ok.json"
+    const val DATA_ID_2_UPDATED_OK = "mocks/categories/categories_id_2_updated_ok.json"
 }
