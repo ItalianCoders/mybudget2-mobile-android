@@ -41,16 +41,25 @@ import java.util.*
  */
 object AmountStringConversion {
 
+    var currentSymbol: String = ""
+
     @JvmStatic
-    fun toString(context: Context, @Nullable value: BigDecimal?): String {
+    fun toString(context: Context?, @Nullable value: BigDecimal?): String {
 
         return try {
             val formatter = NumberFormat.getCurrencyInstance(Locale.getDefault())
-            val currentSymbol = AppPreferenceManager.getCurrencySymbol(context)
+            AppPreferenceManager.getCurrencySymbol(context)?.let {
+                currentSymbol = it
+            }
 
-            formatter.format(value).replace(formatter.currency?.symbol.orEmpty(), currentSymbol.orEmpty())
+            var formattedValue = formatter.format(value)
+            if(currentSymbol.isNotEmpty()) {
+                formattedValue = formattedValue.replace(formatter.currency?.symbol.orEmpty(), currentSymbol)
+            }
+
+            formattedValue
         } catch (e: Exception) {
-            value.toString()
+            value?.toString() ?: ""
         }
     }
 }

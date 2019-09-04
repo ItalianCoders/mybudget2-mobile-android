@@ -1,0 +1,44 @@
+[
+  {
+    "id": 3,
+    "name": "Casa",
+    "description": "Casa",
+    "isReadOnly": true
+  },
+  {
+    "id": 1,
+    "name": "Cibo & Bevande",
+    "description": "Cibo & Bevande",
+    "isReadOnly": true
+  },
+  {
+    "id": 6,
+    "name": "Intrattenimento",
+    "description": "Intrattenimento",
+    "isReadOnly": true
+  },
+  {
+    "id": 2,
+    "name": "Shopping updated",
+    "description": "Shopping updated",
+    "isReadOnly": true
+  },
+  {
+    "id": 8,
+    "name": "test",
+    "description": "test",
+    "isReadOnly": false
+  },
+  {
+    "id": 4,
+    "name": "Trasporti",
+    "description": "Trasporti",
+    "isReadOnly": true
+  },
+  {
+    "id": 5,
+    "name": "Veicoli",
+    "description": "Veicoli",
+    "isReadOnly": true
+  }
+]

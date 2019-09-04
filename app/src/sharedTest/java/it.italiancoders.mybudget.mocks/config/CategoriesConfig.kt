@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: ExampleInstrumentedTest.kt
+ * File: CategoriesConfig.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,25 +25,18 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget
-
-import androidx.test.InstrumentationRegistry
-import androidx.test.runner.AndroidJUnit4
-import org.junit.Assert.assertEquals
-import org.junit.Test
-import org.junit.runner.RunWith
+package it.italiancoders.mybudget.mocks.config
 
 /**
- * Instrumented test, which will execute on an Android device.
- *
- * See [testing documentation](http://d.android.com/tools/testing).
+ * @author fattazzo
+ *         <p/>
+ *         date: 02/09/19
  */
-@RunWith(AndroidJUnit4::class)
-class ExampleInstrumentedTest {
-    @Test
-    fun useAppContext() {
-        // Context of the app under test.
-        val appContext = InstrumentationRegistry.getTargetContext()
-        assertEquals("it.italiancoders.mybudget", appContext.packageName)
-    }
+object CategoriesConfig {
+
+    // MOCK DATA
+    val DATA_ALL_OK = "mocks/categories/categories_all_ok.json"
+    val DATA_NO_ID_2_OK = "mocks/categories/categories_no_id_2_ok.json"
+    val DATA_NEW_ID_10_OK = "mocks/categories/categories_new_id_10_ok.json"
+    val DATA_ID_2_UPDATED_OK = "mocks/categories/categories_id_2_updated_ok.json"
 }

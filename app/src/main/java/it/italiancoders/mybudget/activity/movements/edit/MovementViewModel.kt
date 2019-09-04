@@ -29,8 +29,10 @@ package it.italiancoders.mybudget.activity.movements.edit
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import it.italiancoders.mybudget.manager.categories.CategoriesManager
 import it.italiancoders.mybudget.rest.models.Category
 import it.italiancoders.mybudget.rest.models.Movement
+import it.italiancoders.mybudget.utils.ioJob
 import java.math.BigDecimal
 import java.util.*
 
@@ -39,13 +41,15 @@ import java.util.*
  *         <p/>
  *         date: 06/08/19
  */
-class MovementViewModel : ViewModel() {
+class MovementViewModel(private val categoriesManager: CategoriesManager) : ViewModel() {
 
     var initialized = false
 
-    val amount: MutableLiveData<BigDecimal> = MutableLiveData(BigDecimal.ZERO)
-    val category: MutableLiveData<Category> = MutableLiveData(Category())
-    val date: MutableLiveData<Date> = MutableLiveData(Calendar.getInstance().time)
+    val amount = MutableLiveData(BigDecimal.ZERO)
+    val category = MutableLiveData(Category())
+    val date = MutableLiveData(Calendar.getInstance().time)
+
+    val categories = MutableLiveData<List<Category>>(listOf())
 
     private var movement = Movement()
 
@@ -58,7 +62,8 @@ class MovementViewModel : ViewModel() {
 
     fun isNewMovement(): Boolean = movement.id == null
 
-    fun isMovementValid(): Boolean = amount.value != null && category.value != null && date.value != null
+    fun isMovementValid(): Boolean =
+        amount.value != null && category.value != null && category.value?.id != null && date.value != null
 
     fun getMovement(): Movement? {
         return if (isMovementValid()) {
@@ -69,6 +74,13 @@ class MovementViewModel : ViewModel() {
         } else {
             null
         }
+    }
 
+    fun loadCategories() {
+
+        ioJob {
+            val categoriesLoaded = categoriesManager.loadAll()
+            categories.postValue(categoriesLoaded)
+        }
     }
 }

@@ -34,16 +34,14 @@ import it.italiancoders.mybudget.rest.api.RetrofitBuilder
 import it.italiancoders.mybudget.rest.api.services.CategoryRestService
 import it.italiancoders.mybudget.rest.models.Category
 import it.italiancoders.mybudget.utils.NetworkChecker
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import it.italiancoders.mybudget.utils.OpenForTesting
 
 /**
  * @author fattazzo
  *         <p/>
  *         date: 22/07/19
  */
+@OpenForTesting
 class CategoriesManager(context: Context) : AbstractRestManager(context) {
 
     private val categoriesService =
@@ -51,86 +49,52 @@ class CategoriesManager(context: Context) : AbstractRestManager(context) {
 
     private val categoryCache = CategoryCache(context)
 
-    fun loadAll(
-        onSuccessAction: (List<Category>?) -> Unit,
-        onFailureAction: (Int?) -> Unit,
-        forceReload: Boolean = false
-    ) {
+    fun loadAll(forceReload: Boolean = false): List<Category> {
+
         val networkAvailable = NetworkChecker().isNetworkAvailable(context)
-        CoroutineScope(Dispatchers.IO).launch {
 
-            val cachedCategories = categoryCache.getAll()
+        val cachedCategories = categoryCache.getAll()
 
-            if (networkAvailable && (cachedCategories.isNullOrEmpty() || forceReload)) {
-                val response = categoriesService.loadAll()
+        return if (networkAvailable && (cachedCategories.isNullOrEmpty() || forceReload)) {
+
+            val response = categoriesService.loadAll()
+
+            val result = processResponse(response)
+            result?.let {
                 categoryCache.removeAll()
-                withContext(Dispatchers.Main) {
-                    val onLoadAllSuccessAction: ((List<Category>?) -> Unit)? =
-                        { categoriesResponse ->
-                            onSuccessAction.invoke(categoriesResponse)
-                            CoroutineScope(Dispatchers.IO).launch {
-                                categoryCache.addAll(categoriesResponse.orEmpty())
-                            }
-                        }
-                    processResponse(response, onLoadAllSuccessAction, onFailureAction)
-                }
-            } else {
-                withContext(Dispatchers.Main) {
-                    onSuccessAction.invoke(cachedCategories)
-                }
+                categoryCache.addAll(result.orEmpty())
             }
+
+            result ?: listOf()
+        } else {
+            cachedCategories
         }
     }
 
-    fun create(
-        category: Category,
-        onSuccessAction: ((Category?) -> Unit)? = null,
-        onFailureAction: ((Int?) -> Unit)? = null
-    ) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val response = categoriesService.create(category)
-            categoryCache.removeAll()
-            withContext(Dispatchers.Main) {
-                processResponse(response, onSuccessAction, onFailureAction)
-            }
-        }
+    fun create(category: Category): Category? {
+
+        val response = categoriesService.create(category)
+
+        val result = processResponse(response)
+        result?.let { categoryCache.removeAll() }
+
+        return result
     }
 
-    fun load(id: Int, onSuccessAction: (Category?) -> Unit, onFailureAction: (Int?) -> Unit) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val response = categoriesService.load(id)
-            withContext(Dispatchers.Main) {
-                processResponse(response, onSuccessAction, onFailureAction)
-            }
-        }
+    fun load(id: Int): Category? {
+        val response = categoriesService.load(id)
+        return processResponse(response)
     }
 
-    fun update(
-        id: Int,
-        category: Category,
-        onSuccessAction: ((Void?) -> Unit)? = null,
-        onFailureAction: ((Int?) -> Unit)? = null
-    ) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val response = categoriesService.update(id, category)
-            categoryCache.add(category)
-            withContext(Dispatchers.Main) {
-                processResponse(response, onSuccessAction, onFailureAction)
-            }
-        }
+    fun update(id: Int, category: Category) {
+        val response = categoriesService.update(id, category)
+        processResponse(response)
+        categoryCache.add(category)
     }
 
-    fun delete(
-        id: Int,
-        onSuccessAction: ((Void?) -> Unit)? = null,
-        onFailureAction: ((Int?) -> Unit?)? = null
-    ) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val response = categoriesService.delete(id)
-            categoryCache.remove(id)
-            withContext(Dispatchers.Main) {
-                processResponse(response, onSuccessAction, onFailureAction)
-            }
-        }
+    fun delete(id: Int) {
+        val response = categoriesService.delete(id)
+        processResponse(response)
+        categoryCache.remove(id)
     }
 }

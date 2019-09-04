@@ -29,7 +29,9 @@ package it.italiancoders.mybudget.activity.movements.search
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import it.italiancoders.mybudget.manager.categories.CategoriesManager
 import it.italiancoders.mybudget.rest.models.Category
+import it.italiancoders.mybudget.utils.ioJob
 import java.util.*
 
 /**
@@ -37,7 +39,7 @@ import java.util.*
  *         <p/>
  *         date: 18/07/19
  */
-class SearchMovementsViewModel : ViewModel() {
+class SearchMovementsViewModel(private val categoriesManager: CategoriesManager) : ViewModel() {
 
     val year = MutableLiveData<Int?>(Calendar.getInstance().get(Calendar.YEAR))
     val month = MutableLiveData<Int?>(Calendar.getInstance().get(Calendar.MONTH)+1)
@@ -45,10 +47,20 @@ class SearchMovementsViewModel : ViewModel() {
 
     val category: MutableLiveData<Category?> = MutableLiveData(null)
 
+    val categories = MutableLiveData<List<Category>>(listOf())
+
     fun reset() {
         year.value = Calendar.getInstance().get(Calendar.YEAR)
         month.value = Calendar.getInstance().get(Calendar.MONTH)+1
         day.value = null
         category.value = null
+    }
+
+    fun loadCategories() {
+
+        ioJob {
+            val categoriesLoaded = categoriesManager.loadAll()
+            categories.postValue(categoriesLoaded)
+        }
     }
 }

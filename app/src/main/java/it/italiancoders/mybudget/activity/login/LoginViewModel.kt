@@ -27,7 +27,6 @@
 
 package it.italiancoders.mybudget.activity.login
 
-import android.text.Editable
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -37,34 +36,19 @@ class LoginViewModel : ViewModel() {
 
     val username = MutableLiveData<String>().apply { postValue("") }
     val password = MutableLiveData<String>().apply { postValue("") }
-    val policyAccepted = MutableLiveData<Boolean>().apply { false }
+    val policyAccepted = MutableLiveData<Boolean>().apply { postValue(false) }
 
-    val dataValid = MutableLiveData<Boolean>().apply { postValue(false) }
-
-    private val dataMediator = MediatorLiveData<String>().apply {
-        addSource(username) { value ->
-            setValue(value)
-            dataValid.value = checkDataValid()
-        }
-        addSource(password) { value ->
-            setValue(value)
-            dataValid.value = checkDataValid()
-        }
-    }.also { it.observeForever { /* empty */ } }
-
-    private val booleanDataMediator = MediatorLiveData<Boolean>().apply {
-        addSource(policyAccepted) { value ->
-            setValue(value)
-            dataValid.value = checkDataValid()
-        }
+    val dataValid = MediatorLiveData<Boolean>().apply {
+        value = false
+        addSource(username) { setValue(checkDataValid()) }
+        addSource(password) { setValue(checkDataValid()) }
+        addSource(policyAccepted) { setValue(checkDataValid()) }
     }.also { it.observeForever { /* empty */ } }
 
     private fun checkDataValid(): Boolean {
-        val usernameValid =
-            UserValidationRules.USERNAME.isValid(Editable.Factory.getInstance().newEditable(username.value.orEmpty()))
-        val passwordValid =
-            UserValidationRules.PASSWORD.isValid(Editable.Factory.getInstance().newEditable(password.value.orEmpty()))
-        return usernameValid && passwordValid && policyAccepted.value?:false
+        val usernameValid = UserValidationRules.USERNAME.isValid(username.value)
+        val passwordValid = UserValidationRules.PASSWORD.isValid(password.value)
+        return usernameValid && passwordValid && (policyAccepted.value ?: false)
     }
 }
 

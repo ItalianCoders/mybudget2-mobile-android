@@ -29,25 +29,41 @@ package it.italiancoders.mybudget.rest.api
 
 import android.content.Context
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
-import it.italiancoders.mybudget.AppConstants
 import it.italiancoders.mybudget.SessionData
+import it.italiancoders.mybudget.app.AppConstants
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.net.ssl.SSLSocketFactory
+import javax.net.ssl.X509TrustManager
 
 object RetrofitBuilder {
 
+    var baseUrlPublic = AppConstants.REST_API_BASE_URL_PUBLIC
+    var baseUrl = AppConstants.REST_API_BASE_URL
+
+    var socketFactory: SSLSocketFactory? = null
+    var trustManager: X509TrustManager? = null
+
     val client: Retrofit by lazy {
-        Retrofit.Builder().client(httpClientBuilder.build()).baseUrl(AppConstants.REST_API_BASE_URL_PUBLIC)
+        Retrofit.Builder().client(httpClientBuilder.build()).baseUrl(baseUrlPublic)
             .addConverterFactory(GsonConverterFactory.create()).build()
     }
 
     private val httpClientBuilder: OkHttpClient.Builder
-        get() = OkHttpClient.Builder().connectTimeout(50, TimeUnit.SECONDS).writeTimeout(
-            50,
-            TimeUnit.SECONDS
-        ).readTimeout(50, TimeUnit.SECONDS)
+        get() {
+            val builder = OkHttpClient.Builder().connectTimeout(50, TimeUnit.SECONDS).writeTimeout(
+                50,
+                TimeUnit.SECONDS
+            ).readTimeout(50, TimeUnit.SECONDS)
+
+            if (socketFactory != null && trustManager != null) {
+                builder.sslSocketFactory(socketFactory!!, trustManager!!)
+            }
+
+            return builder
+        }
 
     fun getSecureClient(context: Context): Retrofit {
 
@@ -64,8 +80,9 @@ object RetrofitBuilder {
         }
         httpClient.addInterceptor(RefreshTokenInterceptor(context))
 
-        return Retrofit.Builder().client(httpClient.build()).baseUrl(AppConstants.REST_API_BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create()).addCallAdapterFactory(CoroutineCallAdapterFactory())
+        return Retrofit.Builder().client(httpClient.build()).baseUrl(baseUrl)
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
     }
 }

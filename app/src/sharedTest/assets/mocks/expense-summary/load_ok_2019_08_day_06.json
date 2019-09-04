@@ -1,0 +1,35 @@
+{
+  "totalAmount": 67.0,
+  "categoryOverview": [
+    {
+      "totalAmount": 67,
+      "category": {
+        "id": 5,
+        "name": "Veicoli",
+        "description": "Veicoli",
+        "isReadOnly": true
+      }
+    }
+  ],
+  "lastMovements": {
+    "first": true,
+    "last": true,
+    "size": 20,
+    "totalElements": 1,
+    "totalPages": 1,
+    "number": 0,
+    "contents": [
+      {
+        "id": 9,
+        "amount": 67.0,
+        "category": {
+          "id": 5,
+          "name": "Veicoli",
+          "description": "Veicoli",
+          "isReadOnly": true
+        },
+        "executedAt": "2019-08-06T13:58:13.718Z"
+      }
+    ]
+  }
+}

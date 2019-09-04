@@ -47,7 +47,7 @@ class RefreshTokenInterceptor(private val context: Context) : Interceptor {
         val initialResponse = chain.proceed(originalRequest)
 
         when {
-            initialResponse.code() == 498 -> {
+            initialResponse.code == 498 -> {
                 val responseNewTokenLoginModel = RetrofitBuilder.client.create(SessionRestService::class.java)
                     .refresh(SessionData.session?.refreshToken.orEmpty()).execute()
 

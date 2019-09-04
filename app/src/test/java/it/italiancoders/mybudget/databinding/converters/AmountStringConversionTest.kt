@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: ExampleUnitTest.kt
+ * File: AmountStringConversionTest.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,19 +25,43 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget
+package it.italiancoders.mybudget.databinding.converters
 
-import org.junit.Assert.assertEquals
+import com.nhaarman.mockitokotlin2.any
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.containsString
+import org.hamcrest.MatcherAssert
 import org.junit.Test
+import java.math.BigDecimal
+import java.util.*
 
 /**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
+ * @author fattazzo
+ *         <p/>
+ *         date: 04/09/19
  */
-class ExampleUnitTest {
+class AmountStringConversionTest {
+
     @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+    fun convertToString() {
+        Locale.setDefault(Locale.ITALY)
+        var string = AmountStringConversion.toString(any(), BigDecimal.TEN)
+        MatcherAssert.assertThat(string, containsString("€"))
+
+        Locale.setDefault(Locale.US)
+        string = AmountStringConversion.toString(any(), BigDecimal.TEN)
+        MatcherAssert.assertThat(string, containsString("$"))
+
+        AmountStringConversion.currentSymbol = "AA"
+        string = AmountStringConversion.toString(any(), BigDecimal.TEN)
+        MatcherAssert.assertThat(string, containsString("AA"))
+    }
+
+    @Test
+    fun convertToStringNullValue() {
+
+        Locale.setDefault(Locale.ITALY)
+        val string = AmountStringConversion.toString(any(), null)
+        MatcherAssert.assertThat(string, `is`(""))
     }
 }

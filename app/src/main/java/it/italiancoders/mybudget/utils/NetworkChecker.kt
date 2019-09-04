@@ -51,7 +51,7 @@ class NetworkChecker {
             e.printStackTrace()
             false
         }
-        SessionData.networkAvailable.value = networkAvailable
+        SessionData.networkAvailable.postValue(networkAvailable)
         return networkAvailable
     }
 }

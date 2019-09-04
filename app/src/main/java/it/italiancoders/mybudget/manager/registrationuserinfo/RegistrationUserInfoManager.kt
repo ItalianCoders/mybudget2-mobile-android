@@ -28,6 +28,8 @@
 package it.italiancoders.mybudget.manager.registrationuserinfo
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.manager.AbstractRestManager
@@ -35,6 +37,7 @@ import it.italiancoders.mybudget.rest.api.RetrofitBuilder
 import it.italiancoders.mybudget.rest.api.services.RegistrationUserInfoRestService
 import it.italiancoders.mybudget.rest.models.UserRegistrationInfo
 import it.italiancoders.mybudget.utils.NetworkChecker
+import it.italiancoders.mybudget.utils.OpenForTesting
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -45,28 +48,29 @@ import kotlinx.coroutines.withContext
  *         <p/>
  *         date: 23/08/19
  */
+@OpenForTesting
 class RegistrationUserInfoManager(context: Context) : AbstractRestManager(context) {
 
     private val registrationUserInfoRestService =
         RetrofitBuilder.client.create(RegistrationUserInfoRestService::class.java)
 
-    fun create(
-        userRegistrationInfo: UserRegistrationInfo,
-        onSuccessAction: (Void?) -> Unit,
-        onFailureAction: (Int?) -> Unit
-    ) {
+    fun create(userRegistrationInfo: UserRegistrationInfo) : Boolean? {
+
         if (!NetworkChecker().isNetworkAvailable(context)) {
-            Toast.makeText(context, R.string.network_unavailable_dialog_title, Toast.LENGTH_SHORT)
-                .show()
-            return
+            Handler(Looper.getMainLooper()).post {
+                Toast.makeText(
+                    context,
+                    R.string.network_unavailable_dialog_title,
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+            }
+            return null
         }
 
-        CoroutineScope(Dispatchers.IO).launch {
-            val response = registrationUserInfoRestService.create(userRegistrationInfo)
-            withContext(Dispatchers.Main) {
-                processResponse(response, onSuccessAction, onFailureAction)
-            }
-        }
+        val response = registrationUserInfoRestService.create(userRegistrationInfo)
+
+        return processResponse(response,false) != null
     }
 
     fun resend(

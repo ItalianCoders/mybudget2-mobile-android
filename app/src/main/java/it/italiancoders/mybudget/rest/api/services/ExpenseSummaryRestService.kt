@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: ArrowShape.kt
+ * File: ExpenseSummaryRestService.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,32 +25,35 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget.tutorial
+package it.italiancoders.mybudget.rest.api.services
 
-import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.PointF
-import com.takusemba.spotlight.shape.Shape
-import it.italiancoders.mybudget.R
-
+import it.italiancoders.mybudget.rest.models.ExpenseSummary
+import retrofit2.Call
+import retrofit2.http.GET
+import retrofit2.http.Query
 
 /**
  * @author fattazzo
  *         <p/>
- *         date: 02/08/19
+ *         date: 30/08/19
  */
-class ArrowShape(private val context: Context, private val radius: Float) : Shape {
-    override fun draw(canvas: Canvas?, point: PointF, value: Float, paint: Paint) {
-        val halfWidth = radius / 2 * value
-        val halfHeight = radius / 2 * value
-        val left = point.x - halfWidth
-        val top = point.y - halfHeight
-        val right = point.x + halfWidth
-        val bottom = point.y + halfHeight
+interface ExpenseSummaryRestService {
 
-        val drawable = context.resources.getDrawable(R.drawable.ic_arrow_tutorial, null)
-        drawable.setBounds(left.toInt(), top.toInt(), right.toInt(), bottom.toInt())
-        drawable.draw(canvas!!)
-    }
+    /**
+     * Return the expense summary
+     *
+     * @param year The year of movement
+     * @param month The month of movement
+     * @param day The day of movement
+     * @param week The week number
+     * @param category The id of category
+     */
+    @GET("expense-summary")
+    fun getExpenseSummary(
+        @Query("year") year: Int,
+        @Query("month") month: Int,
+        @Query("day") day: Int?,
+        @Query("week") week: Int?,
+        @Query("category") category: Int?
+    ): Call<ExpenseSummary>
 }

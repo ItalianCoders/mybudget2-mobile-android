@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: AppConstants.kt
+ * File: MovementViewModelFactory.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,26 +25,17 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget
+package it.italiancoders.mybudget.activity.movements.edit
 
-/**
- * General app constants.
- *
- * @author fattazzo
- *         <p/>
- *         date: 08/07/19
- *
- */
-object AppConstants {
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import it.italiancoders.mybudget.manager.categories.CategoriesManager
 
-    // Rest API
-    const val REST_API_BASE_URL_PUBLIC = "https://mybudgetfin.herokuapp.com/public/v1/"
-    const val REST_API_BASE_URL = "https://mybudgetfin.herokuapp.com/v1/"
+class MovementViewModelFactory(private val categoriesManager: CategoriesManager) :
+    ViewModelProvider.Factory {
 
-    const val DEFAULT_PAGE_SIZE = 10
 
-    // Privacy
-    const val PRIVACY_POLICY_URL =
-        "https://raw.githubusercontent.com/wiki/ItalianCoders/myBudget-mobile-android/privacy/privacy_policy.pdf"
-
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return MovementViewModel(categoriesManager) as T
+    }
 }

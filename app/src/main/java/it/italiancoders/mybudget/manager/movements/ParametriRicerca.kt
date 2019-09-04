@@ -27,7 +27,7 @@
 
 package it.italiancoders.mybudget.manager.movements
 
-import it.italiancoders.mybudget.AppConstants
+import it.italiancoders.mybudget.app.AppConstants
 
 /**
  * @author fattazzo
@@ -45,7 +45,14 @@ data class ParametriRicerca(
     val sort: Array<String>?
 ) {
 
-    constructor(year: Int,month: Int,day: Int?,week: Int?,categoryId: Long?): this(year,month,day,week,categoryId,0,AppConstants.DEFAULT_PAGE_SIZE,null)
+    constructor(year: Int,month: Int,day: Int?,week: Int?,categoryId: Long?): this(year,month,day,week,categoryId,0,
+        AppConstants.DEFAULT_PAGE_SIZE,null)
+
+    constructor(year: Int,month: Int): this(year,month,null,null,null,0,
+        AppConstants.DEFAULT_PAGE_SIZE,null)
+
+    constructor(year: Int,month: Int,week: Int): this(year,month,null,week,null,0,
+        AppConstants.DEFAULT_PAGE_SIZE,null)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

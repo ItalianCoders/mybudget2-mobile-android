@@ -27,7 +27,7 @@
 
 package it.italiancoders.mybudget.databinding.converters
 
-import android.widget.TextView
+import androidx.annotation.VisibleForTesting
 import androidx.databinding.InverseMethod
 import java.math.BigDecimal
 import java.text.DecimalFormat
@@ -38,24 +38,28 @@ object BigDecimalStringConversion {
 
     @JvmStatic
     @InverseMethod("toBigDecimal")
-    fun toString(view: TextView, oldValue: BigDecimal, value: BigDecimal): String {
+    fun toString(currentText: CharSequence, oldValue: BigDecimal, value: BigDecimal?): String {
         try {
             // Don't return a different value if the parsed value// doesn't change
-            val inView = view.text.toString().replace('.', ',')
+            val inView = currentText.toString().replace('.', ',')
             val parsed = BigDecimal(getNumberFormat().parse(inView)!!.toDouble())
 
             if (parsed.compareTo(value) == 0) {
-                return view.text.toString()
+                return currentText.toString()
             }
-        } catch (e: ParseException) {
+        } catch (e: Throwable) {
             // Old number was broken
         }
 
-        return getNumberFormat().format(value)
+        return if (value != null) getNumberFormat().format(value) else ""
     }
 
     @JvmStatic
-    fun toBigDecimal(view: TextView, oldValue: BigDecimal, value: String): BigDecimal {
+    fun toBigDecimal(
+        currentText: CharSequence?,
+        oldValue: BigDecimal?,
+        value: String
+    ): BigDecimal? {
         return try {
             BigDecimal(getNumberFormat().parse(value.replace('.', ','))!!.toDouble())
         } catch (e: ParseException) {
@@ -63,7 +67,8 @@ object BigDecimalStringConversion {
         }
     }
 
-    private fun getNumberFormat(): NumberFormat {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun getNumberFormat(): NumberFormat {
         val format = DecimalFormat("0.00")
         format.isGroupingUsed = false
         return format

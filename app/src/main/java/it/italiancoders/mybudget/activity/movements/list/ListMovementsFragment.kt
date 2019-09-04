@@ -42,18 +42,21 @@ import androidx.recyclerview.widget.RecyclerView
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.activity.main.view.lastmovements.MovementsDataAdapter
 import it.italiancoders.mybudget.activity.movements.edit.MovementActivity
+import it.italiancoders.mybudget.app.MyBudgetApplication
 import it.italiancoders.mybudget.databinding.ListMovementsFragmentBinding
 import it.italiancoders.mybudget.manager.movements.MovementsManager
 import it.italiancoders.mybudget.rest.models.Movement
 import it.italiancoders.mybudget.rest.models.MovementListPage
+import javax.inject.Inject
 
 class ListMovementsFragment : Fragment() {
 
     lateinit var binding: ListMovementsFragmentBinding
 
-    var movementsManager: MovementsManager? = null
+    @Inject
+    lateinit var movementsManager: MovementsManager
 
-    val movementsDataAdapter = MovementsDataAdapter(mutableListOf())
+    private val movementsDataAdapter = MovementsDataAdapter(mutableListOf())
 
     var layoutManager: LinearLayoutManager? = null
 
@@ -68,13 +71,17 @@ class ListMovementsFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        binding.model = ViewModelProvider(this).get(ListMovementsViewModel::class.java)
-
-        layoutManager = LinearLayoutManager(binding.root.context)
 
         activity?.let {
-            movementsManager = MovementsManager(it)
+            (it.application as MyBudgetApplication).appComponent.inject(this)
         }
+
+        binding.model =
+            ViewModelProvider(this, ListMovementsViewModelFactory(movementsManager)).get(
+                ListMovementsViewModel::class.java
+            )
+
+        layoutManager = LinearLayoutManager(binding.root.context)
 
         binding.movementsRecyclerView.setHasFixedSize(true)
         binding.movementsRecyclerView.layoutManager = layoutManager
@@ -104,13 +111,13 @@ class ListMovementsFragment : Fragment() {
 
                 if (dy > 0) {
                     if (binding.model?.loadingData?.get() != true && binding.model?.isLastPage() != true) {
-                        binding.model?.loadNextPage(movementsManager, true)
+                        binding.model?.loadNextPage(true)
                     }
                 } else if (binding.model?.isLastPage() != true && layoutManager?.findLastVisibleItemPosition() != -1 &&
-                    layoutManager?.findLastVisibleItemPosition() == (layoutManager?.childCount
+                    layoutManager?.findLastVisibleItemPosition() == (layoutManager?.itemCount
                         ?: 0) - 1
                 ) {
-                    binding.model?.loadNextPage(movementsManager, true)
+                    binding.model?.loadNextPage(true)
                 }
             }
         })
@@ -141,7 +148,7 @@ class ListMovementsFragment : Fragment() {
 
     fun search() {
         binding.model?.isValidParams()?.let {
-            binding.model?.search(movementsManager, true)
+            binding.model?.search(true)
         }
     }
 }

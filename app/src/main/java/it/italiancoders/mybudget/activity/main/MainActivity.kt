@@ -42,6 +42,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
+import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.navigation.NavigationView
 import com.whiteelephant.monthpicker.MonthPickerDialog
@@ -55,19 +56,22 @@ import it.italiancoders.mybudget.activity.main.view.lastmovements.LastMovementsV
 import it.italiancoders.mybudget.activity.movements.MovementsActivity
 import it.italiancoders.mybudget.activity.movements.edit.MovementActivity
 import it.italiancoders.mybudget.activity.settings.SettingsActivity
+import it.italiancoders.mybudget.app.MyBudgetApplication
 import it.italiancoders.mybudget.databinding.ActivityMainBinding
 import it.italiancoders.mybudget.manager.AuthManager
-import it.italiancoders.mybudget.manager.movements.MovementsManager
+import it.italiancoders.mybudget.manager.expensesummary.ExpenseSummaryManager
 import it.italiancoders.mybudget.tutorial.TutorialMainActivity
 import it.italiancoders.mybudget.utils.LinePagerIndicatorDecoration
 import it.italiancoders.mybudget.utils.NetworkChecker
 import java.math.BigDecimal
+import javax.inject.Inject
 
 
 class MainActivity : BaseActivity<ActivityMainBinding>(),
     NavigationView.OnNavigationItemSelectedListener {
 
-    private val movementsManager by lazy { MovementsManager(this) }
+    @Inject
+    lateinit var expenseSummaryManager: ExpenseSummaryManager
 
     private var mBottomSheetBehavior: BottomSheetBehavior<LastMovementsView?>? = null
 
@@ -81,18 +85,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
         SessionData.session = AuthManager(this.applicationContext).getLastSession()
         NetworkChecker().isNetworkAvailable(this)
 
-        /**
-        if (SessionData.session == null) {
-        val intent = Intent(this.applicationContext, LoginActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(intent)
-        }
-         **/
-
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
 
-        binding.model = ViewModelProvider(this).get(MainViewModel::class.java)
+        (application as MyBudgetApplication).appComponent.inject(this)
+
+        binding.model = ViewModelProvider(this, MainViewModelFactory(expenseSummaryManager))
+            .get(MainViewModel::class.java)
         binding.contentMain.lastMovementsView.lifecycleOwner = this
 
         setSupportActionBar(binding.toolbar)
@@ -110,7 +109,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
         val snapHelper = PagerSnapHelper()
         snapHelper.attachToRecyclerView(binding.contentMain.chartsRecyclerView)
 
-        binding.contentMain.chartsRecyclerView.layoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false)
+        binding.contentMain.chartsRecyclerView.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.contentMain.chartsRecyclerView.adapter = ChartsCategoryOverviewAdapter(this)
         binding.contentMain.chartsRecyclerView.addItemDecoration(LinePagerIndicatorDecoration())
 
@@ -122,7 +122,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
         })
 
         if (SessionData.session != null) {
-            binding.model?.loadExpenseSummary(movementsManager)
+            binding.model?.loadExpenseSummary()
         }
 
         binding.contentMain.addMovementButton.setOnClickListener {
@@ -142,7 +142,15 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
             )
             mBottomSheetBehavior?.state == BottomSheetBehavior.STATE_EXPANDED -> mBottomSheetBehavior?.state =
                 BottomSheetBehavior.STATE_COLLAPSED
-            else -> super.onBackPressed()
+            else -> {
+                MaterialDialog(this).show {
+                    icon(R.drawable.menu_logout)
+                    title(R.string.app_name)
+                    message(R.string.exit_confirmation_message)
+                    negativeButton(android.R.string.no)
+                    positiveButton(android.R.string.yes) { super.onBackPressed() }
+                }
+            }
         }
     }
 
@@ -150,15 +158,15 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == MovementActivity.REQUEST_CODE_MOVEMENT && resultCode == Activity.RESULT_OK) {
-            binding.model?.loadExpenseSummary(movementsManager, true)
+            binding.model?.loadExpenseSummary()
         }
     }
 
     override fun onUserLoggedIn() {
-        binding.model?.loadExpenseSummary(movementsManager)
+        binding.model?.loadExpenseSummary()
     }
 
-    fun nextPeriodType(view: View) {
+    fun nextPeriodType(view: View?) {
         binding.contentMain.periodoTextView.alpha = 0f
 
         val flip = ObjectAnimator.ofFloat(
@@ -173,13 +181,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
                 .apply { duration = 1000 }
 
 
-        val set = AnimatorSet()
-        set.play(flip).with(alpha1TextAnimator)
-        set.start()
+        runOnUiThread {
+            val set = AnimatorSet()
+            set.play(flip).with(alpha1TextAnimator)
+            set.start()
+        }
 
-        binding.model?.periodType?.value =
-            binding.model?.periodType?.value?.nextType() ?: PeriodType.MONTH
-        binding.model?.loadExpenseSummary(movementsManager)
+        binding.model?.loadNextPeriodTypeExpenseSummary()
     }
 
     fun changePeriod(view: View) {
@@ -189,10 +197,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
             MonthPickerDialog.Builder(
                 this,
                 MonthPickerDialog.OnDateSetListener { selectedMonth, selectedYear ->
-                    binding.model?.year?.value = selectedYear
-                    binding.model?.month?.value = selectedMonth
-                    binding.model?.day?.value = 1
-                    binding.model?.loadExpenseSummary(movementsManager)
+                    binding.model?.loadExpenseSummary(selectedYear, selectedMonth, 1)
                 },
                 binding.model?.year?.value!!,
                 binding.model?.month?.value!!
@@ -201,10 +206,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
             DatePickerDialog(
                 this,
                 DatePickerDialog.OnDateSetListener { _, selectedYear, selectedMonth, selectedDay ->
-                    binding.model?.year?.value = selectedYear
-                    binding.model?.month?.value = selectedMonth
-                    binding.model?.day?.value = selectedDay
-                    binding.model?.loadExpenseSummary(movementsManager)
+                    binding.model?.loadExpenseSummary(selectedYear, selectedMonth, selectedDay)
                 },
                 binding.model?.year?.value!!,
                 binding.model?.month?.value!!,
@@ -253,7 +255,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_sync -> {
-                binding.model?.loadExpenseSummary(movementsManager, true)
+                binding.model?.loadExpenseSummary()
                 true
             }
             else -> super.onOptionsItemSelected(item)

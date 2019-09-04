@@ -28,6 +28,7 @@
 package it.italiancoders.mybudget.rest.api.services
 
 import it.italiancoders.mybudget.rest.models.UserRegistrationInfo
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -44,7 +45,7 @@ interface RegistrationUserInfoRestService {
      * @param userRegistrationInfo user
      */
     @POST("registration-user")
-    suspend fun create(@Body userRegistrationInfo: UserRegistrationInfo): Response<Void>
+    fun create(@Body userRegistrationInfo: UserRegistrationInfo): Call<Void>
 
     /**
      * Resend confirm registration mail

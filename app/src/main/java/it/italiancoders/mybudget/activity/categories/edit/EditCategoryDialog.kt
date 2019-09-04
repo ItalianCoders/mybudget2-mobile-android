@@ -38,7 +38,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.SessionData
-import it.italiancoders.mybudget.manager.categories.CategoriesManager
+import it.italiancoders.mybudget.activity.categories.CategoriesViewModel
 import it.italiancoders.mybudget.rest.models.Category
 
 /**
@@ -46,7 +46,7 @@ import it.italiancoders.mybudget.rest.models.Category
  *         <p/>
  *         date: 22/07/19
  */
-class EditCategoryDialogBuilder() {
+class EditCategoryDialogBuilder(private val categoriesViewModel: CategoriesViewModel) {
 
     fun build(context: Context, category: Category = Category()): MaterialDialog {
 
@@ -60,12 +60,13 @@ class EditCategoryDialogBuilder() {
         dialog.title(if (category.id == null) R.string.new_category else R.string.edit_category)
 
         // TextView
-        dialog.getCustomView().findViewById<TextInputEditText>(R.id.nameTextView).setText(category.name)
+        dialog.getCustomView().findViewById<TextInputEditText>(R.id.nameTextView)
+            .setText(category.name)
         dialog.getCustomView().findViewById<TextInputEditText>(R.id.descriptionTextView)
             .setText(category.description)
 
         // Buttons
-        if(SessionData.networkAvailable.value != false) {
+        if (SessionData.networkAvailable.value != false) {
             dialog.positiveButton(R.string.save, click = getPositiveCallback(category))
             // Add delete button only for existing and not readonly categories
             if (category.id != null && !category.isIsReadOnly) {
@@ -83,7 +84,7 @@ class EditCategoryDialogBuilder() {
         return object : DialogCallback {
             override fun invoke(dialog: MaterialDialog) {
                 if (category.id != null)
-                    CategoriesManager(dialog.context).delete(category.id.toInt())
+                    categoriesViewModel.delete(category.id.toInt())
                 dialog.dismiss()
             }
         }
@@ -96,9 +97,11 @@ class EditCategoryDialogBuilder() {
         return object : DialogCallback {
             override fun invoke(dialog: MaterialDialog) {
 
-                val nameTIL = dialog.getCustomView().findViewById<TextInputLayout>(R.id.nameTextInputLayout)
+                val nameTIL =
+                    dialog.getCustomView().findViewById<TextInputLayout>(R.id.nameTextInputLayout)
                 val descriptionTIL =
-                    dialog.getCustomView().findViewById<TextInputLayout>(R.id.descriptionTextInputLayout)
+                    dialog.getCustomView()
+                        .findViewById<TextInputLayout>(R.id.descriptionTextInputLayout)
                 validateView(nameTIL, descriptionTIL)
 
                 if (nameTIL.editText?.error == null && descriptionTIL.editText?.error == null) {
@@ -106,10 +109,9 @@ class EditCategoryDialogBuilder() {
                     category.description = descriptionTIL.editText?.text.toString()
 
                     if (category.id != null) {
-                        CategoriesManager(dialog.context)
-                            .update(category.id.toInt(), category)
+                        categoriesViewModel.update(category.id.toInt(), category)
                     } else {
-                        CategoriesManager(dialog.context).create(category)
+                        categoriesViewModel.create(category)
                     }
                     dialog.dismiss()
                 }
@@ -126,7 +128,8 @@ class EditCategoryDialogBuilder() {
         }
 
         if (descriptionTIL.editText?.text.isNullOrBlank()) {
-            descriptionTIL.editText?.error = descriptionTIL.context.getString(R.string.field_required)
+            descriptionTIL.editText?.error =
+                descriptionTIL.context.getString(R.string.field_required)
         } else {
             descriptionTIL.editText?.error = null
         }

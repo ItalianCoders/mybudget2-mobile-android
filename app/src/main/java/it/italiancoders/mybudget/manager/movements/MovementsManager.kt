@@ -28,15 +28,14 @@
 package it.italiancoders.mybudget.manager.movements
 
 import android.content.Context
-import it.italiancoders.mybudget.cache.ExpenseSummaryCache
 import it.italiancoders.mybudget.cache.MovementCache
 import it.italiancoders.mybudget.manager.AbstractRestManager
 import it.italiancoders.mybudget.rest.api.RetrofitBuilder
 import it.italiancoders.mybudget.rest.api.services.MovementRestService
-import it.italiancoders.mybudget.rest.models.ExpenseSummary
 import it.italiancoders.mybudget.rest.models.Movement
 import it.italiancoders.mybudget.rest.models.MovementListPage
 import it.italiancoders.mybudget.utils.NetworkChecker
+import it.italiancoders.mybudget.utils.OpenForTesting
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -47,13 +46,13 @@ import kotlinx.coroutines.withContext
  *         <p/>
  *         date: 26/07/19
  */
+@OpenForTesting
 class MovementsManager(context: Context) : AbstractRestManager(context) {
 
     private val movementService =
         RetrofitBuilder.getSecureClient(context).create(MovementRestService::class.java)
 
     private val movementCache = MovementCache(context)
-    private val expenseSummaryCache = ExpenseSummaryCache(context)
 
     fun load(id: Int, onSuccessAction: (Movement?) -> Unit, onFailureAction: (Int?) -> Unit) {
         val networkAvailable = NetworkChecker().isNetworkAvailable(context)
@@ -84,89 +83,34 @@ class MovementsManager(context: Context) : AbstractRestManager(context) {
         }
     }
 
-    fun search(
-        parametri: ParametriRicerca,
-        onSuccessAction: (MovementListPage?) -> Unit,
-        onFailureAction: (Int?) -> Unit,
-        forceReload: Boolean = false
-    ) {
+    fun search(parametri: ParametriRicerca, forceReload: Boolean = false): MovementListPage {
+
         val networkAvailable = NetworkChecker().isNetworkAvailable(context)
-        CoroutineScope(Dispatchers.IO).launch {
 
-            val movementsCached = movementCache.get(parametri)
+        val movementsCached = movementCache.get(parametri)
 
-            if (networkAvailable && (movementsCached.contents.isNullOrEmpty() || forceReload)) {
-                val response = movementService.query(
-                    parametri.year,
-                    parametri.month,
-                    parametri.day,
-                    parametri.categoryId?.toInt(),
-                    parametri.page,
-                    parametri.size,
-                    null
-                )
+        return if (networkAvailable && (movementsCached.contents.isNullOrEmpty() || forceReload)) {
+            val response = movementService.query(
+                parametri.year,
+                parametri.month,
+                parametri.day,
+                parametri.categoryId?.toInt(),
+                parametri.page,
+                parametri.size,
+                null
+            )
 
+            val result = processResponse(response)
+            result?.let {
                 movementCache.remove(parametri)
-                withContext(Dispatchers.Main) {
-                    val onLoadAllSuccessAction: ((MovementListPage?) -> Unit)? = { searchResponse ->
-                        onSuccessAction.invoke(searchResponse)
-                        CoroutineScope(Dispatchers.IO).launch {
-                            movementCache.addAll(searchResponse?.contents.orEmpty())
-                        }
-                    }
-                    processResponse(response, onLoadAllSuccessAction, onFailureAction)
-                }
-            } else {
-                withContext(Dispatchers.Main) {
-                    onSuccessAction.invoke(movementsCached)
-                }
+                movementCache.addAll(it.contents)
             }
+
+            result ?: MovementListPage()
+        } else {
+            movementsCached
         }
-    }
 
-    fun getExpenseSummary(
-        parametri: ParametriRicerca,
-        onSuccessAction: (ExpenseSummary?) -> Unit,
-        onFailureAction: (Int?) -> Unit,
-        forceReload: Boolean = false
-    ) {
-        val networkAvailable = NetworkChecker().isNetworkAvailable(context)
-        CoroutineScope(Dispatchers.IO).launch {
-
-            //val expenseSummary = expenseSummaryCache.get(year, month)
-
-            if (networkAvailable) { // && (expenseSummary == null || forceReload)) {
-                val response = movementService.getExpenseSummary(
-                    parametri.year,
-                    parametri.month,
-                    parametri.day,
-                    parametri.week,
-                    null // Category not managed now
-                )
-
-                //expenseSummaryCache.remove(year, month)
-                /**
-                val onLoadAllSuccessAction: ((ExpenseSummary?) -> Unit)? = { summary ->
-                onSuccessAction.invoke(summary)
-                summary?.let {
-                CoroutineScope(Dispatchers.IO).launch {
-                expenseSummaryCache.add(it, year, month)
-                }
-                }
-                }
-                 **/
-                processResponse(response, onSuccessAction, onFailureAction)
-            } else {
-                withContext(Dispatchers.Main) {
-                    onSuccessAction.invoke(
-                        ExpenseSummary(
-                            0.0, arrayOf(),
-                            MovementListPage()
-                        )
-                    )
-                }
-            }
-        }
     }
 
     fun delete(

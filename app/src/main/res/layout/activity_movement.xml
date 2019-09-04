@@ -85,7 +85,7 @@
                         android:inputType="numberDecimal"
                         android:selectAllOnFocus="true"
 
-                        android:text="@={BigDecimalStringConversion.toString(amountTextInputEditText,model.amount,model.amount)}" />
+                        android:text="@={BigDecimalStringConversion.toString(amountTextInputEditText.getText(),model.amount,model.amount)}" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout

@@ -28,60 +28,61 @@
 package it.italiancoders.mybudget.activity.login
 
 import android.text.Editable
-import android.util.Patterns
+import androidx.core.util.PatternsCompat
 
 object UserValidationRules {
 
     @JvmStatic
-    var FIRSTNAME: Rule = object : Rule {
-        override fun isValid(s: Editable?): Boolean {
+    var FIRSTNAME: Rule = object : Rule() {
+        override fun isValid(s: String?): Boolean {
             // Check length
-            return s?.toString().orEmpty().length >= 5
+            return s.orEmpty().length >= 5
 
         }
     }
 
     @JvmStatic
-    var LASTNAME: Rule = object : Rule {
-        override fun isValid(s: Editable?): Boolean {
+    var LASTNAME: Rule = object : Rule() {
+        override fun isValid(s: String?): Boolean {
             // Check length
-            return s?.toString().orEmpty().length >= 5
+            return s.orEmpty().length >= 5
 
         }
     }
 
     @JvmStatic
-    var USERNAME: Rule = object : Rule {
-        override fun isValid(s: Editable?): Boolean {
+    var USERNAME: Rule = object : Rule() {
+        override fun isValid(s: String?): Boolean {
             // Check length
-            return s?.toString().orEmpty().length >= 5
+            return s.orEmpty().length >= 5
 
         }
     }
 
     @JvmStatic
-    var PASSWORD: Rule = object : Rule {
-        override fun isValid(s: Editable?): Boolean {
+    var PASSWORD: Rule = object : Rule() {
+        override fun isValid(s: String?): Boolean {
             // Check if contains at least one upper case char
-            val upperCaseChar = """.*[A-Z].*""".toRegex().containsMatchIn(s?.toString().orEmpty())
+            val upperCaseChar = """.*[A-Z].*""".toRegex().containsMatchIn(s.orEmpty())
             // Check if contains at least one digit char
-            val digitChar = """.*[0-9].*""".toRegex().containsMatchIn(s?.toString().orEmpty())
+            val digitChar = """.*[0-9].*""".toRegex().containsMatchIn(s.orEmpty())
             // Check length
-            val length = s?.toString().orEmpty().length >= 8
+            val length = s.orEmpty().length >= 8
             return length && upperCaseChar && digitChar
         }
     }
 
     @JvmStatic
-    var EMAIL: Rule = object : Rule {
-        override fun isValid(s: Editable?): Boolean {
+    var EMAIL: Rule = object : Rule() {
+        override fun isValid(s: String?): Boolean {
             // Check with pattern
-            return Patterns.EMAIL_ADDRESS.matcher(s?.toString().orEmpty()).matches()
+            return PatternsCompat.EMAIL_ADDRESS.matcher(s.orEmpty()).matches()
 
         }
     }
 
-    interface Rule {
-        fun isValid(s: Editable?): Boolean
+    abstract class Rule {
+        fun isValid(s: Editable?): Boolean = isValid(s?.toString())
+        abstract fun isValid(s: String?): Boolean
     }
 }

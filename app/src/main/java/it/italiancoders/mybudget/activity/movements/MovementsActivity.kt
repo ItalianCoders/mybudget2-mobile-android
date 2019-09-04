@@ -43,6 +43,8 @@ import it.italiancoders.mybudget.activity.movements.edit.MovementActivity
 import it.italiancoders.mybudget.activity.movements.list.ListMovementsFragment
 import it.italiancoders.mybudget.activity.movements.search.SearchMovementsView
 import it.italiancoders.mybudget.databinding.ActivityMovementsBinding
+import it.italiancoders.mybudget.tutorial.AbstractTutorialActivity
+import it.italiancoders.mybudget.tutorial.TutorialMovementsActivity
 
 /**
  * @author fattazzo
@@ -54,6 +56,9 @@ class MovementsActivity : BaseActivity<ActivityMovementsBinding>() {
     private var mBottomSheetBehavior: BottomSheetBehavior<SearchMovementsView?>? = null
 
     override fun getLayoutResID(): Int = R.layout.activity_movements
+
+    override fun createTutorial(): AbstractTutorialActivity<ActivityMovementsBinding>? =
+        TutorialMovementsActivity(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

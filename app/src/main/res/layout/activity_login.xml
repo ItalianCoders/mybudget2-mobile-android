@@ -133,7 +133,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:background="@{BooleanSafeUnboxConversions.unbox(viewModel.policyAccepted) ? @drawable/box_round_green : @drawable/box_round_empty}"
+                    android:background="@{safeUnbox(viewModel.policyAccepted) ? @drawable/box_round_green : @drawable/box_round_empty}"
                     android:orientation="horizontal">
 
                 <CheckBox

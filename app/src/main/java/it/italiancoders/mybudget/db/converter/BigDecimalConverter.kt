@@ -28,13 +28,19 @@
 package it.italiancoders.mybudget.db.converter
 
 import androidx.room.TypeConverter
-
 import java.math.BigDecimal
-import java.math.MathContext
 import java.math.RoundingMode
 
+/**
+ * Converter used for store and retrieve Long and BigDecimal values from DB.
+ */
 class BigDecimalConverter {
 
+    /**
+     * Create new BigDecimal from Long value.
+     * BigDecimal = (Long / 100) scale 2 ROUND_HALF_UP
+     *
+     */
     @TypeConverter
     fun fromLong(value: Long?): BigDecimal? {
         return if (value == null) null else BigDecimal(value).divide(
@@ -44,7 +50,17 @@ class BigDecimalConverter {
         )
     }
 
+    /**
+     * Create new Long from BigDecimal value.
+     * Long = (BigDecimal * 100) precision 2 ROUND_HALF_UP
+     */
     @TypeConverter
-    fun fromBigDecimal(value: BigDecimal?): Long? =
-        value?.multiply(BigDecimal(100), MathContext(2, RoundingMode.HALF_UP))?.longValueExact()
+    fun fromBigDecimal(value: BigDecimal?): Long? {
+
+        val multiplier = BigDecimal(100).setScale(0,RoundingMode.UNNECESSARY)
+
+        val result = value?.setScale(2,RoundingMode.DOWN)?.multiply(multiplier)
+
+        return result?.setScale(2,RoundingMode.DOWN)?.longValueExact()
+    }
 }

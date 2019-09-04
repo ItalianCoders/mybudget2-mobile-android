@@ -33,6 +33,14 @@
     <string name="tutorial_main_period_title">Periodo</string>
     <string name="tutorial_main_period_description">Seleziona il periodo che desideri</string>
 
+    <!-- Period type -->
+    <string name="tutorial_main_period_type_title">Tipo Periodo</string>
+    <string name="tutorial_main_period_type_description">Scegli il tipo intervallo fra\nMese, settimana o giorno</string>
+
+    <!-- Charts -->
+    <string name="tutorial_main_charts_title">Grafici</string>
+    <string name="tutorial_main_charts_description">Consulta il grafico che più ti piace\nscorrendo a destra nella lista</string>
+
     <!-- Add movements -->
     <string name="tutorial_main_add_movements_title">Nuovi movimenti</string>
     <string name="tutorial_main_add_movements_description">Aggiungi i nuovi movimenti di spesa</string>
@@ -57,4 +65,13 @@
     <!-- update delete -->
     <string name="tutorial_categories_update_delete_title">Modifica o cancella</string>
     <string name="tutorial_categories_update_delete_description">Seleziona la categoria per\nmodificarla o cancellarla</string>
+
+    <!-- MOVEMENTS -->
+    <!-- Params -->
+    <string name="tutorial_movements_params_title">Ricerca i movimenti</string>
+    <string name="tutorial_movements_params_description">Imposta i prarmetri e ricerca\ntutti i movimenti che hai inserito</string>
+
+    <!-- Edit movement -->
+    <string name="tutorial_movements_edit_title">Modifica movimenti</string>
+    <string name="tutorial_movements_edit_description">Seleziona i movimenti per\nvariarne i dati</string>
 </resources>

@@ -90,4 +90,6 @@
 
     <string name="no_data_for_period">Nessuna dato per il periodo scelto</string>
 
+    <string name="exit_confirmation_message">Confermi di voler uscire dall\'applicazione?</string>
+
 </resources>

@@ -71,8 +71,8 @@ object AppPreferenceManager {
     }
 
     // --- Currency Symbol --------------------------------------------------------------
-    fun getCurrencySymbol(context: Context): String? {
-        if (currencySymbol == null) {
+    fun getCurrencySymbol(context: Context?): String? {
+        if (currencySymbol == null && context != null) {
             val currency = Currency.getInstance(Locale.getDefault())
             currencySymbol = PreferenceManager.getDefaultSharedPreferences(context)
                 .getString(

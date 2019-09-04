@@ -47,14 +47,14 @@ abstract class AbstractTutorialActivity<T : ViewDataBinding>(protected val activ
     /**
      * Key used to manage preferences
      */
-    abstract fun getTutorailPreferenceKey(): String
+    abstract fun getTutorialPreferenceKey(): String
 
     /**
      * Check if the tutorial is never show
      */
     open fun isNeverShow(): Boolean {
         val alreadyShow = activity.getSharedPreferences(TUTORIAL_PREF_FILE, Context.MODE_PRIVATE)
-            .getBoolean(getTutorailPreferenceKey(), false)
+            .getBoolean(getTutorialPreferenceKey(), false)
 
         return !alreadyShow
     }
@@ -86,7 +86,7 @@ abstract class AbstractTutorialActivity<T : ViewDataBinding>(protected val activ
 
     private fun saveTutorialAsShow() {
         activity.getSharedPreferences(TUTORIAL_PREF_FILE, Context.MODE_PRIVATE)
-            .edit().putBoolean(getTutorailPreferenceKey(), true).apply()
+            .edit().putBoolean(getTutorialPreferenceKey(), true).apply()
     }
 
     fun getCenterLocation(view: View): FloatArray {

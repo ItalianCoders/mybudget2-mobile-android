@@ -27,18 +27,21 @@
 
 package it.italiancoders.mybudget.activity.registration
 
-import android.text.Editable
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import it.italiancoders.mybudget.activity.login.UserValidationRules
+import it.italiancoders.mybudget.manager.registrationuserinfo.RegistrationUserInfoManager
+import it.italiancoders.mybudget.rest.models.UserRegistrationInfo
+import it.italiancoders.mybudget.utils.ioJob
 
 /**
  * @author fattazzo
  *         <p/>
  *         date: 24/08/19
  */
-class RegistrationUserInfoViewModel : ViewModel() {
+class RegistrationUserInfoViewModel(private val registrationUserInfoManager: RegistrationUserInfoManager) :
+    ViewModel() {
 
     val firstname = MutableLiveData<String>("")
     val lastname = MutableLiveData<String>("")
@@ -48,6 +51,7 @@ class RegistrationUserInfoViewModel : ViewModel() {
     val email = MutableLiveData<String>("")
 
     val dataValid = MediatorLiveData<Boolean>().apply {
+        value = false
         addSource(firstname) { value = checkDataValid() }
         addSource(lastname) { value = checkDataValid() }
         addSource(username) { value = checkDataValid() }
@@ -58,26 +62,42 @@ class RegistrationUserInfoViewModel : ViewModel() {
 
     private fun checkDataValid(): Boolean {
         val firstnameValid =
-            UserValidationRules.FIRSTNAME.isValid(
-                Editable.Factory.getInstance().newEditable(
-                    firstname.value.orEmpty()
-                )
-            )
+            UserValidationRules.FIRSTNAME.isValid(firstname.value.orEmpty())
         val lastnameValid =
-            UserValidationRules.LASTNAME.isValid(Editable.Factory.getInstance().newEditable(lastname.value.orEmpty()))
+            UserValidationRules.LASTNAME.isValid(lastname.value.orEmpty())
         val usernameValid =
-            UserValidationRules.USERNAME.isValid(Editable.Factory.getInstance().newEditable(username.value.orEmpty()))
+            UserValidationRules.USERNAME.isValid(username.value.orEmpty())
         val passwordValid =
-            UserValidationRules.PASSWORD.isValid(Editable.Factory.getInstance().newEditable(password.value.orEmpty()))
+            UserValidationRules.PASSWORD.isValid(password.value.orEmpty())
         val passwordConfirmValid =
-            UserValidationRules.PASSWORD.isValid(
-                Editable.Factory.getInstance().newEditable(
-                    passwordConfirm.value.orEmpty()
-                )
-            )
+            UserValidationRules.PASSWORD.isValid(passwordConfirm.value.orEmpty())
         val emailValid =
-            UserValidationRules.EMAIL.isValid(Editable.Factory.getInstance().newEditable(email.value.orEmpty()))
+            UserValidationRules.EMAIL.isValid(email.value.orEmpty())
 
         return firstnameValid && lastnameValid && usernameValid && passwordValid && passwordConfirmValid && emailValid && password.value.orEmpty() == passwordConfirm.value
+    }
+
+    fun createRegistration(onSuccessAction: () -> Unit, onFailureAction: () -> Unit) {
+        if (dataValid.value == true) {
+
+            val userRegistrationInfo = UserRegistrationInfo(
+                username.value!!,
+                password.value!!,
+                firstname.value!!,
+                lastname.value!!,
+                email.value!!
+            )
+
+            ioJob {
+                val createResult = registrationUserInfoManager.create(userRegistrationInfo)
+
+                if (createResult == true) {
+                    onSuccessAction.invoke()
+                }
+                if (createResult == false) {
+                    onFailureAction.invoke()
+                }
+            }
+        }
     }
 }

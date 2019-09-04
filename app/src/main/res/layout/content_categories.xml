@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Project: mybudget2-mobile-android
   ~ File: content_categories.xml
   ~
@@ -26,29 +25,39 @@
   ~ SOFTWARE.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_height="match_parent"
-              android:layout_width="match_parent"
-              android:orientation="vertical"
-              tools:showIn="@layout/activity_categories"
-              app:layout_behavior="@string/appbar_scrolling_view_behavior"
-              tools:context=".activity.categories.CategoriesActivity">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipeRefreshContainer"
+    <data>
+        <variable
+                name="model"
+                type="it.italiancoders.mybudget.activity.categories.CategoriesViewModel" />
+    </data>
+
+    <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:context=".activity.categories.CategoriesActivity"
+            tools:showIn="@layout/activity_categories">
 
-        <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/categoriesRecyclerView"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipeRefreshContainer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layoutAnimation="@anim/layout_animation_from_bottom"
-                android:paddingTop="18dp">
+                app:refreshing="@{safeUnbox(model.loadingData)}">
 
-        </androidx.recyclerview.widget.RecyclerView>
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/categoriesRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layoutAnimation="@anim/layout_animation_from_bottom"
+                    android:paddingTop="18dp">
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-</LinearLayout>
+            </androidx.recyclerview.widget.RecyclerView>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </LinearLayout>
+</layout>

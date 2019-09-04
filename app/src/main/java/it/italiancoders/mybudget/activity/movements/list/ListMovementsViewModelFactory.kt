@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: MyBudgetApplication.kt
+ * File: ListMovementsViewModelFactory.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,13 +25,16 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget
+package it.italiancoders.mybudget.activity.movements.list
 
-import android.app.Application
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import it.italiancoders.mybudget.manager.movements.MovementsManager
 
-/**
- * @author fattazzo
- *         <p/>
- *         date: 16/07/19
- */
-class MyBudgetApplication : Application()
+class ListMovementsViewModelFactory(private val movementsManager: MovementsManager) :
+    ViewModelProvider.Factory {
+
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return ListMovementsViewModel(movementsManager) as T
+    }
+}

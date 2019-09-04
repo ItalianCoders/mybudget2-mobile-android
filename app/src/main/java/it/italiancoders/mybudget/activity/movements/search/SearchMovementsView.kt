@@ -35,10 +35,12 @@ import android.widget.LinearLayout
 import androidx.databinding.DataBindingUtil
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.adapters.CategoryAdapter
+import it.italiancoders.mybudget.app.MyBudgetApplication
 import it.italiancoders.mybudget.databinding.ViewSearchMovementsBinding
 import it.italiancoders.mybudget.manager.categories.CategoriesManager
 import it.italiancoders.mybudget.rest.models.Category
 import java.util.*
+import javax.inject.Inject
 
 /**
  * @author fattazzo
@@ -56,7 +58,16 @@ class SearchMovementsView : LinearLayout {
         ) as ViewSearchMovementsBinding
     }
 
-    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle) {
+    lateinit var model: SearchMovementsViewModel
+
+    @Inject
+    lateinit var categoriesManager: CategoriesManager
+
+    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(
+        context,
+        attrs,
+        defStyle
+    ) {
         initView()
     }
 
@@ -71,7 +82,10 @@ class SearchMovementsView : LinearLayout {
     private fun initView() {
         addView(binding.root)
 
-        binding.model = SearchMovementsViewModel()
+        (binding.root.context.applicationContext as MyBudgetApplication).appComponent.inject(this)
+
+        model = SearchMovementsViewModel(categoriesManager)
+        binding.model = model
         binding.datePickerButton.setOnClickListener { showDatePickerDialog() }
         binding.clearButton.setOnClickListener {
             binding.model?.reset()
@@ -82,13 +96,11 @@ class SearchMovementsView : LinearLayout {
             name = context.getString(R.string.category_all)
         }
 
-        CategoriesManager(context).loadAll({
-            val categoryAdapter = CategoryAdapter(context, it ?: listOf(), allCategory)
+        model.categories.observeForever {
+            val categoryAdapter = CategoryAdapter(context, it, allCategory)
             binding.categorySpinner.adapter = categoryAdapter
-        }, {
-            val categoryAdapter = CategoryAdapter(context, listOf(), allCategory)
-            binding.categorySpinner.adapter = categoryAdapter
-        })
+        }
+        model.loadCategories()
     }
 
     private fun showDatePickerDialog() {
@@ -109,7 +121,8 @@ class SearchMovementsView : LinearLayout {
         ).show()
     }
 
-    fun isParametersValid(): Boolean = binding.model?.year?.value != null && binding.model?.month?.value != null
+    fun isParametersValid(): Boolean =
+        binding.model?.year?.value != null && binding.model?.month?.value != null
 
     fun getYear(): Int? = binding.model?.year?.value
     fun getMonth(): Int? = binding.model?.month?.value

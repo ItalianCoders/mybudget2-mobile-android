@@ -27,9 +27,9 @@
 
 package it.italiancoders.mybudget.rest.api.services
 
-import it.italiancoders.mybudget.rest.models.ExpenseSummary
 import it.italiancoders.mybudget.rest.models.Movement
 import it.italiancoders.mybudget.rest.models.MovementListPage
+import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -62,7 +62,7 @@ interface MovementRestService {
      * @return The paged Movement list object
      */
     @GET("movements")
-    suspend fun query(
+    fun query(
         @Query("year") year: Int,
         @Query("month") month: Int,
         @Query("day") day: Int?,
@@ -70,7 +70,7 @@ interface MovementRestService {
         @Query("page") page: Int,
         @Query("size") size: Int,
         @Query("sort") sort: Array<String>?
-    ): Response<MovementListPage>
+    ): Call<MovementListPage>
 
     /**
      * Obtain the movement
@@ -97,22 +97,4 @@ interface MovementRestService {
      */
     @DELETE("movements/{id}")
     suspend fun delete(@Path("id") id: Int): Response<Void>
-
-    /**
-     * Return the expense summary
-     *
-     * @param year The year of movement
-     * @param month The month of movement
-     * @param day The day of movement
-     * @param week The week number
-     * @param category The id of category
-     */
-    @GET("expense-summary")
-    suspend fun getExpenseSummary(
-        @Query("year") year: Int,
-        @Query("month") month: Int,
-        @Query("day") day: Int?,
-        @Query("week") week: Int?,
-        @Query("category") category: Int?
-    ): Response<ExpenseSummary>
 }

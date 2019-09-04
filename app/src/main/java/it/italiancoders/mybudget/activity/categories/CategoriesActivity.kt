@@ -34,24 +34,27 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.afollestad.materialdialogs.callbacks.onDismiss
 import com.google.android.material.appbar.AppBarLayout
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.activity.BaseActivity
 import it.italiancoders.mybudget.activity.categories.edit.EditCategoryDialogBuilder
+import it.italiancoders.mybudget.app.MyBudgetApplication
 import it.italiancoders.mybudget.databinding.ActivityCategoriesBinding
 import it.italiancoders.mybudget.manager.categories.CategoriesManager
 import it.italiancoders.mybudget.rest.models.Category
 import it.italiancoders.mybudget.tutorial.AbstractTutorialActivity
 import it.italiancoders.mybudget.tutorial.TutorialCategoriesActivity
-import kotlinx.android.synthetic.main.content_categories.view.*
+import javax.inject.Inject
 
 
 class CategoriesActivity : BaseActivity<ActivityCategoriesBinding>() {
 
     private val categoriesDataAdapter: CategoriesDataAdapter = CategoriesDataAdapter()
 
-    private val categoriesViewModel by lazy { ViewModelProvider(this).get(CategoriesViewModel::class.java) }
+    @Inject
+    lateinit var categoriesManager: CategoriesManager
+
+    lateinit var categoriesViewModel: CategoriesViewModel
 
     override fun getLayoutResID(): Int = R.layout.activity_categories
 
@@ -60,6 +63,8 @@ class CategoriesActivity : BaseActivity<ActivityCategoriesBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        (application as MyBudgetApplication).appComponent.inject(this)
 
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -70,8 +75,16 @@ class CategoriesActivity : BaseActivity<ActivityCategoriesBinding>() {
         binding.toolbarLayout.setExpandedTitleTypeface(typeface)
         binding.toolbarLayout.setCollapsedTitleTypeface(typeface)
 
+        categoriesViewModel =
+            ViewModelProvider(this, CategoriesViewModelFactory(categoriesManager)).get(
+                CategoriesViewModel::class.java
+            )
+        binding.model = categoriesViewModel
+
         // swipe refresh layout
-        binding.contentLayout.swipeRefreshContainer.setOnRefreshListener { loadAllCategories(true) }
+        binding.contentLayout.swipeRefreshContainer.setOnRefreshListener {
+            categoriesViewModel.loadAll(true)
+        }
 
         // recycler view
         binding.contentLayout.categoriesRecyclerView.layoutManager = LinearLayoutManager(this)
@@ -80,9 +93,10 @@ class CategoriesActivity : BaseActivity<ActivityCategoriesBinding>() {
         categoriesDataAdapter.categoryRecyclerViewAdapterListener = object :
             CategoriesDataAdapter.CategoryRecyclerViewAdapterListener {
             override fun onListItemSelected(category: Category) {
-                EditCategoryDialogBuilder().build(this@CategoriesActivity, category).show {
-                    onDismiss { loadAllCategories(true) }
-                }
+                EditCategoryDialogBuilder(categoriesViewModel).build(
+                    this@CategoriesActivity,
+                    category
+                ).show()
             }
         }
 
@@ -94,9 +108,7 @@ class CategoriesActivity : BaseActivity<ActivityCategoriesBinding>() {
             })
 
         binding.fab.setOnClickListener {
-            EditCategoryDialogBuilder().build(this@CategoriesActivity).show {
-                onDismiss { loadAllCategories(true) }
-            }
+            EditCategoryDialogBuilder(categoriesViewModel).build(this@CategoriesActivity).show()
         }
 
         // Show option menu when appbar is collapsed
@@ -118,21 +130,7 @@ class CategoriesActivity : BaseActivity<ActivityCategoriesBinding>() {
             }
         })
 
-        loadAllCategories()
-    }
-
-    private fun loadAllCategories(forceRefresh: Boolean = false) {
-        if (forceRefresh || categoriesViewModel.categories.value.isNullOrEmpty()) {
-            binding.contentLayout.swipeRefreshContainer.isRefreshing = true
-
-            CategoriesManager(this).loadAll(
-                {
-                    categoriesViewModel.categories.postValue(it)
-                    binding.contentLayout.swipeRefreshContainer.isRefreshing = false
-                },
-                { binding.contentLayout.swipeRefreshContainer.isRefreshing = false }, forceRefresh
-            )
-        }
+        categoriesViewModel.loadAll()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -145,9 +143,7 @@ class CategoriesActivity : BaseActivity<ActivityCategoriesBinding>() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_add -> {
-                EditCategoryDialogBuilder().build(this@CategoriesActivity).show {
-                    onDismiss { loadAllCategories(true) }
-                }
+                EditCategoryDialogBuilder(categoriesViewModel).build(this@CategoriesActivity).show()
                 true
             }
             else -> super.onOptionsItemSelected(item)

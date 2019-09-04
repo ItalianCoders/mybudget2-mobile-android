@@ -27,15 +27,19 @@
 
 package it.italiancoders.mybudget.databinding.converters
 
-import androidx.annotation.Nullable
 import androidx.databinding.InverseMethod
 
+/**
+ * Safe box and unbox for two-way databinding.
+ *
+ * @see https://stackoverflow.com/a/47337166
+ */
 object BooleanSafeUnboxConversions {
 
     @JvmStatic
     @InverseMethod("box")
-    fun unbox(@Nullable b: java.lang.Boolean?): Boolean {
-        return b != null && b.booleanValue()
+    fun unbox(b: Boolean?): Boolean {
+        return b ?: false
     }
 
     @JvmStatic

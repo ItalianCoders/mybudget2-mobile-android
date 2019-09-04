@@ -1,0 +1,54 @@
+{
+  "first": false,
+  "last": true,
+  "size": 10,
+  "totalElements": 14,
+  "totalPages": 2,
+  "number": 1,
+  "contents": [
+    {
+      "id": 6,
+      "amount": 14.0,
+      "category": {
+        "id": 3,
+        "name": "Casa",
+        "description": "Casa",
+        "isReadOnly": true
+      },
+      "executedAt": "2019-08-08T13:34:27.235Z"
+    },
+    {
+      "id": 9,
+      "amount": 67.0,
+      "category": {
+        "id": 5,
+        "name": "Veicoli",
+        "description": "Veicoli",
+        "isReadOnly": true
+      },
+      "executedAt": "2019-08-06T13:58:13.718Z"
+    },
+    {
+      "id": 7,
+      "amount": 23.0,
+      "category": {
+        "id": 1,
+        "name": "Cibo & Bevande",
+        "description": "Cibo & Bevande",
+        "isReadOnly": true
+      },
+      "executedAt": "2019-08-02T13:55:18.227Z"
+    },
+    {
+      "id": 13,
+      "amount": 15.0,
+      "category": {
+        "id": 4,
+        "name": "Trasporti",
+        "description": "Trasporti",
+        "isReadOnly": true
+      },
+      "executedAt": "2019-08-01T13:59:51.918Z"
+    }
+  ]
+}

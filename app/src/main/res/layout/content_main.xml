@@ -34,8 +34,6 @@
 
         <import type="android.view.View" />
 
-        <import type="it.italiancoders.mybudget.databinding.converters.BooleanSafeUnboxConversions" />
-
         <variable
                 name="model"
                 type="it.italiancoders.mybudget.activity.main.MainViewModel" />
@@ -125,7 +123,7 @@
                         style="@style/SpinKitView.Large.ThreeBounce"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:visibility="@{BooleanSafeUnboxConversions.unbox(model.loadingData) ? View.VISIBLE : View.GONE}"
+                        android:visibility="@{safeUnbox(model.loadingData) ? View.VISIBLE : View.GONE}"
                         app:SpinKit_Color="@color/primaryDarkColor"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"

@@ -36,11 +36,15 @@ import androidx.lifecycle.ViewModelProvider
 import com.afollestad.materialdialogs.MaterialDialog
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.activity.BaseActivity
+import it.italiancoders.mybudget.app.MyBudgetApplication
 import it.italiancoders.mybudget.databinding.ActivityRegistrationUserInfoBinding
 import it.italiancoders.mybudget.manager.registrationuserinfo.RegistrationUserInfoManager
-import it.italiancoders.mybudget.rest.models.UserRegistrationInfo
+import javax.inject.Inject
 
 class RegistrationUserInfoActivity : BaseActivity<ActivityRegistrationUserInfoBinding>() {
+
+    @Inject
+    lateinit var registrationUserInfoManager: RegistrationUserInfoManager
 
     override fun getLayoutResID(): Int = R.layout.activity_registration_user_info
 
@@ -49,27 +53,22 @@ class RegistrationUserInfoActivity : BaseActivity<ActivityRegistrationUserInfoBi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding.model = ViewModelProvider(this).get(RegistrationUserInfoViewModel::class.java)
+        (application as MyBudgetApplication).appComponent.inject(this)
+
+        binding.model = ViewModelProvider(
+            this,
+            RegistrationUserInfoViewModelFactory(registrationUserInfoManager)
+        ).get(RegistrationUserInfoViewModel::class.java)
     }
 
     fun createReagistration(view: View) {
         if (binding.model?.dataValid?.value == true) {
             animateLoginButton()
-
-            val userRegistrationInfo = UserRegistrationInfo(
-                binding.model?.username?.value!!,
-                binding.model?.password?.value!!,
-                binding.model?.firstname?.value!!,
-                binding.model?.lastname?.value!!,
-                binding.model?.email?.value!!
-            )
-
-            RegistrationUserInfoManager(this).create(
-                userRegistrationInfo,
-                { showSuccessfullyRegistrationCreatedMessage() },
-                { showFailureRegistrationCreatedMessage() }
-            )
         }
+        binding.model?.createRegistration(
+            { showSuccessfullyRegistrationCreatedMessage() },
+            { showFailureRegistrationCreatedMessage() }
+        )
     }
 
     private fun showSuccessfullyRegistrationCreatedMessage() {

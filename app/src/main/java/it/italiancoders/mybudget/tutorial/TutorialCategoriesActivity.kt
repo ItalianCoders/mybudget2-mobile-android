@@ -33,6 +33,7 @@ import com.takusemba.spotlight.target.Target
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.activity.BaseActivity
 import it.italiancoders.mybudget.databinding.ActivityCategoriesBinding
+import it.italiancoders.mybudget.tutorial.shape.ArrowDownShape
 
 /**
  * @author fattazzo
@@ -42,14 +43,10 @@ import it.italiancoders.mybudget.databinding.ActivityCategoriesBinding
 class TutorialCategoriesActivity(activity: BaseActivity<ActivityCategoriesBinding>) :
     AbstractTutorialActivity<ActivityCategoriesBinding>(activity) {
 
-    override fun getTutorailPreferenceKey(): String = "categories_activity_show"
+    override fun getTutorialPreferenceKey(): String = "categories_activity_show"
 
     override fun getTargets(): ArrayList<Target> {
-        val targets = ArrayList<Target>()
-        targets.add(createNewTarget())
-        targets.add(createRefreshTarget())
-        targets.add(createEditDeleteTarget())
-        return targets
+        return arrayListOf(createNewTarget(), createRefreshTarget(), createEditDeleteTarget())
     }
 
     private fun createNewTarget(): Target {
@@ -69,7 +66,7 @@ class TutorialCategoriesActivity(activity: BaseActivity<ActivityCategoriesBindin
     }
 
     private fun createRefreshTarget(): Target {
-        val view = activity.binding.contentLayout
+        val view = activity.binding.contentLayout.root
         val location = IntArray(2)
         view.getLocationInWindow(location)
         val locationCenter = getCenterLocation(view)
@@ -79,7 +76,7 @@ class TutorialCategoriesActivity(activity: BaseActivity<ActivityCategoriesBindin
 
         return SimpleTarget.Builder(activity)
             .setPoint(pointX, pointY + 100)
-            .setShape(ArrowShape(activity,radius))
+            .setShape(ArrowDownShape(activity, radius))
             .setTitle(activity.getString(R.string.tutorial_categories_refresh_title))
             .setDescription(activity.getString(R.string.tutorial_categories_refresh_description))
             .setOverlayPoint(50f, pointY + radius + 100f)
@@ -87,11 +84,9 @@ class TutorialCategoriesActivity(activity: BaseActivity<ActivityCategoriesBindin
     }
 
     private fun createEditDeleteTarget(): Target {
-        val view = activity.binding.contentLayout
+        val view = activity.binding.contentLayout.root
         val location = IntArray(2)
         view.getLocationInWindow(location)
-        val locationCenter = getCenterLocation(view)
-        val pointX = locationCenter[0]
         val pointY = location[1].toFloat()
         val radius = 100f
 

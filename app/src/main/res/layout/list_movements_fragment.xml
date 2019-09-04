@@ -29,7 +29,6 @@
 
     <data>
         <import type="android.view.View"/>
-        <import type="it.italiancoders.mybudget.databinding.converters.BooleanSafeUnboxConversions"/>
         <variable
                 name="model"
                 type="it.italiancoders.mybudget.activity.movements.list.ListMovementsViewModel" />
@@ -60,7 +59,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginBottom="40dp"
-                android:visibility="@{BooleanSafeUnboxConversions.unbox(model.loadingData) ? View.VISIBLE : View.GONE}"
+                android:visibility="@{safeUnbox(model.loadingData) ? View.VISIBLE : View.GONE}"
                 android:layout_centerInParent="true"
                 app:SpinKit_Color="@color/primaryDarkColor"/>
 

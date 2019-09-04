@@ -30,8 +30,8 @@ package it.italiancoders.mybudget.utils
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import it.italiancoders.mybudget.AppConstants
 import it.italiancoders.mybudget.R
+import it.italiancoders.mybudget.app.AppConstants
 
 /**
  * @author fattazzo

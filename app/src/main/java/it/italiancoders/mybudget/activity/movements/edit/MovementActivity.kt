@@ -43,12 +43,14 @@ import com.afollestad.materialdialogs.MaterialDialog
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.activity.BaseActivity
 import it.italiancoders.mybudget.adapters.CategoryAdapter
+import it.italiancoders.mybudget.app.MyBudgetApplication
 import it.italiancoders.mybudget.databinding.ActivityMovementBinding
 import it.italiancoders.mybudget.manager.categories.CategoriesManager
 import it.italiancoders.mybudget.manager.movements.MovementsManager
 import it.italiancoders.mybudget.rest.models.Category
 import it.italiancoders.mybudget.rest.models.Movement
 import java.util.*
+import javax.inject.Inject
 
 
 class MovementActivity : BaseActivity<ActivityMovementBinding>(), View.OnFocusChangeListener {
@@ -58,13 +60,24 @@ class MovementActivity : BaseActivity<ActivityMovementBinding>(), View.OnFocusCh
         const val REQUEST_CODE_MOVEMENT = 1000
     }
 
-    val model by lazy { ViewModelProvider(this).get(MovementViewModel::class.java) }
+    @Inject
+    lateinit var categoriesManager: CategoriesManager
+
+    @Inject
+    lateinit var movementsManager: MovementsManager
+
+    lateinit var model: MovementViewModel
 
     override fun getLayoutResID(): Int = R.layout.activity_movement
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        (application as MyBudgetApplication).appComponent.inject(this)
+
+        model = ViewModelProvider(this, MovementViewModelFactory(categoriesManager)).get(
+            MovementViewModel::class.java
+        )
         binding.model = model
 
         initToolbar(binding.toolbar)
@@ -81,7 +94,7 @@ class MovementActivity : BaseActivity<ActivityMovementBinding>(), View.OnFocusCh
                 binding.model?.init(Movement())
                 setTitle(R.string.movement_new)
             } else {
-                MovementsManager(this).load(
+                movementsManager.load(
                     movementId.toInt(),
                     {
                         binding.model?.init(it ?: Movement())
@@ -101,7 +114,7 @@ class MovementActivity : BaseActivity<ActivityMovementBinding>(), View.OnFocusCh
             this,
             DatePickerDialog.OnDateSetListener { _, selectedYear, selectedMonth, selectedDay ->
                 val calData = Calendar.getInstance()
-                calData.set(selectedYear,selectedMonth,selectedDay)
+                calData.set(selectedYear, selectedMonth, selectedDay)
                 model.date.postValue(calData.time)
             },
             calData.get(Calendar.YEAR),
@@ -117,8 +130,8 @@ class MovementActivity : BaseActivity<ActivityMovementBinding>(), View.OnFocusCh
         TimePickerDialog(
             this,
             TimePickerDialog.OnTimeSetListener { _, selectedHour, selectedMinutes ->
-                calData.set(Calendar.HOUR_OF_DAY,selectedHour)
-                calData.set(Calendar.MINUTE,selectedMinutes)
+                calData.set(Calendar.HOUR_OF_DAY, selectedHour)
+                calData.set(Calendar.MINUTE, selectedMinutes)
                 model.date.postValue(calData.time)
             },
             calData.get(Calendar.HOUR_OF_DAY),
@@ -131,13 +144,13 @@ class MovementActivity : BaseActivity<ActivityMovementBinding>(), View.OnFocusCh
         val movementToSave = binding.model?.getMovement()
         if (movementToSave != null) {
             if (movementToSave.id != null) {
-                MovementsManager(this).update(
+                movementsManager.update(
                     movementToSave.id.toInt(),
                     movementToSave,
                     { finishWithResultOk() },
                     { finishWithResultCanceled() })
             } else {
-                MovementsManager(this).create(
+                movementsManager.create(
                     movementToSave,
                     { finishWithResultOk() },
                     { finishWithResultCanceled() })
@@ -154,7 +167,7 @@ class MovementActivity : BaseActivity<ActivityMovementBinding>(), View.OnFocusCh
     fun delete(view: View) {
         val movementToSave = binding.model?.getMovement()
         if (movementToSave?.id != null) {
-            MovementsManager(this).delete(
+            movementsManager.delete(
                 movementToSave.id.toInt(),
                 { finishWithResultOk() },
                 { finishWithResultCanceled() })
@@ -187,11 +200,10 @@ class MovementActivity : BaseActivity<ActivityMovementBinding>(), View.OnFocusCh
         binding.categotyTextView.threshold = 1
         binding.categotyTextView.setAdapter(CategoryAdapter(this, listOf()))
 
-        CategoriesManager(this).loadAll({
-            binding.categotyTextView.setAdapter(CategoryAdapter(this, it ?: listOf()))
-        }, {
-            binding.categotyTextView.setAdapter(CategoryAdapter(this, listOf()))
+        binding.model?.categories?.observe(this, androidx.lifecycle.Observer {
+            binding.categotyTextView.setAdapter(CategoryAdapter(this, it))
         })
+        binding.model?.loadCategories()
 
         binding.categotyTextView.onItemClickListener =
             OnItemClickListener { parent, _, pos, _ ->

@@ -27,16 +27,59 @@
 
 package it.italiancoders.mybudget.activity.categories
 
+import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import it.italiancoders.mybudget.manager.categories.CategoriesManager
 import it.italiancoders.mybudget.rest.models.Category
+import it.italiancoders.mybudget.utils.ioJob
 
 /**
  * @author fattazzo
  *         <p/>
  *         date: 18/07/19
  */
-class CategoriesViewModel : ViewModel() {
+class CategoriesViewModel(private val categoriesManager: CategoriesManager) : ViewModel() {
 
     val categories = MutableLiveData<List<Category>>().apply { postValue(listOf()) }
+
+    val loadingData: ObservableBoolean = ObservableBoolean(false)
+
+    fun loadAll(forceRefresh: Boolean = false) {
+        loadingData.set(true)
+
+        ioJob {
+            try {
+                val categoriesLoaded = categoriesManager.loadAll(forceRefresh)
+
+                categories.postValue(categoriesLoaded)
+            } finally {
+                loadingData.set(false)
+            }
+        }
+    }
+
+    fun delete(categoryId: Int) {
+
+        ioJob {
+            categoriesManager.delete(categoryId)
+            loadAll(true)
+        }
+    }
+
+    fun create(category: Category) {
+
+        ioJob {
+            categoriesManager.create(category)
+            loadAll(true)
+        }
+    }
+
+    fun update(id: Int, category: Category) {
+
+        ioJob {
+            categoriesManager.update(id, category)
+            loadAll(true)
+        }
+    }
 }

@@ -34,6 +34,7 @@ import it.italiancoders.mybudget.rest.api.RetrofitBuilder
 import it.italiancoders.mybudget.rest.api.services.SessionRestService
 import it.italiancoders.mybudget.rest.models.LoginRequest
 import it.italiancoders.mybudget.rest.models.Session
+import it.italiancoders.mybudget.utils.OpenForTesting
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -44,6 +45,7 @@ import kotlinx.coroutines.withContext
  *         <p/>
  *         date: 17/07/19
  */
+@OpenForTesting
 class SessionManager(context: Context) : AbstractRestManager(context) {
 
     fun login(

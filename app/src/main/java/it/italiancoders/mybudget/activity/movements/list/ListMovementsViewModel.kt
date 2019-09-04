@@ -27,16 +27,18 @@
 
 package it.italiancoders.mybudget.activity.movements.list
 
+import androidx.annotation.VisibleForTesting
 import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import it.italiancoders.mybudget.AppConstants
+import it.italiancoders.mybudget.app.AppConstants
 import it.italiancoders.mybudget.manager.movements.MovementsManager
 import it.italiancoders.mybudget.manager.movements.ParametriRicerca
 import it.italiancoders.mybudget.rest.models.MovementListPage
+import it.italiancoders.mybudget.utils.ioJob
 import java.util.*
 
-class ListMovementsViewModel : ViewModel() {
+class ListMovementsViewModel(private val movementsManager: MovementsManager) : ViewModel() {
 
     val year = MutableLiveData<Int?>(Calendar.getInstance().get(Calendar.YEAR))
     val month = MutableLiveData<Int?>(Calendar.getInstance().get(Calendar.MONTH))
@@ -48,45 +50,25 @@ class ListMovementsViewModel : ViewModel() {
 
     val loadingData: ObservableBoolean = ObservableBoolean(false)
 
-    fun search(
-        movementsManager: MovementsManager?,
-        forceReload: Boolean = false
-    ) {
-        loadingData.set(true)
-        movementsManager?.search(
-            buildParameters(true),
-            { pageResult ->
-                page.postValue(pageResult ?: MovementListPage())
-                loadingData.set(false)
-            },
-            {
-                page.postValue(MovementListPage())
-                loadingData.set(false)
-            },
-            forceReload
-        )
+    fun search(forceReload: Boolean = false) {
+        load(forceReload, true)
     }
 
-    fun loadNextPage(
-        movementsManager: MovementsManager?,
-        forceReload: Boolean = false
-    ) {
+    fun loadNextPage(forceReload: Boolean = false) {
         if (isLastPage()) return
 
+        load(forceReload, false)
+    }
+
+    private fun load(forceReload: Boolean, fromFirstPage: Boolean) {
         loadingData.set(true)
 
-        movementsManager?.search(
-            buildParameters(false),
-            { pageResult ->
-                page.postValue(pageResult ?: MovementListPage())
-                loadingData.set(false)
-            },
-            {
-                page.postValue(MovementListPage())
-                loadingData.set(false)
-            },
-            forceReload
-        )
+        ioJob {
+            val pageResult = movementsManager.search(buildParameters(fromFirstPage), forceReload)
+
+            page.postValue(pageResult)
+            loadingData.set(false)
+        }
     }
 
     /**
@@ -96,10 +78,12 @@ class ListMovementsViewModel : ViewModel() {
 
     fun isLastPage(): Boolean = page.value?.last ?: true
 
-    private fun buildParameters(fromFirstPage: Boolean): ParametriRicerca {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun buildParameters(fromFirstPage: Boolean): ParametriRicerca {
 
         // Build default parameters
-        var parametri = ParametriRicerca(year.value!!, month.value!!, day.value, null, categoryId.value)
+        var parametri =
+            ParametriRicerca(year.value!!, month.value!!, day.value, null, categoryId.value)
 
         // If a page exist build the parameters from it
         page.value?.let {

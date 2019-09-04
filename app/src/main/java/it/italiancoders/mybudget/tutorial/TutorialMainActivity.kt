@@ -35,6 +35,7 @@ import com.takusemba.spotlight.target.Target
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.activity.BaseActivity
 import it.italiancoders.mybudget.databinding.ActivityMainBinding
+import it.italiancoders.mybudget.tutorial.shape.ArrowRightShape
 
 
 /**
@@ -45,15 +46,33 @@ import it.italiancoders.mybudget.databinding.ActivityMainBinding
 class TutorialMainActivity(activity: BaseActivity<ActivityMainBinding>) :
     AbstractTutorialActivity<ActivityMainBinding>(activity) {
 
-    override fun getTutorailPreferenceKey(): String = "main_activity_show"
+    override fun getTutorialPreferenceKey(): String = "main_activity_show"
 
     override fun getTargets(): ArrayList<Target> {
-        val targets = ArrayList<Target>()
-        targets.add(createPeriodoTarget())
-        targets.add(createAddMovementsTarget())
-        targets.add(createAddScheduledMovementsTarget())
-        targets.add(createLastMovementsTarget())
-        return targets
+        return arrayListOf(
+            createPeriodoTarget(),
+            createPeriodoTypeTarget(),
+            createChartsTarget(),
+            createAddMovementsTarget(),
+            createAddScheduledMovementsTarget(),
+            createLastMovementsTarget()
+        )
+    }
+
+    private fun createPeriodoTypeTarget(): Target {
+        val view = activity.binding.contentMain.changePeriodTypeFab
+        val location = getCenterLocation(view)
+        val pointX = location[0]
+        val pointY = location[1]
+        val oneRadius = 100f
+
+        return SimpleTarget.Builder(activity)
+            .setPoint(pointX, pointY)
+            .setShape(Circle(oneRadius))
+            .setTitle(activity.getString(R.string.tutorial_main_period_type_title))
+            .setDescription(activity.getString(R.string.tutorial_main_period_type_description))
+            .setOverlayPoint(100f, pointY - oneRadius * 2 + 300f)
+            .build()
     }
 
     private fun createPeriodoTarget(): Target {
@@ -65,10 +84,32 @@ class TutorialMainActivity(activity: BaseActivity<ActivityMainBinding>) :
 
         return SimpleTarget.Builder(activity)
             .setPoint(pointX, pointY)
-            .setShape(Circle(radius))
+            .setShape(
+                RoundedRectangle(
+                    view.layout.height.toFloat() + 70,
+                    view.layout.width.toFloat() + 70,
+                    5f
+                )
+            )
             .setTitle(activity.getString(R.string.tutorial_main_period_title))
             .setDescription(activity.getString(R.string.tutorial_main_period_description))
             .setOverlayPoint(100f, pointY + radius + 100f)
+            .build()
+    }
+
+    private fun createChartsTarget(): Target {
+        val view = activity.binding.contentMain.chartsRecyclerView
+        val locationCenter = getCenterLocation(view)
+        val pointX = locationCenter[0]
+        val pointY = locationCenter[1]
+        val radius = 200f
+
+        return SimpleTarget.Builder(activity)
+            .setPoint(pointX, pointY + 100)
+            .setShape(ArrowRightShape(activity, radius))
+            .setTitle(activity.getString(R.string.tutorial_main_charts_title))
+            .setDescription(activity.getString(R.string.tutorial_main_charts_description))
+            .setOverlayPoint(50f, pointY + radius + 100f)
             .build()
     }
 
