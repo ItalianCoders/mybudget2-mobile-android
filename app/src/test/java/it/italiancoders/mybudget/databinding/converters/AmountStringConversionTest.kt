@@ -27,7 +27,6 @@
 
 package it.italiancoders.mybudget.databinding.converters
 
-import com.nhaarman.mockitokotlin2.any
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.MatcherAssert
@@ -45,15 +44,15 @@ class AmountStringConversionTest {
     @Test
     fun convertToString() {
         Locale.setDefault(Locale.ITALY)
-        var string = AmountStringConversion.toString(any(), BigDecimal.TEN)
+        var string = AmountStringConversion.toString(null, BigDecimal.TEN)
         MatcherAssert.assertThat(string, containsString("€"))
 
         Locale.setDefault(Locale.US)
-        string = AmountStringConversion.toString(any(), BigDecimal.TEN)
+        string = AmountStringConversion.toString(null, BigDecimal.TEN)
         MatcherAssert.assertThat(string, containsString("$"))
 
         AmountStringConversion.currentSymbol = "AA"
-        string = AmountStringConversion.toString(any(), BigDecimal.TEN)
+        string = AmountStringConversion.toString(null, BigDecimal.TEN)
         MatcherAssert.assertThat(string, containsString("AA"))
     }
 
@@ -61,7 +60,7 @@ class AmountStringConversionTest {
     fun convertToStringNullValue() {
 
         Locale.setDefault(Locale.ITALY)
-        val string = AmountStringConversion.toString(any(), null)
+        val string = AmountStringConversion.toString(null, null)
         MatcherAssert.assertThat(string, `is`(""))
     }
 }
