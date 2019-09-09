@@ -37,6 +37,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
 import org.junit.Rule
 import org.mockito.MockitoAnnotations
+import java.util.*
 
 /**
  * @author fattazzo
@@ -62,6 +63,7 @@ abstract class AbstractViewModelTest<T : ViewModel> {
     @ExperimentalCoroutinesApi
     @Before
     fun setUp() {
+        Locale.setDefault(Locale.ITALY)
         MockitoAnnotations.initMocks(this)
         viewModel = createViewModel()
         unconfinifyTestScope()

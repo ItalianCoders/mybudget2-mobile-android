@@ -135,7 +135,7 @@ class MainViewModelTest : AbstractViewModelTest<MainViewModel>() {
         viewModel.month.postValue(2) // Month java based Jan=0 Dec=11
         viewModel.year.postValue(2019)
 
-        assertThat(viewModel.periodDescription.value, `is`("05/03 - 11/03"))
+        assertThat(viewModel.periodDescription.value, `is`("04/03 - 10/03"))
 
         assertThat(viewModel.periodDescription.value, not(`is`(initialDesc)))
     }
