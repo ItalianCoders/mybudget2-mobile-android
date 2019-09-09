@@ -69,6 +69,23 @@
                 android:padding="8dp">
 
             <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/category_text_input_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <AutoCompleteTextView
+                        android:id="@+id/categoty_text_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/menu_categories"
+                        android:drawablePadding="8dp"
+                        android:imeOptions="actionNext"
+                        android:singleLine="true"
+                        android:hint="@string/category" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/amount_text_input_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -81,28 +98,11 @@
                         android:drawablePadding="8dp"
                         android:drawableTint="@color/primaryColor"
                         android:hint="@string/movement_amount"
-                        android:imeOptions="actionNext"
+                        android:imeOptions="actionDone"
                         android:inputType="numberDecimal"
                         android:selectAllOnFocus="true"
 
                         android:text="@={BigDecimalStringConversion.toString(amountTextInputEditText.getText(),model.amount,model.amount)}" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/category_text_input_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                <AutoCompleteTextView
-                        android:id="@+id/categoty_text_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:drawableStart="@drawable/menu_categories"
-                        android:drawablePadding="8dp"
-                        android:imeOptions="actionDone"
-                        android:singleLine="true"
-                        android:hint="@string/category" />
-
             </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout

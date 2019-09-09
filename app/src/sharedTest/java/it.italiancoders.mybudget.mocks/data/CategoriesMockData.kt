@@ -76,4 +76,9 @@ object CategoriesMockData : AbstractMockData() {
                 )
             )
     }
+
+    fun mockId00002(categoriesManager: CategoriesManager) {
+        `when`(categoriesManager.load(any()))
+            .doReturn(fromJsonFile(CategoriesConfig.DATA_ID_00002, Category::class))
+    }
 }

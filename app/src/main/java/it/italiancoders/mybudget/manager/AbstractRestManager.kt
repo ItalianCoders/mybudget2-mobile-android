@@ -120,9 +120,26 @@ abstract class AbstractRestManager(protected val context: Context) {
         }
     }
 
+    protected fun processVoidResponse(call: Call<Void>, showErrorMessage: Boolean = true): Boolean {
+        return try {
+            val response = call.execute()
+            if (response.isSuccessful) {
+                true
+            } else {
+                if (showErrorMessage)
+                    showError(response.message())
+                false
+            }
+        } catch (e: Exception) {
+            if (showErrorMessage)
+                showError()
+            false
+        }
+    }
+
     private fun showError(message: String = "Errore!") {
         Handler(Looper.getMainLooper()).post {
-            Toast.makeText(context, "ERRORE! $message", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context,message, Toast.LENGTH_SHORT).show()
         }
     }
 }

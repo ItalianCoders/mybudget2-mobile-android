@@ -70,7 +70,7 @@ class RegistrationUserInfoManager(context: Context) : AbstractRestManager(contex
 
         val response = registrationUserInfoRestService.create(userRegistrationInfo)
 
-        return processResponse(response,false) != null
+        return processVoidResponse(response,false)
     }
 
     fun resend(

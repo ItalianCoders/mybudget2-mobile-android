@@ -66,7 +66,8 @@ class MovementCache(val context: Context) {
 
     fun remove(id: Int) = movementDao.delete(id.toLong())
 
-    fun addAll(movements: List<Movement>) = movementDao.insertAll(*movements.map { it.toEntity() }.toTypedArray())
+    fun addAll(movements: List<Movement>) =
+        movementDao.insertAll(*movements.map { it.toEntity() }.toTypedArray())
 
     private fun createDateFiler(parametri: ParametriRicerca): String {
         var dateFilter = "${parametri.year}-${parametri.month.toString().padStart(2, '0')}"

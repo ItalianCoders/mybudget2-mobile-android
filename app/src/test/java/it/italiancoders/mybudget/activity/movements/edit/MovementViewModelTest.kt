@@ -29,6 +29,7 @@ package it.italiancoders.mybudget.activity.movements.edit
 
 import it.italiancoders.mybudget.AbstractViewModelTest
 import it.italiancoders.mybudget.manager.categories.CategoriesManager
+import it.italiancoders.mybudget.manager.movements.MovementsManager
 import it.italiancoders.mybudget.mocks.data.CategoriesMockData
 import it.italiancoders.mybudget.rest.models.Category
 import it.italiancoders.mybudget.rest.models.Movement
@@ -49,7 +50,10 @@ class MovementViewModelTest : AbstractViewModelTest<MovementViewModel>() {
     @Mock
     lateinit var categoriesManager: CategoriesManager
 
-    override fun createViewModel(): MovementViewModel = MovementViewModel(categoriesManager)
+    @Mock
+    lateinit var movementsManager: MovementsManager
+
+    override fun createViewModel(): MovementViewModel = MovementViewModel(categoriesManager,movementsManager)
 
     @Test
     override fun initialValues() {
@@ -122,21 +126,6 @@ class MovementViewModelTest : AbstractViewModelTest<MovementViewModel>() {
 
         viewModel.category.postValue(Category())
         assertThat(viewModel.isMovementValid(), `is`(false))
-    }
-
-    @Test
-    fun getMovement() {
-
-        var movement = viewModel.getMovement()
-        assertThat(movement, `is`(nullValue()))
-
-        viewModel.amount.postValue(BigDecimal.TEN)
-        viewModel.category.postValue(Category(1L, "name", "desc", false))
-        movement = viewModel.getMovement()
-
-        assertThat(movement, `is`(notNullValue()))
-        assertThat(movement!!.amount.toLong(), `is`(BigDecimal.TEN.toLong()))
-        assertThat(movement.category.id, `is`(1L))
     }
 
     @Test

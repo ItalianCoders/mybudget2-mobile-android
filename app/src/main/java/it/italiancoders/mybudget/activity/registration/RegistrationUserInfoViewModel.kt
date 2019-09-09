@@ -34,6 +34,7 @@ import it.italiancoders.mybudget.activity.login.UserValidationRules
 import it.italiancoders.mybudget.manager.registrationuserinfo.RegistrationUserInfoManager
 import it.italiancoders.mybudget.rest.models.UserRegistrationInfo
 import it.italiancoders.mybudget.utils.ioJob
+import it.italiancoders.mybudget.utils.uiJob
 
 /**
  * @author fattazzo
@@ -92,10 +93,10 @@ class RegistrationUserInfoViewModel(private val registrationUserInfoManager: Reg
                 val createResult = registrationUserInfoManager.create(userRegistrationInfo)
 
                 if (createResult == true) {
-                    onSuccessAction.invoke()
+                    uiJob { onSuccessAction.invoke() }
                 }
                 if (createResult == false) {
-                    onFailureAction.invoke()
+                    uiJob { onFailureAction.invoke() }
                 }
             }
         }

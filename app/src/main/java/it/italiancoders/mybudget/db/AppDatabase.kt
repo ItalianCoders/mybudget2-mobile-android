@@ -37,13 +37,12 @@ import it.italiancoders.mybudget.db.dao.CategoryDao
 import it.italiancoders.mybudget.db.dao.ExpenseSummaryDao
 import it.italiancoders.mybudget.db.dao.MovementDao
 import it.italiancoders.mybudget.db.entity.Category
-import it.italiancoders.mybudget.db.entity.CategoryMovementOverview
 import it.italiancoders.mybudget.db.entity.ExpenseSummary
 import it.italiancoders.mybudget.db.entity.Movement
 
 @Database(
-    entities = [Category::class, Movement::class, ExpenseSummary::class, CategoryMovementOverview::class],
-    version = 4,
+    entities = [Category::class, Movement::class, ExpenseSummary::class],
+    version = 5,
     exportSchema = true
 )
 @TypeConverters(BigDecimalConverter::class)

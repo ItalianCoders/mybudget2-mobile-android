@@ -29,10 +29,12 @@ package it.italiancoders.mybudget.rest.api
 
 import android.content.Context
 import it.italiancoders.mybudget.SessionData
-import it.italiancoders.mybudget.manager.AuthManager
+import it.italiancoders.mybudget.app.MyBudgetApplication
+import it.italiancoders.mybudget.manager.session.SessionManager
 import it.italiancoders.mybudget.rest.api.services.SessionRestService
 import okhttp3.Interceptor
 import okhttp3.Response
+import javax.inject.Inject
 
 /**
  * @author fattazzo
@@ -41,7 +43,12 @@ import okhttp3.Response
  */
 class RefreshTokenInterceptor(private val context: Context) : Interceptor {
 
+    @Inject
+    lateinit var sessionManager: SessionManager
+
     override fun intercept(chain: Interceptor.Chain): Response {
+
+        (context.applicationContext as MyBudgetApplication).appComponent.inject(this)
 
         val originalRequest = chain.request()
         val initialResponse = chain.proceed(originalRequest)
@@ -58,7 +65,7 @@ class RefreshTokenInterceptor(private val context: Context) : Interceptor {
                     }
                     else -> {
                         SessionData.session = responseNewTokenLoginModel.body()
-                        AuthManager(context).setSession(responseNewTokenLoginModel.body())
+                        sessionManager.setSession(responseNewTokenLoginModel.body())
 
                         val newAuthenticationRequest = originalRequest.newBuilder()
                             .addHeader("x-access-token", SessionData.session?.accessToken.orEmpty())

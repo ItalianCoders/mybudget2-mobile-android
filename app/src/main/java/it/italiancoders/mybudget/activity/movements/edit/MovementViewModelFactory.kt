@@ -30,12 +30,16 @@ package it.italiancoders.mybudget.activity.movements.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import it.italiancoders.mybudget.manager.categories.CategoriesManager
+import it.italiancoders.mybudget.manager.movements.MovementsManager
 
-class MovementViewModelFactory(private val categoriesManager: CategoriesManager) :
+class MovementViewModelFactory(
+    private val categoriesManager: CategoriesManager,
+    private val movementsManager: MovementsManager
+) :
     ViewModelProvider.Factory {
 
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return MovementViewModel(categoriesManager) as T
+        return MovementViewModel(categoriesManager, movementsManager) as T
     }
 }

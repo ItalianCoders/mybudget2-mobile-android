@@ -36,6 +36,8 @@ import it.italiancoders.mybudget.manager.expensesummary.ExpenseSummaryManager
 import it.italiancoders.mybudget.manager.movements.MovementsManager
 import it.italiancoders.mybudget.manager.registrationuserinfo.RegistrationUserInfoManager
 import it.italiancoders.mybudget.manager.session.SessionManager
+import it.italiancoders.mybudget.rest.models.Session
+import it.italiancoders.mybudget.rest.models.User
 import it.italiancoders.mybudget.utils.background
 import it.italiancoders.mybudget.utils.io
 import it.italiancoders.mybudget.utils.ui
@@ -43,6 +45,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
 import org.junit.Rule
+import org.mockito.Mockito.`when`
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -78,6 +81,9 @@ open class BaseActivityTest {
         (getTargetApplication().appComponent as TestAppComponent).inject(this)
 
         unconfinifyTestScope()
+
+        if (useDefaultSession())
+            `when`(sessionManager.getLastSession()).thenReturn(getDefaultSession())
     }
 
     @ExperimentalCoroutinesApi
@@ -87,7 +93,19 @@ open class BaseActivityTest {
         background = Dispatchers.Unconfined
     }
 
+    fun useDefaultSession(): Boolean = true
+
     private fun getTargetApplication(): TestApplication =
         InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as TestApplication
+
+    private fun getDefaultSession(): Session = Session().apply {
+        accessToken = "aaaaaa"
+        locale = "it"
+        refreshToken = "bbbbbbb"
+        userInfo = User().apply {
+            username = "defaultUser"
+            email = "default@user.com"
+        }
+    }
 }
 

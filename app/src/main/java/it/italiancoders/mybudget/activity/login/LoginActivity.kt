@@ -47,10 +47,9 @@ import com.afollestad.materialdialogs.input.input
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.activity.BaseActivity
 import it.italiancoders.mybudget.activity.registration.RegistrationUserInfoActivity
-import it.italiancoders.mybudget.app.MyBudgetApplication
+import it.italiancoders.mybudget.app.component.AppComponent
 import it.italiancoders.mybudget.databinding.ActivityLoginBinding
 import it.italiancoders.mybudget.manager.registrationuserinfo.RegistrationUserInfoManager
-import it.italiancoders.mybudget.manager.session.SessionManager
 import it.italiancoders.mybudget.rest.models.Session
 import it.italiancoders.mybudget.utils.PrivacyPolicyManager
 import java.util.*
@@ -66,21 +65,20 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
     @Inject
     lateinit var registrationUserInfoManager: RegistrationUserInfoManager
 
-    @Inject
-    lateinit var sessionManager: SessionManager
-
     override fun getLayoutResID(): Int = R.layout.activity_login
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        (application as MyBudgetApplication).appComponent.inject(this)
 
         binding.viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
 
         // Animate header and footer slide in
         LoginHeaderFooterAnimator.start(binding.headerContainer)
         LoginHeaderFooterAnimator.start(binding.footerContainer, false)
+    }
+
+    override fun injectComponent(appComponent: AppComponent) {
+        appComponent.inject(this)
     }
 
     private fun isLoginDataValid(): Boolean {

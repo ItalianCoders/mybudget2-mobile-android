@@ -28,8 +28,9 @@
 package it.italiancoders.mybudget.manager.session
 
 import android.content.Context
+import com.beust.klaxon.Klaxon
+import it.italiancoders.mybudget.SessionData
 import it.italiancoders.mybudget.manager.AbstractRestManager
-import it.italiancoders.mybudget.manager.AuthManager
 import it.italiancoders.mybudget.rest.api.RetrofitBuilder
 import it.italiancoders.mybudget.rest.api.services.SessionRestService
 import it.italiancoders.mybudget.rest.models.LoginRequest
@@ -61,7 +62,7 @@ class SessionManager(context: Context) : AbstractRestManager(context) {
         val sessionService = RetrofitBuilder.client.create(SessionRestService::class.java)
 
         val loginOnSuccessAction: (Session?) -> Unit = {
-            AuthManager(context).setSession(it)
+            setSession(it)
             onSuccessAction.invoke(it)
         }
 
@@ -71,5 +72,44 @@ class SessionManager(context: Context) : AbstractRestManager(context) {
                 processResponse(response, loginOnSuccessAction, onFailureAction, false)
             }
         }
+    }
+
+    fun getLastSession(): Session? {
+
+        val lastSessionJson =
+            context.getSharedPreferences(AUTH_PREF_FILE, Context.MODE_PRIVATE).getString(
+                ACCESS_TOKEN_KEY, ""
+            )
+
+        return try {
+            Klaxon().parse<Session>(lastSessionJson!!)
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    fun setSession(session: Session?) {
+
+        val sessionJson = Klaxon().toJsonString(session ?: "")
+
+        context.getSharedPreferences(AUTH_PREF_FILE, Context.MODE_PRIVATE).edit()
+            .putString(ACCESS_TOKEN_KEY, sessionJson)
+            .apply()
+        SessionData.session = session
+    }
+
+    fun removeSession() {
+
+        context.getSharedPreferences(AUTH_PREF_FILE, Context.MODE_PRIVATE).edit().clear()
+            .apply()
+
+        SessionData.session = null
+    }
+
+    companion object {
+
+        private const val AUTH_PREF_FILE = "auth_prefs"
+
+        private const val ACCESS_TOKEN_KEY = "accessToken"
     }
 }

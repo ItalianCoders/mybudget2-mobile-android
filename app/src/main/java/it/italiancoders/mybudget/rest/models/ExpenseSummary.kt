@@ -37,7 +37,7 @@ package it.italiancoders.mybudget.rest.models
 data class ExpenseSummary(
     val totalAmount: Double? = null,
     val categoryOverview: Array<CategoryMovementOverview>?,
-    val lastMovements: MovementListPage
+    var lastMovements: MovementListPage
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

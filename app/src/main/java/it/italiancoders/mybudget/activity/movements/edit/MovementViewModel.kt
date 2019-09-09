@@ -30,9 +30,11 @@ package it.italiancoders.mybudget.activity.movements.edit
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import it.italiancoders.mybudget.manager.categories.CategoriesManager
+import it.italiancoders.mybudget.manager.movements.MovementsManager
 import it.italiancoders.mybudget.rest.models.Category
 import it.italiancoders.mybudget.rest.models.Movement
 import it.italiancoders.mybudget.utils.ioJob
+import it.italiancoders.mybudget.utils.uiJob
 import java.math.BigDecimal
 import java.util.*
 
@@ -41,7 +43,10 @@ import java.util.*
  *         <p/>
  *         date: 06/08/19
  */
-class MovementViewModel(private val categoriesManager: CategoriesManager) : ViewModel() {
+class MovementViewModel(
+    private val categoriesManager: CategoriesManager,
+    private val movementsManager: MovementsManager
+) : ViewModel() {
 
     var initialized = false
 
@@ -55,7 +60,7 @@ class MovementViewModel(private val categoriesManager: CategoriesManager) : View
 
     fun init(movement: Movement) {
         amount.postValue(movement.amount)
-        category.value = movement.category
+        category.postValue(movement.category)
         date.postValue(movement.executedAtDate ?: Calendar.getInstance().time)
         this.movement = movement
     }
@@ -65,22 +70,53 @@ class MovementViewModel(private val categoriesManager: CategoriesManager) : View
     fun isMovementValid(): Boolean =
         amount.value != null && category.value != null && category.value?.id != null && date.value != null
 
-    fun getMovement(): Movement? {
-        return if (isMovementValid()) {
-            movement.amount = amount.value!!
-            movement.category = category.value!!
-            movement.executedAtDate = date.value
-            movement
-        } else {
-            null
-        }
-    }
-
     fun loadCategories() {
 
         ioJob {
             val categoriesLoaded = categoriesManager.loadAll()
             categories.postValue(categoriesLoaded)
+        }
+    }
+
+    fun load(movementId: Int) {
+
+        ioJob {
+            val mov = movementsManager.load(movementId)
+            mov?.let { init(it) }
+        }
+    }
+
+    fun save(onSuccessAction: () -> Unit, onFailureAction: () -> Unit) {
+
+        if (!isMovementValid()) {
+            return
+        }
+
+        movement.amount = amount.value!!
+        movement.category = category.value!!
+        movement.executedAtDate = date.value
+
+        ioJob {
+            val success = if (movement.id != null) {
+                movementsManager.update(movement.id!!.toInt(), movement)
+            } else {
+                movementsManager.create(movement)
+            }
+
+            uiJob { if (success) onSuccessAction.invoke() else onFailureAction.invoke() }
+        }
+    }
+
+    fun delete(onSuccessAction: () -> Unit, onFailureAction: () -> Unit) {
+
+        if (!isMovementValid() || movement.id == null) {
+            return
+        }
+
+        ioJob {
+            val success = movementsManager.delete(movement.id!!.toInt())
+
+            uiJob { if (success) onSuccessAction.invoke() else onFailureAction.invoke() }
         }
     }
 }

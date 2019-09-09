@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: CategoryMovementOverview.kt
+ * File: AppDatabaseTest.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,28 +25,33 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget.db.entity
+package it.italiancoders.mybudget.db
 
-import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.notNullValue
+import org.hamcrest.MatcherAssert.assertThat
+import org.junit.Test
+import org.junit.runner.RunWith
 
 /**
  * @author fattazzo
  *         <p/>
- *         date: 01/08/19
+ *         date: 05/09/19
  */
-@Entity(
-    tableName = "category_movement_overview", foreignKeys = [ForeignKey(
-        onDelete = ForeignKey.CASCADE, entity = ExpenseSummary::class,
-        parentColumns = arrayOf("id"), childColumns = arrayOf("expenseSummaryId")
-    )]
-)
-data class CategoryMovementOverview(
-    @PrimaryKey(autoGenerate = true) val id: Long?,
-    val expenseSummaryId: Long,
-    @Embedded(prefix = "category_") val category: Category,
-    val totalAmount: Double
-) {
+@RunWith(AndroidJUnit4::class)
+class AppDatabaseTest : AbstractDbTest() {
+
+
+    @Test
+    fun verify() {
+
+        assertThat(appDb.movementDao(), `is`(notNullValue()))
+        assertThat(appDb.categoryDao(), `is`(notNullValue()))
+        assertThat(appDb.expenseSummaryDao(), `is`(notNullValue()))
+
+        assertThat(appDb.categoryDao().loadAll().size, `is`(10))
+        assertThat(appDb.movementDao().loadAll().size, `is`(100))
+        assertThat(appDb.expenseSummaryDao().loadAll().size, `is`(5))
+    }
 }

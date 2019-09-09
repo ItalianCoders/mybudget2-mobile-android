@@ -29,6 +29,7 @@ package it.italiancoders.mybudget.cache
 
 import android.content.Context
 import it.italiancoders.mybudget.db.AppDatabase
+import it.italiancoders.mybudget.manager.movements.ParametriRicerca
 import it.italiancoders.mybudget.rest.models.ExpenseSummary
 
 /**
@@ -40,13 +41,14 @@ class ExpenseSummaryCache(private val context: Context) {
 
     private val expenseSummaryDao = AppDatabase(context).expenseSummaryDao()
 
-    fun get(year: Int, month: Int): ExpenseSummary? = expenseSummaryDao.search(year, month)?.toModel()
+    fun get(parametriRicerca: ParametriRicerca): ExpenseSummary? = expenseSummaryDao.search(parametriRicerca)?.toModel()
 
-    fun remove(year: Int, month: Int) {
-        expenseSummaryDao.delete(year, month)
-    }
+    fun remove(parametriRicerca: ParametriRicerca) = expenseSummaryDao.delete(parametriRicerca)
 
-    fun add(expenseSummary: ExpenseSummary, year: Int, month: Int) {
-        expenseSummaryDao.insert(expenseSummary, year, month)
+    fun add(
+        expenseSummary: ExpenseSummary,
+        parametriRicerca: ParametriRicerca
+    ) {
+        expenseSummaryDao.insert(expenseSummary, parametriRicerca)
     }
 }

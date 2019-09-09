@@ -60,6 +60,15 @@ object UserValidationRules {
     }
 
     @JvmStatic
+    var REQUIRED: Rule = object : Rule() {
+        override fun isValid(s: String?): Boolean {
+            // Check length
+            return s.orEmpty().isNotBlank()
+
+        }
+    }
+
+    @JvmStatic
     var PASSWORD: Rule = object : Rule() {
         override fun isValid(s: String?): Boolean {
             // Check if contains at least one upper case char

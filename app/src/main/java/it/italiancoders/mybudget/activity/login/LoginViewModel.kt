@@ -46,8 +46,8 @@ class LoginViewModel : ViewModel() {
     }.also { it.observeForever { /* empty */ } }
 
     private fun checkDataValid(): Boolean {
-        val usernameValid = UserValidationRules.USERNAME.isValid(username.value)
-        val passwordValid = UserValidationRules.PASSWORD.isValid(password.value)
+        val usernameValid = UserValidationRules.REQUIRED.isValid(username.value)
+        val passwordValid = UserValidationRules.REQUIRED.isValid(password.value)
         return usernameValid && passwordValid && (policyAccepted.value ?: false)
     }
 }

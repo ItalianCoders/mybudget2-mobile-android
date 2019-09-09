@@ -1,12 +1,12 @@
 {
-  "totalAmount": 67.0,
+  "totalAmount": 59.0,
   "categoryOverview": [
     {
-      "totalAmount": 67.0,
+      "totalAmount": 59.0,
       "category": {
-        "id": 5,
-        "name": "Veicoli",
-        "description": "Veicoli",
+        "id": 2,
+        "name": "Shopping",
+        "description": "Shopping",
         "isReadOnly": true
       }
     }
@@ -20,15 +20,15 @@
     "number": 0,
     "contents": [
       {
-        "id": 15,
-        "amount": 67.0,
+        "id": 13,
+        "amount": 59.0,
         "category": {
-          "id": 5,
-          "name": "Veicoli",
-          "description": "Veicoli",
+          "id": 2,
+          "name": "Shopping",
+          "description": "Shopping",
           "isReadOnly": true
         },
-        "executedAt": "2019-08-06T15:48:53.654Z"
+        "executedAt": "2019-08-14T15:48:19.771Z"
       }
     ]
   }

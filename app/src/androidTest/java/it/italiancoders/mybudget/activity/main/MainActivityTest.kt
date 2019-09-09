@@ -31,6 +31,14 @@ import androidx.test.espresso.Espresso
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.rule.ActivityTestRule
 import it.italiancoders.mybudget.activity.BaseActivityTest
+import it.italiancoders.mybudget.activity.movements.edit.MovementPageObject
+import it.italiancoders.mybudget.manager.movements.ParametriRicerca
+import it.italiancoders.mybudget.mocks.config.ExpenseSummaryConfig
+import it.italiancoders.mybudget.mocks.config.MovementsConfig
+import it.italiancoders.mybudget.mocks.data.ExpenseSummaryMockData
+import it.italiancoders.mybudget.mocks.data.MovementsMockData
+import it.italiancoders.mybudget.rest.models.ExpenseSummary
+import it.italiancoders.mybudget.rest.models.Movement
 import org.hamcrest.Matchers.*
 import org.junit.Rule
 import org.junit.Test
@@ -50,13 +58,11 @@ class MainActivityTest : BaseActivityTest() {
         ActivityTestRule(MainActivity::class.java, true, false)
 
     private val mainPageObject = MainPageObject()
-
-
+    private val movementPageObject = MovementPageObject()
 
     @Test
     fun testPeriodTypeDescription() {
-        //RESTMockServer.whenGET(pathContains(ExpenseSummaryConfig.PATH_GENERIC_OK))
-        //    .thenReturnFile(ExpenseSummaryConfig.DATA_2019_08_OK)
+        mockdata()
 
         rule.launchActivity(null)
         val viewModel = rule.activity.binding.model!!
@@ -85,8 +91,7 @@ class MainActivityTest : BaseActivityTest() {
     @Test
     fun testDialogsPeriodType() {
 
-        //RESTMockServer.whenGET(pathContains(ExpenseSummaryConfig.PATH_GENERIC_OK))
-        //    .thenReturnFile(ExpenseSummaryConfig.DATA_2019_08_OK)
+        mockdata()
 
         rule.launchActivity(null)
         val viewModel = rule.activity.binding.model!!
@@ -110,5 +115,108 @@ class MainActivityTest : BaseActivityTest() {
             }
             Espresso.pressBackUnconditionally()
         }
+    }
+
+    @Test
+    fun newMovement() {
+
+        mockdata()
+
+        rule.launchActivity(null)
+
+        mainPageObject.clickAddMovememntView()
+
+        mainPageObject.checkActivityNewMovementVisible()
+
+        mainPageObject.pressBack()
+
+        mainPageObject.checkActivityMainVisible()
+    }
+
+    @Test
+    fun editMovement() {
+
+        mockdata()
+        MovementsMockData.mock_id_00007(movementsManager)
+
+        rule.launchActivity(null)
+
+        mainPageObject.clickLastMovementHeader(true, rule.activity)
+
+        mainPageObject.clickLastMovemement(rule.activity, 2)
+
+        mainPageObject.checkActivityEditMovementVisible()
+
+        movementPageObject.checkMovement(
+            MovementsMockData.fromJsonFile(
+                MovementsConfig.DATA_ID_00007_OK,
+                Movement::class
+            )!!
+        )
+    }
+
+    @Test
+    fun refreshData() {
+
+        val cal = Calendar.getInstance()
+        ExpenseSummaryMockData.mockData(
+            expenseSummaryManager,
+            ParametriRicerca(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1),
+            ExpenseSummaryConfig.DATA_2019_08_OK
+        )
+
+        ExpenseSummaryMockData.mockData(
+            expenseSummaryManager,
+            ParametriRicerca(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH)),
+            ExpenseSummaryConfig.DATA_2019_07_OK
+        )
+
+        rule.launchActivity(null)
+        val viewModel = rule.activity.binding.model!!
+
+        var expectedSummary = ExpenseSummaryMockData.fromJsonFile<ExpenseSummary>(
+            ExpenseSummaryConfig.DATA_2019_08_OK,
+            ExpenseSummary::class
+        )
+        assertThat(viewModel.total.value!!.toDouble(), `is`(expectedSummary!!.totalAmount))
+
+        viewModel.month.postValue(viewModel.month.value!! - 1)
+
+        mainPageObject.clickRefreshOptionMenu()
+
+        expectedSummary = ExpenseSummaryMockData.fromJsonFile<ExpenseSummary>(
+            ExpenseSummaryConfig.DATA_2019_07_OK,
+            ExpenseSummary::class
+        )
+        assertThat(viewModel.total.value!!.toDouble(), `is`(expectedSummary!!.totalAmount))
+    }
+
+    private fun mockdata() {
+        val cal = Calendar.getInstance()
+        ExpenseSummaryMockData.mockData(
+            expenseSummaryManager,
+            ParametriRicerca(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1),
+            ExpenseSummaryConfig.DATA_2019_08_OK
+        )
+        ExpenseSummaryMockData.mockData(
+            expenseSummaryManager,
+            ParametriRicerca(
+                cal.get(Calendar.YEAR),
+                cal.get(Calendar.MONTH) + 1,
+                cal.get(Calendar.WEEK_OF_MONTH)
+            ),
+            ExpenseSummaryConfig.DATA_2019_08_OK
+        )
+        ExpenseSummaryMockData.mockData(
+            expenseSummaryManager,
+            ParametriRicerca(
+                cal.get(Calendar.YEAR),
+                cal.get(Calendar.MONTH) + 1,
+                cal.get(Calendar.DAY_OF_MONTH),
+                null,
+                null
+            ),
+            ExpenseSummaryConfig.DATA_2019_08_OK
+        )
     }
 }

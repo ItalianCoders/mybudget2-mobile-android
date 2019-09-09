@@ -41,7 +41,7 @@ import it.italiancoders.mybudget.db.entity.Movement
 @Dao
 interface MovementDao {
 
-    @Query("SELECT * from movements where executedAt like :dateFilter || '%' LIMIT :page,:size")
+    @Query("SELECT * from movements where executedAt like :dateFilter || '%' LIMIT :size OFFSET :page*:size")
     fun search(dateFilter: String, page: Int, size: Int): List<Movement>
 
     @Query("SELECT count(id) from movements where executedAt like :dateFilter || '%'")
@@ -56,6 +56,12 @@ interface MovementDao {
     @Query("DELETE FROM movements where id = :id")
     fun delete(id: Long)
 
+    @Query("DELETE FROM movements")
+    fun deleteAll()
+
     @Query("SELECT * FROM movements where id = :id")
     fun load(id: Long): Movement?
+
+    @Query("SELECT * from movements")
+    fun loadAll(): List<Movement>
 }

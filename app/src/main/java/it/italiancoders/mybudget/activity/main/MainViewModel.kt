@@ -139,7 +139,7 @@ open class MainViewModel(var expenseSummaryManager: ExpenseSummaryManager) : Vie
             }
             PeriodType.WEEK -> {
                 val calDate = Calendar.getInstance()
-                calDate.time = parseDate()
+                calDate.set(year,month,day)
                 ParametriRicerca(year, month + 1, calDate.get(Calendar.WEEK_OF_MONTH))
             }
             PeriodType.DAY -> {

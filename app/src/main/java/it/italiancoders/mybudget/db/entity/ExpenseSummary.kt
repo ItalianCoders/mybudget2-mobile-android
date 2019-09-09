@@ -29,6 +29,8 @@ package it.italiancoders.mybudget.db.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.beust.klaxon.Klaxon
+import it.italiancoders.mybudget.rest.models.ExpenseSummary
 
 /**
  * @author fattazzo
@@ -38,7 +40,15 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "expense_summary")
 data class ExpenseSummary(
     @PrimaryKey(autoGenerate = true) val id: Long?,
-    val totalAmount: Double,
     val year: Int,
-    val month: Int
-)
+    val month: Int,
+    val day: Int?,
+    val week: Int?,
+    val categoryId: Int?,
+    val value: String) {
+
+    fun toModel(): ExpenseSummary? {
+
+        return Klaxon().parse<ExpenseSummary>(value)
+    }
+}

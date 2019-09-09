@@ -54,47 +54,30 @@ class LoginViewModelTest : AbstractViewModelTest<LoginViewModel>() {
     @Test
     fun validateUsername() {
 
-        var valid = UserValidationRules.USERNAME.isValid(viewModel.username.value)
+        var valid = UserValidationRules.REQUIRED.isValid(viewModel.username.value)
         assertThat(valid, `is`(false))
 
-        // To short
-        viewModel.username.postValue("te")
-        valid = UserValidationRules.USERNAME.isValid(viewModel.username.value)
+        viewModel.username.postValue("  ")
+        valid = UserValidationRules.REQUIRED.isValid(viewModel.username.value)
         assertThat(valid, `is`(false))
 
         viewModel.username.postValue("testtest")
-        valid = UserValidationRules.USERNAME.isValid(viewModel.username.value)
+        valid = UserValidationRules.REQUIRED.isValid(viewModel.username.value)
         assertThat(valid, `is`(true))
     }
 
     @Test
     fun validatePassword() {
 
-        var valid = UserValidationRules.PASSWORD.isValid(viewModel.password.value)
+        var valid = UserValidationRules.REQUIRED.isValid(viewModel.password.value)
         assertThat(valid, `is`(false))
 
-        // To short
-        viewModel.password.postValue("pwd")
-        valid = UserValidationRules.PASSWORD.isValid(viewModel.password.value)
-        assertThat(valid, `is`(false))
-
-        // No one upper case char and one digit char
-        viewModel.password.postValue("pwdpwdpwdpwd")
-        valid = UserValidationRules.PASSWORD.isValid(viewModel.password.value)
-        assertThat(valid, `is`(false))
-
-        // No one digit char
-        viewModel.password.postValue("Pwdpwdpwdpwd")
-        valid = UserValidationRules.PASSWORD.isValid(viewModel.password.value)
-        assertThat(valid, `is`(false))
-
-        // No one upper case char
-        viewModel.password.postValue("pwdpwdpwdpwd1")
-        valid = UserValidationRules.PASSWORD.isValid(viewModel.password.value)
+        viewModel.password.postValue(" ")
+        valid = UserValidationRules.REQUIRED.isValid(viewModel.password.value)
         assertThat(valid, `is`(false))
 
         viewModel.password.postValue("Pwdpwdpwdpwd1")
-        valid = UserValidationRules.PASSWORD.isValid(viewModel.password.value)
+        valid = UserValidationRules.REQUIRED.isValid(viewModel.password.value)
         assertThat(valid, `is`(true))
     }
 
@@ -102,11 +85,11 @@ class LoginViewModelTest : AbstractViewModelTest<LoginViewModel>() {
     fun validateLoginData() {
 
         viewModel.username.postValue("testtest")
-        assertThat(UserValidationRules.USERNAME.isValid(viewModel.username.value), `is`(true))
+        assertThat(UserValidationRules.REQUIRED.isValid(viewModel.username.value), `is`(true))
         assertThat(viewModel.dataValid.value, `is`(false))
 
         viewModel.password.postValue("Testtest1")
-        assertThat(UserValidationRules.PASSWORD.isValid(viewModel.password.value), `is`(true))
+        assertThat(UserValidationRules.REQUIRED.isValid(viewModel.password.value), `is`(true))
         assertThat(viewModel.dataValid.value, `is`(false))
 
         viewModel.policyAccepted.postValue(true)

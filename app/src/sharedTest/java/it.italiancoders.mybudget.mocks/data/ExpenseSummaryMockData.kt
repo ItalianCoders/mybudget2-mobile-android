@@ -75,11 +75,27 @@ object ExpenseSummaryMockData : AbstractMockData() {
         )
     }
 
+    fun mock2019_08_week_3_dataOk(expenseSummaryManager: ExpenseSummaryManager) {
+        mockData(
+            expenseSummaryManager,
+            ParametriRicerca(2019, 8, 3),
+            ExpenseSummaryConfig.DATA_2019_08_WEEK_3_OK
+        )
+    }
+
     fun mock2019_08_day_06_dataOk(expenseSummaryManager: ExpenseSummaryManager) {
         mockData(
             expenseSummaryManager,
             ParametriRicerca(2019, 8, 6, null, null),
             ExpenseSummaryConfig.DATA_2019_08_DAY_06_OK
+        )
+    }
+
+    fun mock2019_08_day_14_dataOk(expenseSummaryManager: ExpenseSummaryManager) {
+        mockData(
+            expenseSummaryManager,
+            ParametriRicerca(2019, 8, 14, null, null),
+            ExpenseSummaryConfig.DATA_2019_08_DAY_14_OK
         )
     }
 

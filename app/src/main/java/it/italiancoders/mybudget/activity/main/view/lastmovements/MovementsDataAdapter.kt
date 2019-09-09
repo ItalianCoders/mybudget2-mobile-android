@@ -34,7 +34,6 @@ import androidx.recyclerview.widget.RecyclerView
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.databinding.ListItemMovementBinding
 import it.italiancoders.mybudget.rest.models.Movement
-import kotlinx.android.synthetic.main.list_item_category.view.*
 
 class MovementsDataAdapter(private val movements: MutableList<Movement>) :
     RecyclerView.Adapter<MovementsDataAdapter.MovementViewHolder>() {
@@ -71,7 +70,7 @@ class MovementsDataAdapter(private val movements: MutableList<Movement>) :
         RecyclerView.ViewHolder(listItemMovementBinding.root) {
 
         init {
-            listItemMovementBinding.root.rootLayout.setOnClickListener {
+            listItemMovementBinding.root.setOnClickListener {
                 movementRecyclerViewAdapterListener?.onListItemSelected(movements[layoutPosition])
             }
         }

@@ -36,7 +36,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.afollestad.materialdialogs.MaterialDialog
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.activity.BaseActivity
-import it.italiancoders.mybudget.app.MyBudgetApplication
+import it.italiancoders.mybudget.app.component.AppComponent
 import it.italiancoders.mybudget.databinding.ActivityRegistrationUserInfoBinding
 import it.italiancoders.mybudget.manager.registrationuserinfo.RegistrationUserInfoManager
 import javax.inject.Inject
@@ -53,12 +53,14 @@ class RegistrationUserInfoActivity : BaseActivity<ActivityRegistrationUserInfoBi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        (application as MyBudgetApplication).appComponent.inject(this)
-
         binding.model = ViewModelProvider(
             this,
             RegistrationUserInfoViewModelFactory(registrationUserInfoManager)
         ).get(RegistrationUserInfoViewModel::class.java)
+    }
+
+    override fun injectComponent(appComponent: AppComponent) {
+        appComponent.inject(this)
     }
 
     fun createReagistration(view: View) {

@@ -43,7 +43,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.activity.BaseActivity
 import it.italiancoders.mybudget.adapters.CategoryAdapter
-import it.italiancoders.mybudget.app.MyBudgetApplication
+import it.italiancoders.mybudget.app.component.AppComponent
 import it.italiancoders.mybudget.databinding.ActivityMovementBinding
 import it.italiancoders.mybudget.manager.categories.CategoriesManager
 import it.italiancoders.mybudget.manager.movements.MovementsManager
@@ -73,9 +73,10 @@ class MovementActivity : BaseActivity<ActivityMovementBinding>(), View.OnFocusCh
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        (application as MyBudgetApplication).appComponent.inject(this)
-
-        model = ViewModelProvider(this, MovementViewModelFactory(categoriesManager)).get(
+        model = ViewModelProvider(
+            this,
+            MovementViewModelFactory(categoriesManager, movementsManager)
+        ).get(
             MovementViewModel::class.java
         )
         binding.model = model
@@ -86,6 +87,10 @@ class MovementActivity : BaseActivity<ActivityMovementBinding>(), View.OnFocusCh
         binding.deleteButton.visibility =
             if (binding.model?.isNewMovement() != true) View.VISIBLE else View.GONE
 
+        model.category.observe(this, androidx.lifecycle.Observer {
+            binding.categotyTextView.setText(it.name)
+        })
+
         if (!model.initialized) {
             model.initialized = true
             val movementId = intent.extras?.getLong(EXTRA_MOVEMENT_ID)
@@ -94,16 +99,14 @@ class MovementActivity : BaseActivity<ActivityMovementBinding>(), View.OnFocusCh
                 binding.model?.init(Movement())
                 setTitle(R.string.movement_new)
             } else {
-                movementsManager.load(
-                    movementId.toInt(),
-                    {
-                        binding.model?.init(it ?: Movement())
-                        binding.categotyTextView.setText(it?.category?.name)
-                    },
-                    { binding.model?.init(Movement()) })
+                model.load(movementId.toInt())
                 setTitle(R.string.movement_edit)
             }
         }
+    }
+
+    override fun injectComponent(appComponent: AppComponent) {
+        appComponent.inject(this)
     }
 
     fun changeDate(view: View) {
@@ -141,20 +144,8 @@ class MovementActivity : BaseActivity<ActivityMovementBinding>(), View.OnFocusCh
     }
 
     fun save(view: View) {
-        val movementToSave = binding.model?.getMovement()
-        if (movementToSave != null) {
-            if (movementToSave.id != null) {
-                movementsManager.update(
-                    movementToSave.id.toInt(),
-                    movementToSave,
-                    { finishWithResultOk() },
-                    { finishWithResultCanceled() })
-            } else {
-                movementsManager.create(
-                    movementToSave,
-                    { finishWithResultOk() },
-                    { finishWithResultCanceled() })
-            }
+        if (model.isMovementValid()) {
+            model.save({ finishWithResultOk() }, { finishWithResultCanceled() })
         } else {
             MaterialDialog(this).show {
                 icon(R.drawable.ic_error)
@@ -165,18 +156,15 @@ class MovementActivity : BaseActivity<ActivityMovementBinding>(), View.OnFocusCh
     }
 
     fun delete(view: View) {
-        val movementToSave = binding.model?.getMovement()
-        if (movementToSave?.id != null) {
-            movementsManager.delete(
-                movementToSave.id.toInt(),
-                { finishWithResultOk() },
-                { finishWithResultCanceled() })
-        } else
+        if (model.isMovementValid()) {
+            model.delete({ finishWithResultOk() }, { finishWithResultCanceled() })
+        } else {
             MaterialDialog(this).show {
                 icon(R.drawable.ic_error)
                 title(R.string.attention)
                 message(R.string.movement_all_data_required)
             }
+        }
     }
 
     private fun finishWithResultOk() {

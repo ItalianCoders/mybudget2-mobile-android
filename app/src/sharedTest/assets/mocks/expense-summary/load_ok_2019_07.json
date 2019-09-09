@@ -11,7 +11,7 @@
             }
         },
         {
-            "totalAmount": 140,
+            "totalAmount": 140.0,
             "category": {
                 "id": 4,
                 "name": "Trasporti",
@@ -29,7 +29,7 @@
         "number": 0,
         "contents": [
             {
-                "id": 16,
+                "id": 2,
                 "amount": 140.0,
                 "category": {
                     "id": 4,
@@ -37,10 +37,10 @@
                     "description": "Trasporti",
                     "isReadOnly": true
                 },
-                "executedAt": "2019-07-31T11:38:43.5Z"
+                "executedAt": "2019-07-31T15:44:25.069Z"
             },
             {
-                "id": 15,
+                "id": 3,
                 "amount": 200.0,
                 "category": {
                     "id": 3,
@@ -48,7 +48,7 @@
                     "description": "Casa",
                     "isReadOnly": true
                 },
-                "executedAt": "2019-07-10T11:38:23.546Z"
+                "executedAt": "2019-07-10T15:44:54.034Z"
             }
         ]
     }

@@ -36,10 +36,7 @@ import it.italiancoders.mybudget.rest.models.Movement
 import it.italiancoders.mybudget.rest.models.MovementListPage
 import it.italiancoders.mybudget.utils.NetworkChecker
 import it.italiancoders.mybudget.utils.OpenForTesting
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import java.util.*
 
 /**
  * @author fattazzo
@@ -54,32 +51,24 @@ class MovementsManager(context: Context) : AbstractRestManager(context) {
 
     private val movementCache = MovementCache(context)
 
-    fun load(id: Int, onSuccessAction: (Movement?) -> Unit, onFailureAction: (Int?) -> Unit) {
+    fun load(id: Int): Movement? {
         val networkAvailable = NetworkChecker().isNetworkAvailable(context)
-        CoroutineScope(Dispatchers.IO).launch {
 
-            val movementCached = movementCache.get(id)
+        val movementCached = movementCache.get(id)
 
-            if (networkAvailable && (movementCached == null)) {
-                val response = movementService.load(id)
+        return if (networkAvailable && (movementCached == null)) {
+            val response = movementService.load(id)
 
+            val movement = processResponse(response)
+
+            movement?.let {
                 movementCache.remove(id)
-                withContext(Dispatchers.Main) {
-                    val onLoadAllSuccessAction: ((Movement?) -> Unit)? = { loadResponse ->
-                        onSuccessAction.invoke(loadResponse)
-                        loadResponse?.let {
-                            CoroutineScope(Dispatchers.IO).launch {
-                                movementCache.addAll(listOf(it))
-                            }
-                        }
-                    }
-                    processResponse(response, onLoadAllSuccessAction, onFailureAction)
-                }
-            } else {
-                withContext(Dispatchers.Main) {
-                    onSuccessAction.invoke(movementCached)
-                }
+                movementCache.addAll(listOf(it))
             }
+
+            return movement
+        } else {
+            movementCached
         }
     }
 
@@ -113,60 +102,47 @@ class MovementsManager(context: Context) : AbstractRestManager(context) {
 
     }
 
-    fun delete(
-        id: Int,
-        onSuccessAction: ((Void?) -> Unit)? = null,
-        onFailureAction: ((Int?) -> Unit?)? = null
-    ) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val response = movementService.delete(id)
+    fun delete(id: Int): Boolean {
+        val response = movementService.delete(id)
 
-            val onDeleteSuccessAction: ((Void?) -> Unit)? = { summary ->
-                onSuccessAction?.invoke(summary)
-                CoroutineScope(Dispatchers.IO).launch {
-                    movementCache.remove(id)
-                }
-            }
+        val success = processVoidResponse(response)
 
-            withContext(Dispatchers.Main) {
-                processResponse(response, onDeleteSuccessAction, onFailureAction)
-            }
-        }
+        if (success) movementCache.remove(id)
+
+        return success
     }
 
-    fun update(
-        id: Int,
-        movement: Movement,
-        onSuccessAction: ((Void?) -> Unit)? = null,
-        onFailureAction: ((Int?) -> Unit)? = null
-    ) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val response = movementService.update(id, movement)
+    fun update(id: Int, movement: Movement): Boolean {
 
-            val onUpdateSuccessAction: ((Void?) -> Unit)? = { summary ->
-                onSuccessAction?.invoke(summary)
-                CoroutineScope(Dispatchers.IO).launch {
-                    movementCache.addAll(listOf(movement))
-                }
-            }
+        val response = movementService.update(id, movement)
 
-            withContext(Dispatchers.Main) {
-                processResponse(response, onUpdateSuccessAction, onFailureAction)
-            }
+        val success = processVoidResponse(response)
+
+        if (success) {
+            movementCache.remove(id)
+            movementCache.addAll(listOf(movement))
         }
+
+        return success
     }
 
-    fun create(
-        movement: Movement,
-        onSuccessAction: ((Void?) -> Unit)? = null,
-        onFailureAction: ((Int?) -> Unit)? = null
-    ) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val response = movementService.create(movement)
+    fun create(movement: Movement): Boolean {
 
-            withContext(Dispatchers.Main) {
-                processResponse(response, onSuccessAction, onFailureAction)
-            }
+        val response = movementService.create(movement)
+
+        val success = processVoidResponse(response)
+
+        if (success) {
+            val cal = Calendar.getInstance()
+            cal.time = movement.executedAtDate!!
+            movementCache.remove(
+                ParametriRicerca(
+                    cal.get(Calendar.YEAR),
+                    cal.get(Calendar.MONTH) + 1
+                )
+            )
         }
+
+        return success
     }
 }

@@ -36,8 +36,12 @@ object ExpenseSummaryConfig {
 
     // MOCK DATA
     const val DATA_OK_EMPTY = "mocks/expense-summary/load_ok_empty.json"
+
     const val DATA_2019_08_OK = "mocks/expense-summary/load_ok_2019_08.json"
     const val DATA_2019_08_WEEK_2_OK = "mocks/expense-summary/load_ok_2019_08_week_2.json"
+    const val DATA_2019_08_WEEK_3_OK = "mocks/expense-summary/load_ok_2019_08_week_3.json"
     const val DATA_2019_08_DAY_06_OK = "mocks/expense-summary/load_ok_2019_08_day_06.json"
+    const val DATA_2019_08_DAY_14_OK = "mocks/expense-summary/load_ok_2019_08_day_14.json"
+
     const val DATA_2019_07_OK = "mocks/expense-summary/load_ok_2019_07.json"
 }

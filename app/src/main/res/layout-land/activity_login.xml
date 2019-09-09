@@ -95,8 +95,8 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
                         app:errorEnabled="false"
-                        app:validation="@{UserValidationRules.USERNAME}"
-                        app:errorMsg='@{@string/error_username_invalid}'>
+                        app:errorMsg='@{@string/error_username_required}'
+                        app:validation="@{UserValidationRules.REQUIRED}">
 
                     <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/usernameET"
@@ -114,8 +114,8 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
                         app:errorEnabled="false"
-                        app:validation="@{UserValidationRules.PASSWORD}"
-                        app:errorMsg='@{@string/error_password_invalid}'>
+                        app:errorMsg='@{@string/error_password_required}'
+                        app:validation="@{UserValidationRules.REQUIRED}">
 
                     <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/passwordET"

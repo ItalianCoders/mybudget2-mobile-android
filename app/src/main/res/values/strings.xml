@@ -88,6 +88,10 @@
     <string name="error_password_invalid">La password deve avere minimo 8 caratteri e contenere almeno una maiuscola e un numero</string>
     <string name="error_email_invalid">L\'email deve essere valida</string>
 
+    <string name="error_password_required">Password richiesta</string>
+    <string name="error_username_required">Username richiesto</string>
+
+
     <string name="no_data_for_period">Nessuna dato per il periodo scelto</string>
 
     <string name="exit_confirmation_message">Confermi di voler uscire dall\'applicazione?</string>

@@ -27,11 +27,13 @@
 
 package it.italiancoders.mybudget.app.component
 
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.util.Preconditions
 import dagger.Component
 import it.italiancoders.mybudget.activity.categories.CategoriesActivity
 import it.italiancoders.mybudget.activity.login.LoginActivity
 import it.italiancoders.mybudget.activity.main.MainActivity
+import it.italiancoders.mybudget.activity.movements.MovementsActivity
 import it.italiancoders.mybudget.activity.movements.edit.MovementActivity
 import it.italiancoders.mybudget.activity.movements.list.ListMovementsFragment
 import it.italiancoders.mybudget.activity.movements.search.SearchMovementsView
@@ -40,10 +42,17 @@ import it.italiancoders.mybudget.app.module.AppModule
 import it.italiancoders.mybudget.app.module.CategoriesModule
 import it.italiancoders.mybudget.app.module.MovementsModule
 import it.italiancoders.mybudget.app.module.SessionModule
+import it.italiancoders.mybudget.rest.api.RefreshTokenInterceptor
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [AppModule::class,CategoriesModule::class,MovementsModule::class,SessionModule::class])
+@Component(
+    modules = [
+        AppModule::class,
+        CategoriesModule::class,
+        MovementsModule::class,
+        SessionModule::class]
+)
 interface AppComponent {
 
     object Singleton {
@@ -58,8 +67,10 @@ interface AppComponent {
         }
     }
 
+    fun inject(activity: AppCompatActivity)
     fun inject(activity: MainActivity)
     fun inject(activity: CategoriesActivity)
+    fun inject(activity: MovementsActivity)
     fun inject(activity: MovementActivity)
     fun inject(activity: LoginActivity)
     fun inject(activity: RegistrationUserInfoActivity)
@@ -67,4 +78,6 @@ interface AppComponent {
     fun inject(view: SearchMovementsView)
 
     fun inject(fragment: ListMovementsFragment)
+
+    fun inject(interceptor: RefreshTokenInterceptor)
 }

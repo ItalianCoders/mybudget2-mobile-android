@@ -38,7 +38,7 @@ import com.google.android.material.appbar.AppBarLayout
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.activity.BaseActivity
 import it.italiancoders.mybudget.activity.categories.edit.EditCategoryDialogBuilder
-import it.italiancoders.mybudget.app.MyBudgetApplication
+import it.italiancoders.mybudget.app.component.AppComponent
 import it.italiancoders.mybudget.databinding.ActivityCategoriesBinding
 import it.italiancoders.mybudget.manager.categories.CategoriesManager
 import it.italiancoders.mybudget.rest.models.Category
@@ -63,8 +63,6 @@ class CategoriesActivity : BaseActivity<ActivityCategoriesBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        (application as MyBudgetApplication).appComponent.inject(this)
 
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -131,6 +129,10 @@ class CategoriesActivity : BaseActivity<ActivityCategoriesBinding>() {
         })
 
         categoriesViewModel.loadAll()
+    }
+
+    override fun injectComponent(appComponent: AppComponent) {
+        appComponent.inject(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

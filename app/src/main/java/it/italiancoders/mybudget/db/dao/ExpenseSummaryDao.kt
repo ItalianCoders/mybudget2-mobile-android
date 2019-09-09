@@ -28,9 +28,13 @@
 package it.italiancoders.mybudget.db.dao
 
 import androidx.room.*
-import it.italiancoders.mybudget.db.entity.CategoryMovementOverview
-import it.italiancoders.mybudget.db.pojo.ExpenseSummaryWithCategoriesOverview
-import it.italiancoders.mybudget.rest.models.ExpenseSummary
+import androidx.sqlite.db.SimpleSQLiteQuery
+import androidx.sqlite.db.SupportSQLiteQuery
+import com.beust.klaxon.Klaxon
+import it.italiancoders.mybudget.db.entity.ExpenseSummary
+import it.italiancoders.mybudget.manager.movements.ParametriRicerca
+import it.italiancoders.mybudget.rest.models.MovementListPage
+
 
 /**
  * @author fattazzo
@@ -40,31 +44,109 @@ import it.italiancoders.mybudget.rest.models.ExpenseSummary
 @Dao
 abstract class ExpenseSummaryDao {
 
-    @Query("SELECT * FROM expense_summary WHERE year = :year and month = :month limit 1")
-    abstract fun search(year: Int, month: Int): ExpenseSummaryWithCategoriesOverview?
+    companion object {
 
-    @Query("DELETE FROM expense_summary WHERE year = :year and month = :month")
-    abstract fun delete(year: Int, month: Int)
+        const val MAX_ROW = 20
+    }
+
+    fun search(parametriRicerca: ParametriRicerca): ExpenseSummary? {
+
+        val params: MutableList<Any> = mutableListOf()
+
+        val query = StringBuilder()
+        query.append("SELECT * FROM expense_summary WHERE year = ? and month = ? ")
+        params.add(parametriRicerca.year)
+        params.add(parametriRicerca.month)
+
+        if (parametriRicerca.day != null) {
+            query.append("and day = ? ")
+            params.add(parametriRicerca.day)
+        } else {
+            query.append("and day is null ")
+        }
+
+        if (parametriRicerca.week != null) {
+            query.append("and week = ? ")
+            params.add(parametriRicerca.week)
+        } else {
+            query.append("and week is null ")
+        }
+
+        if (parametriRicerca.categoryId != null) {
+            query.append("and categoryId = ? ")
+            params.add(parametriRicerca.categoryId)
+        } else {
+            query.append("and categoryId is null ")
+        }
+
+        return performQuery(SimpleSQLiteQuery(query.toString(), params.toTypedArray()))
+    }
+
+    @RawQuery
+    protected abstract fun performQuery(query: SupportSQLiteQuery): ExpenseSummary?
+
+    fun delete(parametriRicerca: ParametriRicerca) {
+        val params: MutableList<Any> = mutableListOf()
+
+        val query = StringBuilder()
+        query.append("DELETE FROM expense_summary WHERE year = ? and month = ? ")
+        params.add(parametriRicerca.year)
+        params.add(parametriRicerca.month)
+
+        if (parametriRicerca.day != null) {
+            query.append("and day = ? ")
+            params.add(parametriRicerca.day)
+        } else {
+            query.append("and day is null ")
+        }
+
+        if (parametriRicerca.week != null) {
+            query.append("and week = ? ")
+            params.add(parametriRicerca.week)
+        } else {
+            query.append("and week is null ")
+        }
+
+        if (parametriRicerca.categoryId != null) {
+            query.append("and categoryId = ? ")
+            params.add(parametriRicerca.categoryId)
+        } else {
+            query.append("and categoryId is null ")
+        }
+
+        performQuery(SimpleSQLiteQuery(query.toString(), params.toTypedArray()))
+    }
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insert(expenseSummary: it.italiancoders.mybudget.db.entity.ExpenseSummary): Long
+    protected abstract fun insert(expenseSummary: ExpenseSummary)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insert(expenseSummary: CategoryMovementOverview)
+    @Query("DELETE FROM expense_summary where id NOT IN (SELECT id from expense_summary ORDER BY id DESC LIMIT 20)")
+    protected abstract fun truncateToRowsLimit()
 
     @Transaction
-    open fun insert(expenseSummary: ExpenseSummary, year: Int, month: Int) {
+    open fun insert(
+        expenseSummary: it.italiancoders.mybudget.rest.models.ExpenseSummary,
+        parametriRicerca: ParametriRicerca
+    ) {
 
-        val expenseSummaryEntity =
-            it.italiancoders.mybudget.db.entity.ExpenseSummary(null, expenseSummary.totalAmount ?: 0.0, year, month)
+        delete(parametriRicerca)
 
-        val expenseSummaryId = insert(expenseSummaryEntity)
+        expenseSummary.lastMovements = MovementListPage()
+        val expenseSummaryEntity = ExpenseSummary(
+            null,
+            parametriRicerca.year,
+            parametriRicerca.month,
+            parametriRicerca.day,
+            parametriRicerca.week,
+            parametriRicerca.categoryId?.toInt(),
+            Klaxon().toJsonString(expenseSummary)
+        )
 
-        expenseSummary.categoryOverview?.forEach {
+        insert(expenseSummaryEntity)
 
-            val categoryOverviewEntity =
-                CategoryMovementOverview(null, expenseSummaryId, it.category.toEntity(), it.totalAmount ?: 0.0)
-            insert(categoryOverviewEntity)
-        }
+        truncateToRowsLimit()
     }
+
+    @Query("SELECT * from expense_summary")
+    abstract fun loadAll(): List<ExpenseSummary>
 }

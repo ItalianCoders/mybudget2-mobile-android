@@ -36,6 +36,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
@@ -57,8 +58,8 @@ import it.italiancoders.mybudget.activity.movements.MovementsActivity
 import it.italiancoders.mybudget.activity.movements.edit.MovementActivity
 import it.italiancoders.mybudget.activity.settings.SettingsActivity
 import it.italiancoders.mybudget.app.MyBudgetApplication
+import it.italiancoders.mybudget.app.component.AppComponent
 import it.italiancoders.mybudget.databinding.ActivityMainBinding
-import it.italiancoders.mybudget.manager.AuthManager
 import it.italiancoders.mybudget.manager.expensesummary.ExpenseSummaryManager
 import it.italiancoders.mybudget.tutorial.TutorialMainActivity
 import it.italiancoders.mybudget.utils.LinePagerIndicatorDecoration
@@ -73,7 +74,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
     @Inject
     lateinit var expenseSummaryManager: ExpenseSummaryManager
 
-    private var mBottomSheetBehavior: BottomSheetBehavior<LastMovementsView?>? = null
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    var mBottomSheetBehavior: BottomSheetBehavior<LastMovementsView?>? = null
 
     override fun getLayoutResID(): Int = R.layout.activity_main
 
@@ -82,13 +84,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
     override fun createTutorial() = TutorialMainActivity(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        SessionData.session = AuthManager(this.applicationContext).getLastSession()
+        (application as MyBudgetApplication).appComponent.inject(this)
+
+        SessionData.session = sessionManager.getLastSession()
         NetworkChecker().isNetworkAvailable(this)
 
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
-
-        (application as MyBudgetApplication).appComponent.inject(this)
 
         binding.model = ViewModelProvider(this, MainViewModelFactory(expenseSummaryManager))
             .get(MainViewModel::class.java)
@@ -133,6 +135,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
         }
 
         initLastMovementsSlidingPanel()
+    }
+
+    override fun injectComponent(appComponent: AppComponent) {
+        appComponent.inject(this)
     }
 
     override fun onBackPressed() {
@@ -221,7 +227,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
             R.id.nav_categories -> startActivity(Intent(this, CategoriesActivity::class.java))
             R.id.nav_movements -> startActivity(Intent(this, MovementsActivity::class.java))
             R.id.nav_logout -> {
-                AuthManager(this).removeSession()
+                sessionManager.removeSession()
                 startActivity(Intent(this.applicationContext, LoginActivity::class.java))
             }
         }

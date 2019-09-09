@@ -38,8 +38,8 @@ package it.italiancoders.mybudget.app
 object AppConstants {
 
     // Rest API
-    const val REST_API_BASE_URL_PUBLIC = "https://mybudgetfin.herokuapp.com/public/v1/"
-    const val REST_API_BASE_URL = "https://mybudgetfin.herokuapp.com/v1/"
+    const val REST_API_BASE_URL_PUBLIC = "https://144.91.65.212:80/my-budget-api/public/v1/"
+    const val REST_API_BASE_URL = "https://144.91.65.212:80/my-budget-api/v1/"
 
     const val DEFAULT_PAGE_SIZE = 10
 

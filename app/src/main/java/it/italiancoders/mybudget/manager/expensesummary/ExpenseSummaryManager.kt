@@ -52,7 +52,7 @@ class ExpenseSummaryManager(context: Context) : AbstractRestManager(context) {
 
     fun getExpenseSummary(parametri: ParametriRicerca): ExpenseSummary {
 
-        expenseSummaryCache.get(parametri.year, parametri.month)
+        expenseSummaryCache.get(parametri)
 
         val response = expenseSummaryRestService.getExpenseSummary(
             parametri.year,

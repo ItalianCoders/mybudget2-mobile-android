@@ -50,9 +50,12 @@ interface CategoryDao {
     @Query("DELETE from categories where id = :id")
     fun delete(id: Long)
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg category: Category)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(category: Category)
+
+    @Query("SELECT * FROM categories where id = :id")
+    fun load(id: Long): Category?
 }

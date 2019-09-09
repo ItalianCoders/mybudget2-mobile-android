@@ -1,0 +1,11 @@
+{
+  "id": 7,
+  "amount": 120.0,
+  "category": {
+    "id": 3,
+    "name": "Casa",
+    "description": "Casa",
+    "isReadOnly": true
+  },
+  "executedAt": "2019-08-27T15:46:27.56Z"
+}
