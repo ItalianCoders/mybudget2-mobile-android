@@ -64,6 +64,7 @@ class MovementViewModelTest : AbstractViewModelTest<MovementViewModel>() {
         calViewModel.time = viewModel.date.value!!
 
         assertThat(viewModel.amount.value?.toLong(), `is`(BigDecimal.ZERO.toLong()))
+        assertThat(viewModel.note.value.orEmpty(), `is`(""))
         assertThat(viewModel.category.value, `is`(notNullValue()))
         assertThat(calViewModel.get(Calendar.YEAR), `is`(calToday.get(Calendar.YEAR)))
         assertThat(calViewModel.get(Calendar.MONTH), `is`(calToday.get(Calendar.MONTH)))
@@ -81,6 +82,7 @@ class MovementViewModelTest : AbstractViewModelTest<MovementViewModel>() {
             amount = BigDecimal.TEN
             category = Category(1L, "name", "desc", false)
             executedAt = "2019-08-30T13:59:23.617Z"
+            note = "note"
         }
 
         viewModel.init(movement)
@@ -88,6 +90,7 @@ class MovementViewModelTest : AbstractViewModelTest<MovementViewModel>() {
         assertThat(viewModel.amount.value?.toLong(), `is`(movement.amount.toLong()))
         assertThat(viewModel.category.value, `is`(movement.category))
         assertThat(viewModel.date.value, `is`(movement.executedAtDate))
+        assertThat(viewModel.note.value, `is`(movement.note))
     }
 
     @Test
@@ -116,7 +119,7 @@ class MovementViewModelTest : AbstractViewModelTest<MovementViewModel>() {
         viewModel.init(Movement())
         assertThat(viewModel.isMovementValid(), `is`(false))
 
-        val movement = Movement(
+        var movement = Movement(
             1L,
             BigDecimal.TEN,
             Category(1L, "name", "desc", false),
@@ -125,7 +128,31 @@ class MovementViewModelTest : AbstractViewModelTest<MovementViewModel>() {
         viewModel.init(movement)
         assertThat(viewModel.isMovementValid(), `is`(true))
 
-        viewModel.category.postValue(Category())
+        movement = Movement(
+            1L,
+            BigDecimal.TEN,
+            Category(),
+            "2019-08-30T13:59:23.617Z", null
+        )
+        viewModel.init(movement)
+        assertThat(viewModel.isMovementValid(), `is`(false))
+
+        movement = Movement(
+            1L,
+            BigDecimal.ZERO,
+            Category(1L, "name", "desc", false),
+            "2019-08-30T13:59:23.617Z", null
+        )
+        viewModel.init(movement)
+        assertThat(viewModel.isMovementValid(), `is`(false))
+
+        movement = Movement(
+            1L,
+            BigDecimal(-10),
+            Category(1L, "name", "desc", false),
+            "2019-08-30T13:59:23.617Z", null
+        )
+        viewModel.init(movement)
         assertThat(viewModel.isMovementValid(), `is`(false))
     }
 

@@ -70,7 +70,9 @@ class MovementViewModel(
     fun isNewMovement(): Boolean = movement.id == null
 
     fun isMovementValid(): Boolean =
-        amount.value != null && category.value != null && category.value?.id != null && date.value != null
+        amount.value != null && amount.value!!.compareTo(BigDecimal.ZERO) > 0 &&
+                category.value != null && category.value?.id != null &&
+                date.value != null
 
     fun loadCategories() {
 
