@@ -30,8 +30,11 @@ package it.italiancoders.mybudget
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.matcher.BoundedMatcher
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.hamcrest.Description
 import org.hamcrest.Matcher
+import org.hamcrest.TypeSafeMatcher
+
 
 /**
  * @author fattazzo
@@ -52,6 +55,26 @@ object Matchers {
                     ?: // has no item on such position
                     return false
                 return itemMatcher.matches(viewHolder.itemView)
+            }
+        }
+    }
+
+    /**
+     * Matcher for BottomSheetBehavior state.
+     *
+     * @param expected state to be expected
+     */
+    fun withBottomSheetBehaviorState(expected: Int): Matcher<View> {
+        return object : TypeSafeMatcher<View>() {
+
+            override fun matchesSafely(view: View): Boolean {
+                return if (view !is BottomSheetBehavior<*>) {
+                    false
+                } else view.state == expected
+            }
+
+            override fun describeTo(description: Description) {
+
             }
         }
     }

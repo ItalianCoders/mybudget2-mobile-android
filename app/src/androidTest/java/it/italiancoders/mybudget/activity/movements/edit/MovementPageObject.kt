@@ -60,26 +60,24 @@ class MovementPageObject {
 
         // Date
         onView(withId(R.id.date_text_view)).check(matches(isDisplayed()))
-        onView(withId(R.id.date_text_view)).check(
-            matches(
-                withText(
-                    DateFormat.getDateInstance().format(
-                        movement.executedAtDate!!
-                    )
+        if (movement.id != null) {
+            onView(withId(R.id.date_text_view)).check(
+                matches(
+                    withText(DateFormat.getDateInstance().format(movement.executedAtDate!!))
                 )
             )
-        )
+        }
 
         // Time
         onView(withId(R.id.time_text_view)).check(matches(isDisplayed()))
-        onView(withId(R.id.time_text_view)).check(
-            matches(
-                withText(
-                    DateFormat.getTimeInstance().format(
-                        movement.executedAtDate!!
+        if (movement.id != null) {
+            onView(withId(R.id.time_text_view)).check(
+                matches(
+                    withText(
+                        DateFormat.getTimeInstance().format(movement.executedAtDate!!)
                     )
                 )
             )
-        )
+        }
     }
 }
