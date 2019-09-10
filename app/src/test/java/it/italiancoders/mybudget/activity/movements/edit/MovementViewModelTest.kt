@@ -53,7 +53,8 @@ class MovementViewModelTest : AbstractViewModelTest<MovementViewModel>() {
     @Mock
     lateinit var movementsManager: MovementsManager
 
-    override fun createViewModel(): MovementViewModel = MovementViewModel(categoriesManager,movementsManager)
+    override fun createViewModel(): MovementViewModel =
+        MovementViewModel(categoriesManager, movementsManager)
 
     @Test
     override fun initialValues() {
@@ -101,7 +102,7 @@ class MovementViewModelTest : AbstractViewModelTest<MovementViewModel>() {
             1L,
             BigDecimal.TEN,
             Category(1L, "name", "desc", false),
-            "2019-08-30T13:59:23.617Z"
+            "2019-08-30T13:59:23.617Z", null
         )
         viewModel.init(movement)
         assertThat(viewModel.isNewMovement(), `is`(false))
@@ -119,7 +120,7 @@ class MovementViewModelTest : AbstractViewModelTest<MovementViewModel>() {
             1L,
             BigDecimal.TEN,
             Category(1L, "name", "desc", false),
-            "2019-08-30T13:59:23.617Z"
+            "2019-08-30T13:59:23.617Z", null
         )
         viewModel.init(movement)
         assertThat(viewModel.isMovementValid(), `is`(true))
