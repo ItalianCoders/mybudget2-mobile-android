@@ -34,6 +34,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.VisibleForTesting
 import androidx.core.content.res.ResourcesCompat
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -54,7 +55,8 @@ import it.italiancoders.mybudget.tutorial.TutorialMovementsActivity
  */
 class MovementsActivity : BaseActivity<ActivityMovementsBinding>() {
 
-    private var mBottomSheetBehavior: BottomSheetBehavior<SearchMovementsView?>? = null
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    var mBottomSheetBehavior: BottomSheetBehavior<SearchMovementsView?>? = null
 
     override fun getLayoutResID(): Int = R.layout.activity_movements
 

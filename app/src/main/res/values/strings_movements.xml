@@ -38,5 +38,9 @@
     <string name="movement_amount">Importo</string>
     <string name="movement_note">Note</string>
 
+    <string name="movement_deleted">Movimento cancellato</string>
+
+    <string name="movement_delete_error">Errore durante la cancellazione del movimento</string>
+
     <string name="movement_all_data_required">Valori inseriti non corretti\nCategoria e data richiesti\nImporto maggiore di 0</string>
 </resources>

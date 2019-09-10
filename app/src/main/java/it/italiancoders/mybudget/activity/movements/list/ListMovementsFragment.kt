@@ -33,12 +33,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.activity.main.view.lastmovements.MovementsDataAdapter
 import it.italiancoders.mybudget.activity.movements.edit.MovementActivity
@@ -47,7 +52,9 @@ import it.italiancoders.mybudget.databinding.ListMovementsFragmentBinding
 import it.italiancoders.mybudget.manager.movements.MovementsManager
 import it.italiancoders.mybudget.rest.models.Movement
 import it.italiancoders.mybudget.rest.models.MovementListPage
+import it.italiancoders.mybudget.utils.recyclerview.SwipeToDeleteCallback
 import javax.inject.Inject
+
 
 class ListMovementsFragment : Fragment() {
 
@@ -121,6 +128,54 @@ class ListMovementsFragment : Fragment() {
                 }
             }
         })
+
+        val itemTouchHelper =
+            ItemTouchHelper(SwipeToDeleteCallback(binding.root.context) { deleteItemOnSwipe(it) })
+        itemTouchHelper.attachToRecyclerView(binding.movementsRecyclerView)
+    }
+
+    private fun deleteItemOnSwipe(position: Int) {
+        val movement = movementsDataAdapter.getMovement(position)
+        if (movement.id == null) return
+
+        movementsDataAdapter.removeMovement(movement)
+        movementsDataAdapter.notifyItemRemoved(position)
+
+        var confirmDelete = true
+        var deleteProcessed = false
+
+        val snackbar = Snackbar.make(
+            binding.root, R.string.movement_deleted,
+            Snackbar.LENGTH_LONG
+        )
+        snackbar.setAction(R.string.undo) {
+            confirmDelete = false
+            snackbar.dismiss()
+        }
+        snackbar.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
+            .setTextColor(ContextCompat.getColor(binding.root.context, android.R.color.white))
+        snackbar.addCallback(object : Snackbar.Callback() {
+            override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                if (deleteProcessed) return
+
+                deleteProcessed = true
+                if (confirmDelete) {
+                    binding.model?.delete(movement) {
+                        if (!it) {
+                            Toast.makeText(
+                                binding.root.context,
+                                R.string.movement_delete_error,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            movementsDataAdapter.addMovement(movement, position)
+                        }
+                    }
+                } else {
+                    movementsDataAdapter.addMovement(movement, position)
+                }
+            }
+        })
+        snackbar.show()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

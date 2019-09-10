@@ -50,7 +50,7 @@ class PrefCurrencySymbolHandler(preference: Preference) : PreferenceHandler(pref
     override fun handle(context: Context) {
         MaterialDialog(context).show {
             input(inputType = InputType.TYPE_CLASS_TEXT)
-            title(R.string.login_username_hint)
+            title(R.string.settings_currency_symbol)
             positiveButton(android.R.string.ok) {
                 AppPreferenceManager.setCurrentSymbol(
                     context,

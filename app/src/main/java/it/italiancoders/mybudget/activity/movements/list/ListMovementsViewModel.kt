@@ -34,8 +34,10 @@ import androidx.lifecycle.ViewModel
 import it.italiancoders.mybudget.app.AppConstants
 import it.italiancoders.mybudget.manager.movements.MovementsManager
 import it.italiancoders.mybudget.manager.movements.ParametriRicerca
+import it.italiancoders.mybudget.rest.models.Movement
 import it.italiancoders.mybudget.rest.models.MovementListPage
 import it.italiancoders.mybudget.utils.ioJob
+import it.italiancoders.mybudget.utils.uiJob
 import java.util.*
 
 class ListMovementsViewModel(private val movementsManager: MovementsManager) : ViewModel() {
@@ -100,5 +102,33 @@ class ListMovementsViewModel(private val movementsManager: MovementsManager) : V
         }
 
         return parametri
+    }
+
+    fun delete(movement: Movement, onDeleteAction: (Boolean) -> Unit) {
+        if (movement.id == null) return
+
+        ioJob {
+            val success = movementsManager.delete(movement.id.toInt())
+
+            if (success) {
+                val pageOld = page.value
+                val newMovements = mutableListOf<Movement>()
+                newMovements.addAll(pageOld?.contents.orEmpty())
+                newMovements.remove(movement)
+
+                val pageNew = MovementListPage().apply {
+                    first = pageOld?.first
+                    last = pageOld?.last
+                    size = pageOld?.size
+                    totalElements = pageOld?.totalElements
+                    totalPages = pageOld?.totalPages
+                    number = pageOld?.number
+                    contents = newMovements
+                }
+                page.postValue(pageNew)
+            }
+
+            uiJob { onDeleteAction.invoke(success) }
+        }
     }
 }

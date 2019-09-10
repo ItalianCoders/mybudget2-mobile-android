@@ -55,6 +55,14 @@ class MovementsDataAdapter(private val movements: MutableList<Movement>) :
 
     override fun getItemCount(): Int = movements.size
 
+    fun getMovement(position: Int) : Movement = movements[position]
+
+    fun getMovementPosition(movement: Movement) : Int = movements.indexOf(movement)
+
+    fun removeMovement(movement: Movement) {
+        movements.remove(movement)
+    }
+
     fun setMovements(movements: List<Movement>) {
         this.movements.clear()
         this.movements.addAll(movements.toMutableList())
@@ -64,6 +72,11 @@ class MovementsDataAdapter(private val movements: MutableList<Movement>) :
     fun addMovements(movements: List<Movement>) {
         this.movements.addAll(movements.toMutableList())
         notifyDataSetChanged()
+    }
+
+    fun addMovement(movement: Movement, position: Int) {
+        this.movements.add(position,movement)
+        notifyItemInserted(position)
     }
 
     inner class MovementViewHolder(var listItemMovementBinding: ListItemMovementBinding) :

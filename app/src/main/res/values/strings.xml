@@ -45,6 +45,7 @@
     <string name="save">Salva</string>
     <string name="delete">Cancella</string>
     <string name="refresh">Aggiorna</string>
+    <string name="undo">Annulla</string>
 
     <string name="name">Nome</string>
     <string name="description">Descrizione</string>
