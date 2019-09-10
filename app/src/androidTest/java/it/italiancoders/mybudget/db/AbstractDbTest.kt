@@ -92,7 +92,7 @@ abstract class AbstractDbTest {
             val movDate = dateFormat.format(calendar.time)
             val movAmount = BigDecimal(Math.random() * 100).setScale(2, RoundingMode.HALF_UP)
             for (j in 1..10) {
-                val movement = Movement(movId++, movAmount, category, movDate)
+                val movement = Movement(movId++, movAmount, category, movDate,"")
                 appDb.movementDao().insertAll(movement)
             }
             calendar.add(Calendar.DATE, 1)

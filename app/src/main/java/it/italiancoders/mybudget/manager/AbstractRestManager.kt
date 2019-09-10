@@ -32,7 +32,6 @@ import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
 import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.Response
 
 
@@ -42,29 +41,6 @@ import retrofit2.Response
  *         date: 22/07/19
  */
 abstract class AbstractRestManager(protected val context: Context) {
-
-    protected fun <T> enqueueRequest(
-        call: Call<T>,
-        onSuccessAction: (T?) -> Unit,
-        onFailureAction: () -> Unit
-    ) {
-        call.enqueue(object : Callback<T> {
-            override fun onResponse(call: Call<T>, response: Response<T>) {
-
-                if (response.isSuccessful) {
-                    onSuccessAction.invoke(response.body())
-                } else {
-                    showError(response.message())
-                    onFailureAction.invoke()
-                }
-            }
-
-            override fun onFailure(call: Call<T>?, t: Throwable?) {
-                showError()
-                onFailureAction.invoke()
-            }
-        })
-    }
 
     protected fun <T> processResponse(
         response: Response<T>,
@@ -84,22 +60,6 @@ abstract class AbstractRestManager(protected val context: Context) {
             if (showErrorMessage)
                 showError()
             onFailureAction?.invoke(null)
-        }
-    }
-
-    protected fun <T> processResponse(response: Response<T>, showErrorMessage: Boolean = true): T? {
-        return try {
-            if (response.isSuccessful) {
-                response.body()
-            } else {
-                if (showErrorMessage)
-                    showError(response.message())
-                null
-            }
-        } catch (e: Exception) {
-            if (showErrorMessage)
-                showError()
-            null
         }
     }
 

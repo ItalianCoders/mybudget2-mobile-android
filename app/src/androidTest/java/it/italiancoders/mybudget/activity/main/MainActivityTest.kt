@@ -137,19 +137,20 @@ class MainActivityTest : BaseActivityTest() {
     fun editMovement() {
 
         mockdata()
-        MovementsMockData.mock_id_00007(movementsManager)
+        MovementsMockData.mock_id_00014(movementsManager)
 
         rule.launchActivity(null)
+        val viewModel = rule.activity.binding.model!!
 
         mainPageObject.clickLastMovementHeader(true, rule.activity)
 
-        mainPageObject.clickLastMovemement(rule.activity, 2)
+        mainPageObject.clickLastMovemement(rule.activity, viewModel.lastMovements.value!!.contents.indexOfFirst { it.id!! == 14L })
 
         mainPageObject.checkActivityEditMovementVisible()
 
         movementPageObject.checkMovement(
             MovementsMockData.fromJsonFile(
-                MovementsConfig.DATA_ID_00007_OK,
+                MovementsConfig.DATA_ID_00014_OK,
                 Movement::class
             )!!
         )

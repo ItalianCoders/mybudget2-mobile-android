@@ -129,7 +129,7 @@ class MovementDaoTest : AbstractDbTest() {
 
         val movementsToInsert = mutableListOf<Movement>()
         for (i in 1..10) {
-            val movement = Movement(i.toLong(), BigDecimal(Math.random()), category, movDate)
+            val movement = Movement(i.toLong(), BigDecimal(Math.random()), category, movDate,"")
             movementsToInsert.add(movement)
         }
         appDb.movementDao().insertAll(*movementsToInsert.toTypedArray())
@@ -141,7 +141,7 @@ class MovementDaoTest : AbstractDbTest() {
 
         movementsToInsert.clear()
         for (i in 101..120) {
-            val movement = Movement(i.toLong(), BigDecimal(Math.random()), category, movDate)
+            val movement = Movement(i.toLong(), BigDecimal(Math.random()), category, movDate,"")
             movementsToInsert.add(movement)
         }
         appDb.movementDao().insertAll(*movementsToInsert.toTypedArray())

@@ -42,7 +42,7 @@ import it.italiancoders.mybudget.db.entity.Movement
 
 @Database(
     entities = [Category::class, Movement::class, ExpenseSummary::class],
-    version = 5,
+    version = 6,
     exportSchema = true
 )
 @TypeConverters(BigDecimalConverter::class)

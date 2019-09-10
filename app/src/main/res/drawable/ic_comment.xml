@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Project: mybudget2-mobile-android
-  ~ File: strings_movements.xml
+  ~ File: ic_comment.xml
   ~
   ~ Created by fattazzo
   ~ Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -26,17 +25,12 @@
   ~ SOFTWARE.
   -->
 
-<resources>
-    <string name="activity_movements_title">Movimenti</string>
-
-    <string name="movements_search_parameters_data_required">Anno e mese non validi</string>
-
-    <string name="movements_search_parameters">Parametri di ricerca</string>
-    
-    <string name="movement_new">Nuovo movimento</string>
-    <string name="movement_edit">Modifica movimento</string>
-    <string name="movement_amount">Importo</string>
-    <string name="movement_note">Note</string>
-
-    <string name="movement_all_data_required">Valori inseriti non corretti</string>
-</resources>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+        android:width="24dp"
+        android:height="24dp"
+        android:viewportWidth="24.0"
+        android:viewportHeight="24.0">
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M21.99,4c0,-1.1 -0.89,-2 -1.99,-2L4,2c-1.1,0 -2,0.9 -2,2v12c0,1.1 0.9,2 2,2h14l4,4 -0.01,-18zM18,14L6,14v-2h12v2zM18,11L6,11L6,9h12v2zM18,8L6,8L6,6h12v2z"/>
+</vector>

@@ -29,7 +29,7 @@
         "number": 0,
         "contents": [
             {
-                "id": 2,
+                "id": 10,
                 "amount": 140.0,
                 "category": {
                     "id": 4,
@@ -37,10 +37,11 @@
                     "description": "Trasporti",
                     "isReadOnly": true
                 },
-                "executedAt": "2019-07-31T15:44:25.069Z"
+                "executedAt": "2019-07-31T10:55:02.467Z",
+                "note": null
             },
             {
-                "id": 3,
+                "id": 11,
                 "amount": 200.0,
                 "category": {
                     "id": 3,
@@ -48,7 +49,8 @@
                     "description": "Casa",
                     "isReadOnly": true
                 },
-                "executedAt": "2019-07-10T15:44:54.034Z"
+                "executedAt": "2019-07-10T10:55:18.374Z",
+                "note": null
             }
         ]
     }

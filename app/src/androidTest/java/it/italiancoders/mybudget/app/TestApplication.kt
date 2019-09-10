@@ -32,6 +32,7 @@ import it.italiancoders.mybudget.app.module.MockAppModule
 import it.italiancoders.mybudget.app.module.MockCategoriesModule
 import it.italiancoders.mybudget.app.module.MockMovementsModule
 import it.italiancoders.mybudget.app.module.MockSessionModule
+import java.util.*
 
 /**
  * @author fattazzo
@@ -42,6 +43,8 @@ class TestApplication : MyBudgetApplication() {
 
     override fun onCreate() {
         super.onCreate()
+
+        Locale.setDefault(Locale.ITALY)
 
         appComponent = DaggerTestAppComponent.builder()
             .appModule(MockAppModule(this))

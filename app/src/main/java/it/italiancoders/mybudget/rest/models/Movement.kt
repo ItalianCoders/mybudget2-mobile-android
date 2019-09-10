@@ -35,28 +35,45 @@ import java.util.*
 /**
  * Movement
  */
-data class Movement(val id: Long?, var amount: BigDecimal, var category: Category, var executedAt: String) {
+data class Movement(
+    val id: Long?,
+    var amount: BigDecimal,
+    var category: Category,
+    var executedAt: String,
+    var note: String?
+) {
 
     var executedAtDate: Date? = null
         get() =
             try {
-                SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault()).parse(executedAt)
+                SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault()).parse(
+                    executedAt
+                )
             } catch (e: Exception) {
                 null
             }
         set(value) {
             field = value
             executedAt = try {
-                SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault()).format(value!!)
+                SimpleDateFormat(
+                    "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+                    Locale.getDefault()
+                ).format(value!!)
             } catch (e: Exception) {
                 ""
             }
         }
 
 
-    constructor() : this(null, BigDecimal.ZERO, Category(), "")
+    constructor() : this(null, BigDecimal.ZERO, Category(), "", null)
 
     fun toEntity(): Movement =
-        Movement(this@Movement.id!!, this@Movement.amount, this@Movement.category.toEntity(), this@Movement.executedAt)
+        Movement(
+            this@Movement.id!!,
+            this@Movement.amount,
+            this@Movement.category.toEntity(),
+            this@Movement.executedAt,
+            this@Movement.note
+        )
 }
 

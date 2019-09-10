@@ -29,7 +29,7 @@
     "number": 0,
     "contents": [
       {
-        "id": 12,
+        "id": 20,
         "amount": 47.0,
         "category": {
           "id": 6,
@@ -37,10 +37,11 @@
           "description": "Intrattenimento",
           "isReadOnly": true
         },
-        "executedAt": "2019-08-16T15:48:01.179Z"
+        "executedAt": "2019-08-16T10:58:03.501Z",
+        "note": null
       },
       {
-        "id": 13,
+        "id": 21,
         "amount": 59.0,
         "category": {
           "id": 2,
@@ -48,7 +49,8 @@
           "description": "Shopping",
           "isReadOnly": true
         },
-        "executedAt": "2019-08-14T15:48:19.771Z"
+        "executedAt": "2019-08-14T10:58:19.501Z",
+        "note": null
       }
     ]
   }

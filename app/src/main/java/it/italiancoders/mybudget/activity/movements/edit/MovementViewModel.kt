@@ -53,6 +53,7 @@ class MovementViewModel(
     val amount = MutableLiveData(BigDecimal.ZERO)
     val category = MutableLiveData(Category())
     val date = MutableLiveData(Calendar.getInstance().time)
+    val note = MutableLiveData<String?>()
 
     val categories = MutableLiveData<List<Category>>(listOf())
 
@@ -62,6 +63,7 @@ class MovementViewModel(
         amount.postValue(movement.amount)
         category.postValue(movement.category)
         date.postValue(movement.executedAtDate ?: Calendar.getInstance().time)
+        note.postValue(movement.note)
         this.movement = movement
     }
 
@@ -95,6 +97,7 @@ class MovementViewModel(
         movement.amount = amount.value!!
         movement.category = category.value!!
         movement.executedAtDate = date.value
+        movement.note = note.value
 
         ioJob {
             val success = if (movement.id != null) {

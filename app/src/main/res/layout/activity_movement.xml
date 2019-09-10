@@ -207,6 +207,25 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/note_text_input_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/noteTextInputEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_comment"
+                        android:drawablePadding="8dp"
+                        android:drawableTint="@android:color/holo_orange_dark"
+                        android:hint="@string/movement_note"
+                        android:imeOptions="actionDone"
+                        android:inputType="textMultiLine"
+                        android:selectAllOnFocus="true"
+                        android:text="@={model.note)}" />
+            </com.google.android.material.textfield.TextInputLayout>
+
             <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

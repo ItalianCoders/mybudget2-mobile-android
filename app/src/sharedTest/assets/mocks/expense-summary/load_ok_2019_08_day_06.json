@@ -20,7 +20,7 @@
     "number": 0,
     "contents": [
       {
-        "id": 15,
+        "id": 23,
         "amount": 67.0,
         "category": {
           "id": 5,
@@ -28,7 +28,8 @@
           "description": "Veicoli",
           "isReadOnly": true
         },
-        "executedAt": "2019-08-06T15:48:53.654Z"
+        "executedAt": "2019-08-06T10:58:48.001Z",
+        "note": null
       }
     ]
   }

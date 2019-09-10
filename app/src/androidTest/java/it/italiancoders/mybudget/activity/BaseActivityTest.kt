@@ -78,6 +78,7 @@ open class BaseActivityTest {
     @ExperimentalCoroutinesApi
     @Before
     fun setUp() {
+
         (getTargetApplication().appComponent as TestAppComponent).inject(this)
 
         unconfinifyTestScope()

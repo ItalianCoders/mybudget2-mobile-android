@@ -29,7 +29,7 @@
     "number": 0,
     "contents": [
       {
-        "id": 14,
+        "id": 22,
         "amount": 14.0,
         "category": {
           "id": 3,
@@ -37,10 +37,11 @@
           "description": "Casa",
           "isReadOnly": true
         },
-        "executedAt": "2019-08-08T15:48:35.033Z"
+        "executedAt": "2019-08-08T10:58:32.101Z",
+        "note": null
       },
       {
-        "id": 15,
+        "id": 23,
         "amount": 67.0,
         "category": {
           "id": 5,
@@ -48,7 +49,8 @@
           "description": "Veicoli",
           "isReadOnly": true
         },
-        "executedAt": "2019-08-06T15:48:53.654Z"
+        "executedAt": "2019-08-06T10:58:48.001Z",
+        "note": null
       }
     ]
   }

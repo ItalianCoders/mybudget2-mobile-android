@@ -41,7 +41,8 @@ data class Movement(
     @PrimaryKey val id: Long,
     val amount: BigDecimal,
     @Embedded(prefix = "category_") val category: Category,
-    val executedAt: String
+    val executedAt: String,
+    val note: String?
 ) {
 
     fun toModel(): Movement =
@@ -49,7 +50,8 @@ data class Movement(
             this@Movement.id,
             this@Movement.amount,
             this@Movement.category.toModel(),
-            this@Movement.executedAt
+            this@Movement.executedAt,
+            this@Movement.note
         )
 }
 
