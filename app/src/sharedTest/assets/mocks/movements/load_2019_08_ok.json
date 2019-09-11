@@ -1,0 +1,178 @@
+{
+  "first": true,
+  "last": true,
+  "size": 10,
+  "totalElements": 14,
+  "totalPages": 1,
+  "number": 0,
+  "contents": [
+    {
+      "id": 12,
+      "amount": 230.0,
+      "category": {
+        "id": 5,
+        "name": "Veicoli",
+        "description": "Veicoli",
+        "isReadOnly": true
+      },
+      "executedAt": "2019-08-30T10:55:46.968Z",
+      "note": "Bollo auto"
+    },
+    {
+      "id": 13,
+      "amount": 105.0,
+      "category": {
+        "id": 4,
+        "name": "Trasporti",
+        "description": "Trasporti",
+        "isReadOnly": true
+      },
+      "executedAt": "2019-08-28T10:56:00.78Z",
+      "note": null
+    },
+    {
+      "id": 15,
+      "amount": 100.0,
+      "category": {
+        "id": 2,
+        "name": "Shopping",
+        "description": "Shopping",
+        "isReadOnly": true
+      },
+      "executedAt": "2019-08-27T10:56:39.084Z",
+      "note": null
+    },
+    {
+      "id": 14,
+      "amount": 120.0,
+      "category": {
+        "id": 3,
+        "name": "Casa",
+        "description": "Casa",
+        "isReadOnly": true
+      },
+      "executedAt": "2019-08-27T10:56:17.717Z",
+      "note": null
+    },
+    {
+      "id": 17,
+      "amount": 54.0,
+      "category": {
+        "id": 6,
+        "name": "Intrattenimento",
+        "description": "Intrattenimento",
+        "isReadOnly": true
+      },
+      "executedAt": "2019-08-26T10:57:15.484Z",
+      "note": null
+    },
+    {
+      "id": 16,
+      "amount": 87.5,
+      "category": {
+        "id": 2,
+        "name": "Shopping",
+        "description": "Shopping",
+        "isReadOnly": true
+      },
+      "executedAt": "2019-08-26T10:57:00.851Z",
+      "note": null
+    },
+    {
+      "id": 18,
+      "amount": 180.0,
+      "category": {
+        "id": 1,
+        "name": "Cibo & Bevande",
+        "description": "Cibo & Bevande",
+        "isReadOnly": true
+      },
+      "executedAt": "2019-08-24T10:57:31.571Z",
+      "note": null
+    },
+    {
+      "id": 19,
+      "amount": 20.0,
+      "category": {
+        "id": 1,
+        "name": "Cibo & Bevande",
+        "description": "Cibo & Bevande",
+        "isReadOnly": true
+      },
+      "executedAt": "2019-08-18T10:57:46.917Z",
+      "note": null
+    },
+    {
+      "id": 20,
+      "amount": 47.0,
+      "category": {
+        "id": 6,
+        "name": "Intrattenimento",
+        "description": "Intrattenimento",
+        "isReadOnly": true
+      },
+      "executedAt": "2019-08-16T10:58:03.501Z",
+      "note": null
+    },
+    {
+      "id": 21,
+      "amount": 59.0,
+      "category": {
+        "id": 2,
+        "name": "Shopping",
+        "description": "Shopping",
+        "isReadOnly": true
+      },
+      "executedAt": "2019-08-14T10:58:19.501Z",
+      "note": null
+    },
+    {
+      "id": 22,
+      "amount": 14.0,
+      "category": {
+        "id": 3,
+        "name": "Casa",
+        "description": "Casa",
+        "isReadOnly": true
+      },
+      "executedAt": "2019-08-08T10:58:32.101Z",
+      "note": null
+    },
+    {
+      "id": 23,
+      "amount": 67.0,
+      "category": {
+        "id": 5,
+        "name": "Veicoli",
+        "description": "Veicoli",
+        "isReadOnly": true
+      },
+      "executedAt": "2019-08-06T10:58:48.001Z",
+      "note": null
+    },
+    {
+      "id": 24,
+      "amount": 23.0,
+      "category": {
+        "id": 1,
+        "name": "Cibo & Bevande",
+        "description": "Cibo & Bevande",
+        "isReadOnly": true
+      },
+      "executedAt": "2019-08-02T10:59:02.375Z",
+      "note": null
+    },
+    {
+      "id": 25,
+      "amount": 15.0,
+      "category": {
+        "id": 4,
+        "name": "Trasporti",
+        "description": "Trasporti",
+        "isReadOnly": true
+      },
+      "executedAt": "2019-08-01T10:59:14.667Z",
+      "note": null
+    }
+  ]
+}

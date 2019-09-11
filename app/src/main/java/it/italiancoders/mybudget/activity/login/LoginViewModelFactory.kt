@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: SessionRestService.kt
+ * File: LoginViewModelFactory.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,38 +25,17 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget.rest.api.services
+package it.italiancoders.mybudget.activity.login
 
-import it.italiancoders.mybudget.rest.models.LoginRequest
-import it.italiancoders.mybudget.rest.models.Session
-import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.POST
-import retrofit2.http.Path
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import it.italiancoders.mybudget.manager.session.SessionManager
+
+class LoginViewModelFactory(private val sessionManager: SessionManager) :
+    ViewModelProvider.Factory {
 
 
-/**
- * @author fattazzo
- *         <p/>
- *         date: 16/07/19
- */
-interface SessionRestService {
-
-    /**
-     * Obtain AccessToken, RefreshToken and the user session
-     *
-     * @param loginRequest The login request data
-     * @return The session object
-     */
-    @POST("session")
-    fun login(@Body loginRequest: LoginRequest): Call<Session>
-
-    /**
-     * Obtain a new AccessToken and user session using RefreshToken
-     *
-     * @param refreshToken The refresh token
-     * @return The session object
-     */
-    @POST("session/refresh/{refreshToken}")
-    fun refresh(@Path("refreshToken") refreshToken: String): Call<Session>
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return LoginViewModel(sessionManager) as T
+    }
 }

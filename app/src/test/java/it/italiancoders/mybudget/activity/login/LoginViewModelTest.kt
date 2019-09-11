@@ -28,9 +28,14 @@
 package it.italiancoders.mybudget.activity.login
 
 import it.italiancoders.mybudget.AbstractViewModelTest
+import it.italiancoders.mybudget.manager.session.SessionManager
+import it.italiancoders.mybudget.mocks.data.SessionMockData
 import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.MatcherAssert
 import org.junit.Assert.assertThat
 import org.junit.Test
+import org.mockito.Mock
+import java.util.*
 
 /**
  * @author fattazzo
@@ -39,7 +44,10 @@ import org.junit.Test
  */
 class LoginViewModelTest : AbstractViewModelTest<LoginViewModel>() {
 
-    override fun createViewModel(): LoginViewModel = LoginViewModel()
+    @Mock
+    lateinit var sessionManager: SessionManager
+
+    override fun createViewModel(): LoginViewModel = LoginViewModel(sessionManager)
 
     @Test
     override fun initialValues() {
@@ -95,5 +103,47 @@ class LoginViewModelTest : AbstractViewModelTest<LoginViewModel>() {
         viewModel.policyAccepted.postValue(true)
         assertThat(viewModel.policyAccepted.value, `is`(true))
         assertThat(viewModel.dataValid.value, `is`(true))
+    }
+
+    @Test
+    fun loginInvalid() {
+
+        SessionMockData.mock_login_invalid_ok(sessionManager,"testUser","testPasswprd", Locale.getDefault())
+
+        viewModel.username.postValue("testUser")
+        viewModel.password.postValue("testPasswprd")
+        viewModel.policyAccepted.postValue(true)
+
+        var passed = true
+        viewModel.login({ passed = false }, { passed = it != 403 })
+        MatcherAssert.assertThat("Invalid login failed", passed)
+    }
+
+    @Test
+    fun loginUserNonActivated() {
+
+        SessionMockData.mock_login_not_activated_ok(sessionManager,"testUser","testPasswprd", Locale.getDefault())
+
+        viewModel.username.postValue("testUser")
+        viewModel.password.postValue("testPasswprd")
+        viewModel.policyAccepted.postValue(true)
+
+        var passed = true
+        viewModel.login({ passed = false }, { passed = it == 403 })
+        MatcherAssert.assertThat("Not activated login failed", passed)
+    }
+
+    @Test
+    fun loginOk() {
+
+        SessionMockData.mock_login_ok(sessionManager,"testUser","testPasswprd", Locale.getDefault())
+
+        viewModel.username.postValue("testUser")
+        viewModel.password.postValue("testPasswprd")
+        viewModel.policyAccepted.postValue(true)
+
+        var passed = true
+        viewModel.login({ passed = true }, { passed = false })
+        MatcherAssert.assertThat("Valid login fail", passed)
     }
 }

@@ -36,6 +36,9 @@ object MovementsConfig {
 
     const val DATA_ID_00014_OK = "mocks/movements/load_id_00014_ok.json"
 
+    const val DATA_2019_08_OK = "mocks/movements/load_2019_08_ok.json"
+    const val DATA_2019_08_NO_ID_00014_OK = "mocks/movements/load_2019_08_no_id_00014_ok.json"
+
     const val DATA_2019_08_PAGE_0_OK = "mocks/movements/load_2019_08_page_0_ok.json"
     const val DATA_2019_08_PAGE_1_OK = "mocks/movements/load_2019_08_page_1_ok.json"
 }

@@ -33,8 +33,6 @@ import android.animation.ValueAnimator
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.InputType
 import android.view.View
 import android.widget.Toast
@@ -50,9 +48,7 @@ import it.italiancoders.mybudget.activity.registration.RegistrationUserInfoActiv
 import it.italiancoders.mybudget.app.component.AppComponent
 import it.italiancoders.mybudget.databinding.ActivityLoginBinding
 import it.italiancoders.mybudget.manager.registrationuserinfo.RegistrationUserInfoManager
-import it.italiancoders.mybudget.rest.models.Session
 import it.italiancoders.mybudget.utils.PrivacyPolicyManager
-import java.util.*
 import javax.inject.Inject
 
 class LoginActivity : BaseActivity<ActivityLoginBinding>() {
@@ -65,12 +61,18 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
     @Inject
     lateinit var registrationUserInfoManager: RegistrationUserInfoManager
 
+    lateinit var loginViewModel: LoginViewModel
+
     override fun getLayoutResID(): Int = R.layout.activity_login
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding.viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
+        loginViewModel = ViewModelProvider(
+            this,
+            LoginViewModelFactory(sessionManager)
+        ).get(LoginViewModel::class.java)
+        binding.viewModel = loginViewModel
 
         // Animate header and footer slide in
         LoginHeaderFooterAnimator.start(binding.headerContainer)
@@ -81,40 +83,29 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
         appComponent.inject(this)
     }
 
-    private fun isLoginDataValid(): Boolean {
-        val usernameValid = binding.usernameLayout.editText?.error == null
-        val passwordValid = binding.passwordLayout.editText?.error == null
-        return usernameValid && passwordValid
-    }
-
     fun login(view: View) {
-        if (isLoginDataValid()) {
-            animateLoginButton()
 
-            val username = binding.usernameET.text.toString()
-            val password = binding.passwordET.text.toString()
-            val locale = Locale.getDefault().language
-            val successAction: (Session?) -> Unit = {
+        loginViewModel.login(
+            {
                 setResult(Activity.RESULT_OK, Intent())
                 this@LoginActivity.finish()
-            }
-            val failureAction: (Int?) -> Unit = {
+            },
+            {
                 if (it == 403) {
-                    Handler(Looper.getMainLooper()).post {
-                        MaterialDialog(this).show {
-                            title(R.string.login_user_not_activated_title)
-                            message(R.string.login_user_not_activated_message)
-                            icon(R.drawable.ic_error)
-                            positiveButton { this@LoginActivity.recreate() }
-                        }
+                    MaterialDialog(this).show {
+                        title(R.string.login_user_not_activated_title)
+                        message(R.string.login_user_not_activated_message)
+                        icon(R.drawable.ic_error)
+                        positiveButton { this@LoginActivity.recreate() }
                     }
-                } else
+                } else {
                     Toast.makeText(this, R.string.login_error, Toast.LENGTH_SHORT).show()
-                this@LoginActivity.recreate()
+                    this@LoginActivity.recreate()
+                }
             }
+        )
 
-            sessionManager.login(username, password, locale, successAction, failureAction)
-        }
+        if (loginViewModel.dataValid.value == true) animateLoginButton()
     }
 
     fun showPrivacyPolicy(view: View) {

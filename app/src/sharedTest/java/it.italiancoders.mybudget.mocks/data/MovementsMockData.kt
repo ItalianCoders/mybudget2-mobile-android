@@ -59,6 +59,34 @@ object MovementsMockData : AbstractMockData() {
             .doReturn(fromJsonFile(MovementsConfig.DATA_2019_08_PAGE_1_OK, MovementListPage::class))
     }
 
+    fun mock2019_08(movementsManager: MovementsManager) {
+        val parametri =
+            ParametriRicerca(2019, 8, null, null, null, 0, AppConstants.DEFAULT_PAGE_SIZE, null)
+
+        `when`(movementsManager.search(parametri))
+            .doReturn(fromJsonFile(MovementsConfig.DATA_2019_08_OK, MovementListPage::class))
+
+        `when`(movementsManager.search(parametri, false))
+            .doReturn(fromJsonFile(MovementsConfig.DATA_2019_08_OK, MovementListPage::class))
+
+        `when`(movementsManager.search(parametri, true))
+            .doReturn(fromJsonFile(MovementsConfig.DATA_2019_08_OK, MovementListPage::class))
+    }
+
+    fun mock2019_08_no_id_00014(movementsManager: MovementsManager) {
+        val parametri =
+            ParametriRicerca(2019, 8, null, null, null, 0, AppConstants.DEFAULT_PAGE_SIZE, null)
+
+        `when`(movementsManager.search(parametri))
+            .doReturn(fromJsonFile(MovementsConfig.DATA_2019_08_NO_ID_00014_OK, MovementListPage::class))
+
+        `when`(movementsManager.search(parametri, false))
+            .doReturn(fromJsonFile(MovementsConfig.DATA_2019_08_NO_ID_00014_OK, MovementListPage::class))
+
+        `when`(movementsManager.search(parametri, true))
+            .doReturn(fromJsonFile(MovementsConfig.DATA_2019_08_NO_ID_00014_OK, MovementListPage::class))
+    }
+
     fun mock_id_00014(movementsManager: MovementsManager) {
 
         `when`(movementsManager.load(14))

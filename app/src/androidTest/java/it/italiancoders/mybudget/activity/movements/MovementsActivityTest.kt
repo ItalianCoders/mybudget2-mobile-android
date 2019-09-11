@@ -27,15 +27,23 @@
 
 package it.italiancoders.mybudget.activity.movements
 
+import android.os.SystemClock
 import androidx.test.rule.ActivityTestRule
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.nhaarman.mockitokotlin2.doReturn
 import it.italiancoders.mybudget.activity.BaseActivityTest
 import it.italiancoders.mybudget.activity.movements.edit.MovementPageObject
+import it.italiancoders.mybudget.activity.movements.list.ListMovementsPageObject
+import it.italiancoders.mybudget.activity.movements.search.SearchMovementPageObject
+import it.italiancoders.mybudget.mocks.config.MovementsConfig
+import it.italiancoders.mybudget.mocks.data.MovementsMockData
 import it.italiancoders.mybudget.rest.models.Movement
+import it.italiancoders.mybudget.rest.models.MovementListPage
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.Mockito
 
 /**
  * @author fattazzo
@@ -51,6 +59,8 @@ class MovementsActivityTest : BaseActivityTest() {
 
     private val movementsPageObject = MovementsPageObject()
     private val movementPageObject = MovementPageObject()
+    private val searchMovementPageObject = SearchMovementPageObject()
+    private val listMovementsPageObject = ListMovementsPageObject()
 
     @Test
     fun initialState() {
@@ -58,7 +68,7 @@ class MovementsActivityTest : BaseActivityTest() {
         rule.launchActivity(null)
 
         movementsPageObject.checkNewMovementFabVisible()
-        movementsPageObject.checkMovementsListChildCount(0)
+        listMovementsPageObject.checkMovementsListChildCount(0)
         assertThat(
             rule.activity.mBottomSheetBehavior?.state,
             `is`(BottomSheetBehavior.STATE_EXPANDED)
@@ -106,10 +116,98 @@ class MovementsActivityTest : BaseActivityTest() {
     @Test
     fun editMovement() {
 
+        MovementsMockData.mock2019_08(movementsManager)
+        MovementsMockData.mock_id_00014(movementsManager)
+
+        rule.launchActivity(null)
+
+        searchMovementPageObject.setTextInDayTextView("")
+        searchMovementPageObject.setTextInMonthTextView("8")
+        searchMovementPageObject.setTextInYearTextView("2019")
+        searchMovementPageObject.clickSearchButton()
+
+        listMovementsPageObject.checkMovementsListChildCount(14)
+
+        val movementPage = MovementsMockData.fromJsonFile<MovementListPage>(
+            MovementsConfig.DATA_2019_08_OK,
+            MovementListPage::class
+        )
+        val editMovement14Position = movementPage!!.contents.indexOfFirst { it.id!! == 14L }
+
+        listMovementsPageObject.clickMovementItem(editMovement14Position)
+
+        movementPageObject.checkMovement(movementPage.contents[editMovement14Position])
     }
 
     @Test
     fun deleteMovement() {
 
+        MovementsMockData.mock2019_08(movementsManager)
+        MovementsMockData.mock_id_00014(movementsManager)
+
+        rule.launchActivity(null)
+
+        searchMovementPageObject.setTextInDayTextView("")
+        searchMovementPageObject.setTextInMonthTextView("8")
+        searchMovementPageObject.setTextInYearTextView("2019")
+        searchMovementPageObject.clickSearchButton()
+
+        listMovementsPageObject.checkMovementsListChildCount(14)
+
+        val movementPage = MovementsMockData.fromJsonFile<MovementListPage>(
+            MovementsConfig.DATA_2019_08_OK,
+            MovementListPage::class
+        )
+        val editMovement14Position = movementPage!!.contents.indexOfFirst { it.id!! == 14L }
+
+        listMovementsPageObject.clickMovementItem(editMovement14Position)
+
+        movementPageObject.checkMovement(movementPage.contents[editMovement14Position])
+
+        Mockito.`when`(movementsManager.delete(14)).doReturn(true)
+        MovementsMockData.mock2019_08_no_id_00014(movementsManager)
+        movementPageObject.clickDeleteButton()
+
+        listMovementsPageObject.checkMovementsListChildCount(13)
+    }
+
+    @Test
+    fun deleteMovementFromSwipe() {
+
+        MovementsMockData.mock2019_08(movementsManager)
+        MovementsMockData.mock_id_00014(movementsManager)
+
+        rule.launchActivity(null)
+
+        searchMovementPageObject.setTextInDayTextView("")
+        searchMovementPageObject.setTextInMonthTextView("8")
+        searchMovementPageObject.setTextInYearTextView("2019")
+        searchMovementPageObject.clickSearchButton()
+
+        listMovementsPageObject.checkMovementsListChildCount(14)
+
+        val movementPage = MovementsMockData.fromJsonFile<MovementListPage>(
+            MovementsConfig.DATA_2019_08_OK,
+            MovementListPage::class
+        )
+        val editMovement14Position = movementPage!!.contents.indexOfFirst { it.id!! == 14L }
+
+        // Error on delete
+        Mockito.`when`(movementsManager.delete(14)).doReturn(false)
+        listMovementsPageObject.swipeRightMovementItem(editMovement14Position)
+
+        listMovementsPageObject.checkMovementDeletedSnackBarVisible()
+
+        SystemClock.sleep(5000)
+        listMovementsPageObject.checkMovementsListChildCount(14)
+
+        // Delete ok
+        Mockito.`when`(movementsManager.delete(14)).doReturn(true)
+        listMovementsPageObject.swipeRightMovementItem(editMovement14Position)
+
+        listMovementsPageObject.checkMovementDeletedSnackBarVisible()
+
+        SystemClock.sleep(5000)
+        listMovementsPageObject.checkMovementsListChildCount(13)
     }
 }

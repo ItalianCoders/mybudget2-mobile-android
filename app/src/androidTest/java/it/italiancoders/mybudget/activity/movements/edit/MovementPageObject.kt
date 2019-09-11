@@ -28,6 +28,7 @@
 package it.italiancoders.mybudget.activity.movements.edit
 
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import it.italiancoders.mybudget.R
@@ -79,5 +80,9 @@ class MovementPageObject {
                 )
             )
         }
+    }
+
+    fun clickDeleteButton() {
+        onView(withId(R.id.delete_button)).perform(click())
     }
 }

@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: SessionRestService.kt
+ * File: SearchMovementPageObject.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,38 +25,42 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget.rest.api.services
+package it.italiancoders.mybudget.activity.movements.search
 
-import it.italiancoders.mybudget.rest.models.LoginRequest
-import it.italiancoders.mybudget.rest.models.Session
-import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.POST
-import retrofit2.http.Path
-
+import androidx.test.espresso.Espresso
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import it.italiancoders.mybudget.R
+import it.italiancoders.mybudget.ViewActions.setTextInTextView
 
 /**
  * @author fattazzo
  *         <p/>
- *         date: 16/07/19
+ *         date: 11/09/19
  */
-interface SessionRestService {
+class SearchMovementPageObject {
 
-    /**
-     * Obtain AccessToken, RefreshToken and the user session
-     *
-     * @param loginRequest The login request data
-     * @return The session object
-     */
-    @POST("session")
-    fun login(@Body loginRequest: LoginRequest): Call<Session>
+    fun checkMovementsListChildCount(count: Int) {
+        Espresso.onView(ViewMatchers.withId(R.id.movements_recycler_view))
+            .check(ViewAssertions.matches(ViewMatchers.hasChildCount(count)))
+    }
 
-    /**
-     * Obtain a new AccessToken and user session using RefreshToken
-     *
-     * @param refreshToken The refresh token
-     * @return The session object
-     */
-    @POST("session/refresh/{refreshToken}")
-    fun refresh(@Path("refreshToken") refreshToken: String): Call<Session>
+    fun setTextInDayTextView(text: String) {
+        onView(withId(R.id.day_TIET)).perform(setTextInTextView(text))
+    }
+
+    fun setTextInMonthTextView(text: String) {
+        onView(withId(R.id.month_TIET)).perform(setTextInTextView(text))
+    }
+
+    fun setTextInYearTextView(text: String) {
+        onView(withId(R.id.year_TIET)).perform(setTextInTextView(text))
+    }
+
+    fun clickSearchButton() {
+        onView(withId(R.id.search_button)).perform(click())
+    }
 }

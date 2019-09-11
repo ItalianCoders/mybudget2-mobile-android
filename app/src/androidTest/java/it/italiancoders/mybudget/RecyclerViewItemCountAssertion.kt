@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: SessionRestService.kt
+ * File: RecyclerViewItemCountAssertion.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,38 +25,40 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget.rest.api.services
+package it.italiancoders.mybudget
 
-import it.italiancoders.mybudget.rest.models.LoginRequest
-import it.italiancoders.mybudget.rest.models.Session
-import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.POST
-import retrofit2.http.Path
+import android.view.View
 
+import androidx.recyclerview.widget.RecyclerView
+import androidx.test.espresso.NoMatchingViewException
+import androidx.test.espresso.ViewAssertion
 
-/**
- * @author fattazzo
- *         <p/>
- *         date: 16/07/19
- */
-interface SessionRestService {
+import org.hamcrest.CoreMatchers
+import org.hamcrest.Matcher
 
-    /**
-     * Obtain AccessToken, RefreshToken and the user session
-     *
-     * @param loginRequest The login request data
-     * @return The session object
-     */
-    @POST("session")
-    fun login(@Body loginRequest: LoginRequest): Call<Session>
+import org.hamcrest.MatcherAssert.assertThat
 
-    /**
-     * Obtain a new AccessToken and user session using RefreshToken
-     *
-     * @param refreshToken The refresh token
-     * @return The session object
-     */
-    @POST("session/refresh/{refreshToken}")
-    fun refresh(@Path("refreshToken") refreshToken: String): Call<Session>
+class RecyclerViewItemCountAssertion private constructor(private val matcher: Matcher<Int>) :
+    ViewAssertion {
+
+    override fun check(view: View, noViewFoundException: NoMatchingViewException?) {
+        if (noViewFoundException != null) {
+            throw noViewFoundException
+        }
+
+        val recyclerView = view as RecyclerView
+        val adapter = recyclerView.adapter
+        assertThat(adapter!!.itemCount, matcher)
+    }
+
+    companion object {
+
+        fun withItemCount(expectedCount: Int): RecyclerViewItemCountAssertion {
+            return withItemCount(CoreMatchers.`is`(expectedCount))
+        }
+
+        fun withItemCount(matcher: Matcher<Int>): RecyclerViewItemCountAssertion {
+            return RecyclerViewItemCountAssertion(matcher)
+        }
+    }
 }

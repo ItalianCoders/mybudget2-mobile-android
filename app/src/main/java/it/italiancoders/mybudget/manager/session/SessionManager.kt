@@ -49,7 +49,7 @@ import kotlinx.coroutines.withContext
 @OpenForTesting
 class SessionManager(context: Context) : AbstractRestManager(context) {
 
-    fun login(
+    fun loginOld(
         username: String,
         password: String,
         locale: String,
@@ -69,9 +69,35 @@ class SessionManager(context: Context) : AbstractRestManager(context) {
         CoroutineScope(Dispatchers.IO).launch {
             val response = sessionService.login(loginRequest)
             withContext(Dispatchers.Main) {
-                processResponse(response, loginOnSuccessAction, onFailureAction, false)
+                //processResponse(response, loginOnSuccessAction, onFailureAction, false)
             }
         }
+    }
+
+    fun login(username: String, password: String, locale: String): LoginResult {
+
+        val loginRequest = LoginRequest(username, password, locale)
+
+        val sessionService = RetrofitBuilder.client.create(SessionRestService::class.java)
+
+        var errorCodeResult: Int? = null
+
+        val sessionResult: Session? = try {
+            val response = sessionService.login(loginRequest).execute()
+            if (response.isSuccessful) {
+                response.body()
+            } else {
+                errorCodeResult = response.code()
+                null
+            }
+        } catch (e: Exception) {
+            errorCodeResult = 400
+            null
+        }
+
+        sessionResult?.let { setSession(it) }
+
+        return LoginResult(sessionResult, errorCodeResult)
     }
 
     fun getLastSession(): Session? {

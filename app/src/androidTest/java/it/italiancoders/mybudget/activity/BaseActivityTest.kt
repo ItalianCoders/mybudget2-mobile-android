@@ -94,7 +94,7 @@ open class BaseActivityTest {
         background = Dispatchers.Unconfined
     }
 
-    fun useDefaultSession(): Boolean = true
+    private fun useDefaultSession(): Boolean = true
 
     private fun getTargetApplication(): TestApplication =
         InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as TestApplication

@@ -30,9 +30,13 @@ package it.italiancoders.mybudget.activity.login
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import it.italiancoders.mybudget.manager.session.SessionManager
+import it.italiancoders.mybudget.utils.ioJob
+import it.italiancoders.mybudget.utils.uiJob
+import java.util.*
 
 
-class LoginViewModel : ViewModel() {
+class LoginViewModel(private val sessionManager: SessionManager) : ViewModel() {
 
     val username = MutableLiveData<String>().apply { postValue("") }
     val password = MutableLiveData<String>().apply { postValue("") }
@@ -49,6 +53,24 @@ class LoginViewModel : ViewModel() {
         val usernameValid = UserValidationRules.REQUIRED.isValid(username.value)
         val passwordValid = UserValidationRules.REQUIRED.isValid(password.value)
         return usernameValid && passwordValid && (policyAccepted.value ?: false)
+    }
+
+    fun login(onSuccessAction: () -> Unit, onFailureAction: (Int) -> Unit) {
+        if(dataValid.value != true) return
+
+        ioJob {
+
+            val result = sessionManager.login(username.value!!,password.value!!, Locale.getDefault().language)
+
+            uiJob {
+
+                if(result.session != null) {
+                    onSuccessAction.invoke()
+                } else {
+                    onFailureAction.invoke(result.errorCode ?: 400)
+                }
+            }
+        }
     }
 }
 

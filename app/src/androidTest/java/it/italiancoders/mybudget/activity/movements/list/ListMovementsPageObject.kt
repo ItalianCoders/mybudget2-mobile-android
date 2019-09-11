@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: MovementsPageObject.kt
+ * File: ListMovementsPageObject.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,52 +25,50 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget.activity.movements
+package it.italiancoders.mybudget.activity.movements.list
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.swipeUp
-import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
+import androidx.test.espresso.action.ViewActions.swipeRight
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import it.italiancoders.mybudget.R
+import it.italiancoders.mybudget.RecyclerViewItemCountAssertion.Companion.withItemCount
+import it.italiancoders.mybudget.activity.main.view.lastmovements.MovementsDataAdapter
 
 /**
  * @author fattazzo
  *         <p/>
- *         date: 10/09/19
+ *         date: 11/09/19
  */
-class MovementsPageObject {
+class ListMovementsPageObject {
 
-    fun checkNewMovementFabVisible() {
-        onView(withId(R.id.new_movement_fab)).check(matches(isDisplayed()))
+    fun checkMovementsListChildCount(count: Int) {
+        onView(withId(R.id.movements_recycler_view)).check(withItemCount(count))
     }
 
-    fun checkNewMovementFabNotVisible() {
-        onView(withId(R.id.new_movement_fab)).check(doesNotExist())
+    fun clickMovementItem(position: Int) {
+        onView(withId(R.id.movements_recycler_view)).perform(
+            actionOnItemAtPosition<MovementsDataAdapter.MovementViewHolder>(
+                position,
+                click()
+            )
+        )
     }
 
-    fun clickNewMovementFab() {
-        onView(withId(R.id.new_movement_fab)).perform(click())
+    fun swipeRightMovementItem(position: Int) {
+        onView(withId(R.id.movements_recycler_view)).perform(
+            actionOnItemAtPosition<MovementsDataAdapter.MovementViewHolder>(
+                position,
+                swipeRight()
+            )
+        )
     }
 
-    fun clickNewMovementFromMenu() {
-        onView(withId(R.id.action_add)).perform(click())
-    }
-
-    fun pressBack() {
-        onView(withContentDescription(R.string.abc_action_bar_up_description)).perform(click())
-    }
-
-    fun checkActivityNewMovementVisible() {
-        onView(withId(R.id.toolbar)).check(matches(hasDescendant(withText(R.string.movement_new))))
-    }
-
-    fun checkActivityMovementsVisible() {
-        onView(withId(R.id.toolbar)).check(matches(hasDescendant(withText(R.string.activity_movements_title))))
-    }
-
-    fun swipeUpMovements() {
-        onView(withId(R.id.movements_recycler_view)).perform(swipeUp())
+    fun checkMovementDeletedSnackBarVisible() {
+        onView(withId(com.google.android.material.R.id.snackbar_text))
+            .check(matches(withText(R.string.movement_deleted)))
     }
 }
