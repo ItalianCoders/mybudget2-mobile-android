@@ -43,7 +43,11 @@ import it.italiancoders.mybudget.tutorial.shape.ArrowDownShape
 class TutorialCategoriesActivity(activity: BaseActivity<ActivityCategoriesBinding>) :
     AbstractTutorialActivity<ActivityCategoriesBinding>(activity) {
 
-    override fun getTutorialPreferenceKey(): String = "categories_activity_show"
+    companion object {
+        const val KEY = "categories_activity_show"
+    }
+
+    override fun getTutorialPreferenceKey(): String = KEY
 
     override fun getTargets(): ArrayList<Target> {
         return arrayListOf(createNewTarget(), createRefreshTarget(), createEditDeleteTarget())

@@ -44,7 +44,7 @@ class TestApplication : MyBudgetApplication() {
     override fun onCreate() {
         super.onCreate()
 
-        Locale.setDefault(Locale.ITALY)
+        Locale.setDefault(Locale("it_IT"))
 
         appComponent = DaggerTestAppComponent.builder()
             .appModule(MockAppModule(this))

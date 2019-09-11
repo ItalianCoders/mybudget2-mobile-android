@@ -39,6 +39,7 @@ import it.italiancoders.mybudget.mocks.data.ExpenseSummaryMockData
 import it.italiancoders.mybudget.mocks.data.MovementsMockData
 import it.italiancoders.mybudget.rest.models.ExpenseSummary
 import it.italiancoders.mybudget.rest.models.Movement
+import it.italiancoders.mybudget.tutorial.TutorialMainActivity
 import org.hamcrest.Matchers.*
 import org.junit.Rule
 import org.junit.Test
@@ -59,6 +60,10 @@ class MainActivityTest : BaseActivityTest() {
 
     private val mainPageObject = MainPageObject()
     private val movementPageObject = MovementPageObject()
+
+    override fun getActivityTutorialKey(): String? = TutorialMainActivity.KEY
+
+    override fun isTutorialAlreadyShow(): Boolean = true
 
     @Test
     fun testPeriodTypeDescription() {

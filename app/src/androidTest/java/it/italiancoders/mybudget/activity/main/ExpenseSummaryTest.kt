@@ -33,6 +33,7 @@ import it.italiancoders.mybudget.manager.movements.ParametriRicerca
 import it.italiancoders.mybudget.mocks.config.ExpenseSummaryConfig
 import it.italiancoders.mybudget.mocks.data.ExpenseSummaryMockData
 import it.italiancoders.mybudget.rest.models.ExpenseSummary
+import it.italiancoders.mybudget.tutorial.TutorialMainActivity
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
@@ -55,6 +56,9 @@ class ExpenseSummaryTest : BaseActivityTest() {
     var rule: ActivityTestRule<MainActivity> =
         ActivityTestRule(MainActivity::class.java, true, false)
 
+    override fun getActivityTutorialKey(): String? = TutorialMainActivity.KEY
+
+    override fun isTutorialAlreadyShow(): Boolean = true
 
     @Test
     fun changeMonthPeriod() {

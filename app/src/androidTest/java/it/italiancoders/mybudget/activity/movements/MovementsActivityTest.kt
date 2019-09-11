@@ -39,6 +39,7 @@ import it.italiancoders.mybudget.mocks.config.MovementsConfig
 import it.italiancoders.mybudget.mocks.data.MovementsMockData
 import it.italiancoders.mybudget.rest.models.Movement
 import it.italiancoders.mybudget.rest.models.MovementListPage
+import it.italiancoders.mybudget.tutorial.TutorialMovementsActivity
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Rule
@@ -61,6 +62,10 @@ class MovementsActivityTest : BaseActivityTest() {
     private val movementPageObject = MovementPageObject()
     private val searchMovementPageObject = SearchMovementPageObject()
     private val listMovementsPageObject = ListMovementsPageObject()
+
+    override fun getActivityTutorialKey(): String? = TutorialMovementsActivity.KEY
+
+    override fun isTutorialAlreadyShow(): Boolean = true
 
     @Test
     fun initialState() {

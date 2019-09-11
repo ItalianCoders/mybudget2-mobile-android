@@ -46,7 +46,11 @@ import it.italiancoders.mybudget.tutorial.shape.ArrowRightShape
 class TutorialMainActivity(activity: BaseActivity<ActivityMainBinding>) :
     AbstractTutorialActivity<ActivityMainBinding>(activity) {
 
-    override fun getTutorialPreferenceKey(): String = "main_activity_show"
+    companion object {
+        const val KEY = "main_activity_show"
+    }
+
+    override fun getTutorialPreferenceKey(): String = KEY
 
     override fun getTargets(): ArrayList<Target> {
         return arrayListOf(

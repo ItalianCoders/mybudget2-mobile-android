@@ -27,8 +27,10 @@
 
 package it.italiancoders.mybudget.activity
 
+import android.content.Context
 import androidx.arch.core.executor.testing.CountingTaskExecutorRule
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
 import it.italiancoders.mybudget.app.TestApplication
 import it.italiancoders.mybudget.app.component.TestAppComponent
 import it.italiancoders.mybudget.manager.categories.CategoriesManager
@@ -38,6 +40,7 @@ import it.italiancoders.mybudget.manager.registrationuserinfo.RegistrationUserIn
 import it.italiancoders.mybudget.manager.session.SessionManager
 import it.italiancoders.mybudget.rest.models.Session
 import it.italiancoders.mybudget.rest.models.User
+import it.italiancoders.mybudget.tutorial.AbstractTutorialActivity.Companion.TUTORIAL_PREF_FILE
 import it.italiancoders.mybudget.utils.background
 import it.italiancoders.mybudget.utils.io
 import it.italiancoders.mybudget.utils.ui
@@ -49,12 +52,13 @@ import org.mockito.Mockito.`when`
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
+
 /**
  * @author fattazzo
  *         <p/>
  *         date: 28/08/19
  */
-open class BaseActivityTest {
+abstract class BaseActivityTest {
 
     @Inject
     lateinit var expenseSummaryManager: ExpenseSummaryManager
@@ -85,6 +89,8 @@ open class BaseActivityTest {
 
         if (useDefaultSession())
             `when`(sessionManager.getLastSession()).thenReturn(getDefaultSession())
+
+        initSharedPrefrences()
     }
 
     @ExperimentalCoroutinesApi
@@ -95,6 +101,19 @@ open class BaseActivityTest {
     }
 
     private fun useDefaultSession(): Boolean = true
+
+    abstract fun getActivityTutorialKey(): String?
+
+    abstract fun isTutorialAlreadyShow(): Boolean
+
+    private fun initSharedPrefrences() {
+        if (getActivityTutorialKey() != null) {
+            getInstrumentation().targetContext.getSharedPreferences(
+                TUTORIAL_PREF_FILE,
+                Context.MODE_PRIVATE
+            ).edit().putBoolean(getActivityTutorialKey()!!, isTutorialAlreadyShow()).apply()
+        }
+    }
 
     private fun getTargetApplication(): TestApplication =
         InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as TestApplication

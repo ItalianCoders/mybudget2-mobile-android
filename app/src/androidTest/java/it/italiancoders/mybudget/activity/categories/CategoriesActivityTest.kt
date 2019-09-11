@@ -34,6 +34,7 @@ import it.italiancoders.mybudget.activity.BaseActivityTest
 import it.italiancoders.mybudget.mocks.config.CategoriesConfig
 import it.italiancoders.mybudget.mocks.data.CategoriesMockData
 import it.italiancoders.mybudget.rest.models.Category
+import it.italiancoders.mybudget.tutorial.TutorialCategoriesActivity
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Rule
@@ -53,6 +54,10 @@ class CategoriesActivityTest : BaseActivityTest() {
         ActivityTestRule(CategoriesActivity::class.java, true, false)
 
     private val categoriesPageObject = CategoriesPageObject()
+
+    override fun getActivityTutorialKey(): String? = TutorialCategoriesActivity.KEY
+
+    override fun isTutorialAlreadyShow(): Boolean = true
 
     @Test
     fun refreshValues() {

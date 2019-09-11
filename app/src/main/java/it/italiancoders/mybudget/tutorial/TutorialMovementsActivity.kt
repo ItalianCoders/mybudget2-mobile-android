@@ -44,7 +44,11 @@ import it.italiancoders.mybudget.databinding.ActivityMovementsBinding
 class TutorialMovementsActivity(activity: BaseActivity<ActivityMovementsBinding>) :
     AbstractTutorialActivity<ActivityMovementsBinding>(activity) {
 
-    override fun getTutorialPreferenceKey(): String = "movements_activity_show"
+    companion object {
+        const val KEY = "movements_activity_show"
+    }
+
+    override fun getTutorialPreferenceKey(): String = KEY
 
     override fun getTargets(): ArrayList<Target> {
         return arrayListOf(

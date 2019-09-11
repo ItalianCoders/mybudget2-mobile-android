@@ -49,6 +49,10 @@ class LoginActivityTest : BaseActivityTest() {
 
     private val loginPageObject = LoginPageObject()
 
+    override fun getActivityTutorialKey(): String? = null
+
+    override fun isTutorialAlreadyShow(): Boolean = true
+
     @Test
     fun initialState() {
 
