@@ -30,6 +30,7 @@ Questo repository ospita il codice del frontend del progetto mentre il backend l
 Di seguito verrà riportato un elenco delle tecniche di programmazione e framework utilizzati per realizzare l'applicazione.
 
 ##### DataBinding
+- Two-way
 - Converters
 - Adapters
 
@@ -73,6 +74,8 @@ Di seguito verrà riportato un elenco delle tecniche di programmazione e framewo
 - Summary
 - Custom preference
 - Custom file
+
+##### Splash screen
 
 ##### Room ORM
 - Database

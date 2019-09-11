@@ -107,4 +107,17 @@ class LoginPageObject {
     fun checkActivityResult(activityResult: Instrumentation.ActivityResult, expectedResult: Int) {
         MatcherAssert.assertThat(activityResult,hasResultCode(expectedResult))
     }
+
+    fun clickNewUserRegistration() {
+        onView(withId(R.id.registration_create_text_view)).perform(click())
+    }
+
+    fun clickResendActivationEmail() {
+        onView(withId(R.id.registration_resend_text_view)).perform(click())
+    }
+
+    fun checkResendActivationDialogVisible() {
+        onView(CoreMatchers.instanceOf(DialogLayout::class.java)).check(matches(isDisplayed()))
+        onView(withId(R.id.md_text_title)).check(matches(withText(R.string.login_username_hint)))
+    }
 }

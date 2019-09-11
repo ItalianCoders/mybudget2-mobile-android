@@ -78,6 +78,8 @@ android {
         // Disables animations during instrumented tests you run from the cammand line.
         // see [https://google.github.io/android-gradle-dsl/current/com.android.build.gradle.internal.dsl.TestOptions.html#com.android.build.gradle.internal.dsl.TestOptions:animationsDisabled]
         animationsDisabled = true
+
+
     }
     sourceSets {
         test.resources.srcDirs += 'src/sharedTest/assets'

@@ -30,6 +30,7 @@ package it.italiancoders.mybudget.activity.login
 import android.app.Activity
 import androidx.test.rule.ActivityTestRule
 import it.italiancoders.mybudget.activity.BaseActivityTest
+import it.italiancoders.mybudget.activity.RegistrationUserInfoPageObject
 import it.italiancoders.mybudget.mocks.data.SessionMockData
 import org.junit.Rule
 import org.junit.Test
@@ -48,6 +49,7 @@ class LoginActivityTest : BaseActivityTest() {
         ActivityTestRule(LoginActivity::class.java, true, false)
 
     private val loginPageObject = LoginPageObject()
+    private val registrationUserInfoPageObject = RegistrationUserInfoPageObject()
 
     override fun getActivityTutorialKey(): String? = null
 
@@ -110,5 +112,25 @@ class LoginActivityTest : BaseActivityTest() {
         loginPageObject.clickLoginButton()
 
         loginPageObject.checkActivityResult(rule.activityResult,Activity.RESULT_OK)
+    }
+
+    @Test
+    fun openRegistrationActivity() {
+
+        rule.launchActivity(null)
+
+        loginPageObject.clickNewUserRegistration()
+
+        registrationUserInfoPageObject.checkSignUpButtonVisible()
+    }
+
+    @Test
+    fun resendActivationEmail() {
+
+        rule.launchActivity(null)
+
+        loginPageObject.clickResendActivationEmail()
+
+        loginPageObject.checkResendActivationDialogVisible()
     }
 }

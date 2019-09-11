@@ -41,6 +41,7 @@ import it.italiancoders.mybudget.databinding.ActivityRegistrationUserInfoBinding
 import it.italiancoders.mybudget.manager.registrationuserinfo.RegistrationUserInfoManager
 import javax.inject.Inject
 
+
 class RegistrationUserInfoActivity : BaseActivity<ActivityRegistrationUserInfoBinding>() {
 
     @Inject
@@ -113,16 +114,5 @@ class RegistrationUserInfoActivity : BaseActivity<ActivityRegistrationUserInfoBi
                 }
             }
             ).start()
-    }
-
-    override fun onBackPressed() {
-        when {
-            binding.firstnameET.isFocused -> binding.firstnameET.clearFocus()
-            binding.lastnameET.isFocused -> binding.lastnameET.clearFocus()
-            binding.usernameET.isFocused -> binding.usernameET.clearFocus()
-            binding.passwordET.isFocused -> binding.passwordET.clearFocus()
-            binding.emailET.isFocused -> binding.emailET.clearFocus()
-            else -> super.onBackPressed()
-        }
     }
 }
