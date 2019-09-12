@@ -29,7 +29,7 @@ Questo repository ospita il codice del frontend del progetto mentre il backend l
 ## :microscope: Architettura
 Di seguito verrà riportato un elenco delle tecniche di programmazione e framework utilizzati per realizzare l'applicazione.
 
-- [DataBinding](#datadinding)
+- [DataBinding](#databinding)
 - [ViewModel](#viewmodel)
 - [LiveData](#livedata)
 - [Observable](#observable)
@@ -54,15 +54,18 @@ Di seguito verrà riportato un elenco delle tecniche di programmazione e framewo
 - [Shared test](#shared-test)
 
 ##### DataBinding
-- Binding
 
-  File: [activity_registration_user_info.xml](app/src/main/res/layout/activity_registration_user_info.xml)
+| One-way / Two way |
+| -- |
+| File: [activity_registration_user_info.xml](app/src/main/res/layout/activity_registration_user_info.xml)<br><br>Il _FrameLayout_ con id _sign_up_button_ binda le sue proprietà _background_ e _clickable_ alla proprietà dataValid del ViewModel<br><br>Il _TextInputEditText_ con id _firstname_ET_ binda la proprietà _text_ alla proprietà firstname del ViewModel. Utilizzando <kbd>@={model.firstname}</kbd> il binding viene fatto in Two-way quindi scrivendo del testo nella vista si aggiorna anche la proprietà del ViewModel e viceversa|  
 
-  Il _FrameLayout_ con id _sign_up_button_ binda le sue proprietà _background_ e _clickable_ alla proprietà dataValid del ViewModel
+| Converters |
+| -- |
+| Directory: [converters](app/src/main/java/it/italiancoders/mybudget/databinding/converters) |
 
-  Il _TextInputEditText_ con id _firstname_ET_ binda la proprietà _text_ alla proprietà firstname del ViewModel. Utilizzando @={model.firstname} il binding viene fatto in Two-way quindi scrivendo del testo nella vista si aggiorna anche la proprietà del ViewModel
-- Converters
-- Adapters
+| Adapters |
+| -- |
+| Directory: [adapters](app/src/main/java/it/italiancoders/mybudget/databinding/adapters) |
 
 ##### ViewModel
 - ViewModel
