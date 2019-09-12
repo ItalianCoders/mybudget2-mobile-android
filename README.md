@@ -29,8 +29,38 @@ Questo repository ospita il codice del frontend del progetto mentre il backend l
 ## :microscope: Architettura
 Di seguito verrà riportato un elenco delle tecniche di programmazione e framework utilizzati per realizzare l'applicazione.
 
+- [DataBinding](#datadinding)
+- [ViewModel](#viewmodel)
+- [LiveData](#livedata)
+- [Observable](#observable)
+- [Animation](#animation)
+- [Kotlin coroutine](#kotlin-coroutine)
+- [Dagger injection](#dagger-injection)
+- [REST client](#rest-client)
+- [Tutorial](#tutorial)
+- [RecyclerView](#recyclerview)
+- [State Machine Pattern](#state-machine-pattern)
+- [Activity startActivityForResult](#activity-startactivityforresult)
+- [BottomSheetBehavior](#bottomsheetbehavior)
+- [Firebase](#firebase)
+- [Crashlytics](#crashlytics)
+- [Settings](#settings)
+- [Splash screen](#splash-screen)
+- [Room ORM](#room-orm)
+- [Menu](#menu)
+- [Network state monitor](#network-state-monitor)
+- [Local Junit Test](#local-junit-test)
+- [Instrumented Test](#instrumented-test)
+- [Shared test](#shared-test)
+
 ##### DataBinding
-- Two-way
+- Binding
+
+  File: [activity_registration_user_info.xml](app/src/main/res/layout/activity_registration_user_info.xml)
+
+  Il _FrameLayout_ con id _sign_up_button_ binda le sue proprietà _background_ e _clickable_ alla proprietà dataValid del ViewModel
+
+  Il _TextInputEditText_ con id _firstname_ET_ binda la proprietà _text_ alla proprietà firstname del ViewModel. Utilizzando @={model.firstname} il binding viene fatto in Two-way quindi scrivendo del testo nella vista si aggiorna anche la proprietà del ViewModel
 - Converters
 - Adapters
 
@@ -66,9 +96,13 @@ Di seguito verrà riportato un elenco delle tecniche di programmazione e framewo
 ##### State Machine Pattern
 - PeriodType
 
-##### Activity.startActivityForResult
+##### Activity startActivityForResult
 
 ##### BottomSheetBehavior
+
+##### Firebase
+
+##### Crashlytics
 
 ##### Settings
 - Summary
