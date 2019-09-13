@@ -53,7 +53,7 @@ Di seguito verrà riportato un elenco delle tecniche di programmazione e framewo
 - [Instrumented Test](#instrumented-test)
 - [Shared test](#shared-test)
 
-##### DataBinding
+##### :heavy_check_mark: DataBinding
 
 | One-way / Two way |
 | -- |
@@ -61,15 +61,21 @@ Di seguito verrà riportato un elenco delle tecniche di programmazione e framewo
 
 | Converters |
 | -- |
-| Directory: [converters](app/src/main/java/it/italiancoders/mybudget/databinding/converters) |
+| Directory: [converters](app/src/main/java/it/italiancoders/mybudget/databinding/converters)<br><br>Un esempio è possibile trovarlo in [list_item_movement.xml](app/src/main/res/layout/list_item_movement.xml) in cui è stato aggiunto l'import nel tag data di [AmountStringConversion](app/src/main/java/it/italiancoders/mybudget/databinding/converters/AmountStringConversion.kt) e utilizzato per visualizzare il totale del documento.<br><br>Il converter è stato creato per visualizzare l'importo del documento formattato secondo le impostazioni di sistema con il simbolo della valuta impostato nelle settings dell'applicazione. |
 
 | Adapters |
 | -- |
-| Directory: [adapters](app/src/main/java/it/italiancoders/mybudget/databinding/adapters) |
+| Directory: [adapters](app/src/main/java/it/italiancoders/mybudget/databinding/adapters)<br><br>Nel layout [activity_registration_user_info.xml](app/src/main/res/layout/activity_registration_user_info.xml) viene utilizzato l'adapter [ValidationBindingAdapter](app/src/main/java/it/italiancoders/mybudget/databinding/adapters/ValidationBindingAdapter.kt) su tutti i _TextInputLayout_.<br><br>Le proprietà che vengono prese in considerazione sono <kbd>app:validation</kbd> che rappresenta la rule da applicare per la validazione e <kbd>app:errorMsg</kbd> che rappresenta il messaggio di errore che verrà impostato se la rule non viene rispettata. |
 
-##### ViewModel
-- ViewModel
-- ViewModelFactory
+##### :heavy_check_mark: ViewModel
+
+| ViewModel |
+| -- |
+| I ViewModel presenti sono utilizzati in activity, fragment e custom view all'interno di tutta l'applicazione. Di seguito viene riportato un esempio per ogni tipologia.<br><br>Activity: [RegistrationUserInfoActivity](app/src/main/java/it/italiancoders/mybudget/activity/registration/RegistrationUserInfoActivity.kt)<br><br>Fragment: [ListMovementsFragment](app/src/main/java/it/italiancoders/mybudget/activity/movements/list/ListMovementsFragment.kt)<br><br>Custom view: [SearchMovementsView](app/src/main/java/it/italiancoders/mybudget/activity/movements/search/SearchMovementsView.kt) |
+
+| ViewModelFactory |
+| -- |
+| In Android non esiste la possibilità di poter instanziare un ViewModel con costruttore con 1 o più parametri attraverso un _ViewModelProviders_. Per questo motivo si rende necessario l'uso di _ViewModelFactory_<br><br>Nell'applicazione possiamo trovare l'uso di factory quasi ovunque. Un esempio può essere quello in [CategoriesActivity](app/src/main/java/it/italiancoders/mybudget/activity/categories/CategoriesActivity.kt) dove il ViewModel viene creato nel metodo _onCreate_ in questo modo<br><br>`ViewModelProvider(this,CategoriesViewModelFactory(categoriesManager))`<br>`.get(CategoriesViewModel::class.java)` |
 
 ##### LiveData
 
