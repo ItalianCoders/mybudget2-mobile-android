@@ -29,8 +29,8 @@ Questo repository ospita il codice del frontend del progetto mentre il backend l
 ## :microscope: Architettura
 Di seguito verrà riportato un elenco delle tecniche di programmazione e framework utilizzati per realizzare l'applicazione.
 
-- [DataBinding](#databinding)
-- [ViewModel](#viewmodel)
+- [DataBinding](#heavy_check_mark-databinding)
+- [ViewModel](#heavy_check_mark-viewmodel)
 - [LiveData](#livedata)
 - [Observable](#observable)
 - [Animation](#animation)
@@ -53,7 +53,7 @@ Di seguito verrà riportato un elenco delle tecniche di programmazione e framewo
 - [Instrumented Test](#instrumented-test)
 - [Shared test](#shared-test)
 
-##### :heavy_check_mark: DataBinding
+## :heavy_check_mark: DataBinding
 
 | One-way / Two way |
 | -- |
@@ -67,7 +67,7 @@ Di seguito verrà riportato un elenco delle tecniche di programmazione e framewo
 | -- |
 | Directory: [adapters](app/src/main/java/it/italiancoders/mybudget/databinding/adapters)<br><br>Nel layout [activity_registration_user_info.xml](app/src/main/res/layout/activity_registration_user_info.xml) viene utilizzato l'adapter [ValidationBindingAdapter](app/src/main/java/it/italiancoders/mybudget/databinding/adapters/ValidationBindingAdapter.kt) su tutti i _TextInputLayout_.<br><br>Le proprietà che vengono prese in considerazione sono <kbd>app:validation</kbd> che rappresenta la rule da applicare per la validazione e <kbd>app:errorMsg</kbd> che rappresenta il messaggio di errore che verrà impostato se la rule non viene rispettata. |
 
-##### :heavy_check_mark: ViewModel
+## :heavy_check_mark: ViewModel
 
 | ViewModel |
 | -- |
