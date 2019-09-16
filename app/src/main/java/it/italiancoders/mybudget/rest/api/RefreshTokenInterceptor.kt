@@ -68,6 +68,7 @@ class RefreshTokenInterceptor(private val context: Context) : Interceptor {
                         sessionManager.setSession(responseNewTokenLoginModel.body())
 
                         val newAuthenticationRequest = originalRequest.newBuilder()
+                            .removeHeader("x-access-token")
                             .addHeader("x-access-token", SessionData.session?.accessToken.orEmpty())
                             .build()
                         chain.proceed(newAuthenticationRequest)
