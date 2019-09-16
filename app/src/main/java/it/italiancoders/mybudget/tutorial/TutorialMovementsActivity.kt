@@ -35,6 +35,7 @@ import com.takusemba.spotlight.target.Target
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.activity.BaseActivity
 import it.italiancoders.mybudget.databinding.ActivityMovementsBinding
+import it.italiancoders.mybudget.tutorial.shape.ArrowRightShape
 
 /**
  * @author fattazzo
@@ -48,13 +49,18 @@ class TutorialMovementsActivity(activity: BaseActivity<ActivityMovementsBinding>
         const val KEY = "movements_activity_show"
     }
 
+    override fun isNeverShow(): Boolean {
+        return true
+    }
+
     override fun getTutorialPreferenceKey(): String = KEY
 
     override fun getTargets(): ArrayList<Target> {
         return arrayListOf(
             createParamsTarget(),
             createEditMovementTarget(),
-            createNewMovementsTarget()
+            createNewMovementsTarget(),
+            createSwipeDeleteMovementTarget()
         )
     }
 
@@ -111,6 +117,24 @@ class TutorialMovementsActivity(activity: BaseActivity<ActivityMovementsBinding>
             .setTitle(activity.getString(R.string.tutorial_main_add_movements_title))
             .setDescription(activity.getString(R.string.tutorial_main_add_movements_description))
             .setOverlayPoint(100f, pointY + oneRadius + 100f)
+            .build()
+    }
+
+    private fun createSwipeDeleteMovementTarget(): Target {
+        val view = activity.binding.contentLayout
+        val location = IntArray(2)
+        view.getLocationInWindow(location)
+        val locationCenter = getCenterLocation(view)
+        val pointX = locationCenter[0]
+        val pointY = location[1].toFloat()
+        val radius = 150f
+
+        return SimpleTarget.Builder(activity)
+            .setPoint(pointX, pointY + 200)
+            .setShape(ArrowRightShape(activity, radius))
+            .setTitle(activity.getString(R.string.tutorial_movements_swipe_delete_title))
+            .setDescription(activity.getString(R.string.tutorial_movements_swipe_delete_description))
+            .setOverlayPoint(50f, pointY + radius + 300f)
             .build()
     }
 }

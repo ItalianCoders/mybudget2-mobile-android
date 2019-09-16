@@ -74,4 +74,8 @@
     <!-- Edit movement -->
     <string name="tutorial_movements_edit_title">Modifica movimenti</string>
     <string name="tutorial_movements_edit_description">Seleziona i movimenti per\nvariarne i dati</string>
+
+    <!-- Swipe delete movement -->
+    <string name="tutorial_movements_swipe_delete_title">Cancella i movimenti</string>
+    <string name="tutorial_movements_swipe_delete_description">Cancella i mopvimenti\ncon un semplice swipe</string>
 </resources>
