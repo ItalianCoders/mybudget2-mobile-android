@@ -39,8 +39,8 @@ android {
         applicationId "it.italiancoders.mybudget"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 50
-        versionName "0.9.5"
+        versionCode 51
+        versionName "0.9.6"
         testInstrumentationRunner "it.italiancoders.mybudget.runner.CustomTestRunner"
 
         multiDexEnabled true
