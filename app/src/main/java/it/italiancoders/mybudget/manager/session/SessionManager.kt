@@ -36,10 +36,6 @@ import it.italiancoders.mybudget.rest.api.services.SessionRestService
 import it.italiancoders.mybudget.rest.models.LoginRequest
 import it.italiancoders.mybudget.rest.models.Session
 import it.italiancoders.mybudget.utils.OpenForTesting
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /**
  * @author fattazzo
@@ -48,31 +44,6 @@ import kotlinx.coroutines.withContext
  */
 @OpenForTesting
 class SessionManager(context: Context) : AbstractRestManager(context) {
-
-    fun loginOld(
-        username: String,
-        password: String,
-        locale: String,
-        onSuccessAction: (Session?) -> Unit,
-        onFailureAction: (Int?) -> Unit
-    ) {
-
-        val loginRequest = LoginRequest(username, password, locale)
-
-        val sessionService = RetrofitBuilder.client.create(SessionRestService::class.java)
-
-        val loginOnSuccessAction: (Session?) -> Unit = {
-            setSession(it)
-            onSuccessAction.invoke(it)
-        }
-
-        CoroutineScope(Dispatchers.IO).launch {
-            val response = sessionService.login(loginRequest)
-            withContext(Dispatchers.Main) {
-                //processResponse(response, loginOnSuccessAction, onFailureAction, false)
-            }
-        }
-    }
 
     fun login(username: String, password: String, locale: String): LoginResult {
 
