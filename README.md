@@ -89,7 +89,7 @@ Di seguito verrà riportato un elenco delle tecniche di programmazione e framewo
 
   Nell'applicazione possiamo trovare l'uso di factory quasi ovunque. Un esempio può essere quello in [CategoriesActivity](app/src/main/java/it/italiancoders/mybudget/activity/categories/CategoriesActivity.kt) dove il ViewModel viene creato nel metodo _onCreate_ in questo modo
 
-  ```java
+  ```kotlin
   ViewModelProvider(this,CategoriesViewModelFactory(categoriesManager)).get(CategoriesViewModel::class.java)
   ```
 
@@ -109,7 +109,7 @@ Di seguito verrà riportato un elenco delle tecniche di programmazione e framewo
   - Cambiare la trasparenza del testo del pulsante e alla fine visualizzare la progress bar
 
   Prendendo come esempio la prima animazione ecco il codice:
-  ```java
+  ```kotlin
   val finalWidth = resources.getDimension(R.dimen.sign_button_loading_width).toInt()
   val anim = ValueAnimator.ofInt(binding.signInButton.measuredWidth, finalWidth)
   anim.addUpdateListener {
@@ -148,16 +148,16 @@ Di seguito verrà riportato un elenco delle tecniche di programmazione e framewo
   Il capitolo delle coroutines in kotlin è molto vasto e prima di utilizzarle è assolutamente obbligatorio leggerne la documentazione. L'uso in questa applicazione per ora si limita alla gestione dei thread come quando succedeva in Java con l'utilizzo degli _AsyncTask_.
 
   Un esempio di utilizzo nell'applicazione può essere quello nella classe [RegistrationUserInfoManager](app/src/main/java/it/italiancoders/mybudget/manager/registrationuserinfo/RegistrationUserInfoManager.kt) nel metodo <kbd>resend</kbd>. In questo caso specifico viene eseguita la chiamata rest in background con
-  ```java
+  ```kotlin
   CoroutineScope(Dispatchers.IO).launch {}
   ```
   e la response viene processata con
-  ```java
+  ```kotlin
   withContext(Dispatchers.Main) {}
   ```
 
   Il tutto risulta
-  ```java
+  ```kotlin
   CoroutineScope(Dispatchers.IO).launch {
       // Operazioni in background
       val response = registrationUserInfoRestService.resend(userName)
