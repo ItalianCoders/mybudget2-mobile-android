@@ -39,8 +39,8 @@ android {
         applicationId "it.italiancoders.mybudget"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 60
-        versionName "0.9.15"
+        versionCode 61
+        versionName "0.9.16"
         testInstrumentationRunner "it.italiancoders.mybudget.runner.CustomTestRunner"
 
         multiDexEnabled true
@@ -61,7 +61,7 @@ android {
         }
         debug {
             debuggable true
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro', 'proguard-test-rules.pro'
         }
     }

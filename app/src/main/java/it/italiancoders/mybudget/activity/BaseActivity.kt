@@ -45,6 +45,7 @@ import it.italiancoders.mybudget.SessionData
 import it.italiancoders.mybudget.activity.login.LoginActivity
 import it.italiancoders.mybudget.manager.session.SessionManager
 import it.italiancoders.mybudget.tutorial.AbstractTutorialActivity
+import it.italiancoders.mybudget.utils.NetworkChecker
 import javax.inject.Inject
 
 
@@ -101,6 +102,7 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        NetworkChecker().isNetworkAvailable(this)
 
         if (checkUserSession()) {
             SessionHandler().setAppLastSession(this, true)
@@ -110,6 +112,8 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
         if (SessionData.session != null && tutorial?.isNeverShow() == true) {
             binding.root.post { getTutorial()?.start() }
         }
+
+        updateNetworkMenuMenuColor()
     }
 
     protected open fun checkUserSession(): Boolean = true
@@ -148,14 +152,26 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
         menuInflater.inflate(R.menu.base, menu)
         this.menu = menu
 
-        var drawable = menu.findItem(R.id.action_network_offline).icon
-
-        drawable = DrawableCompat.wrap(drawable)
-        DrawableCompat.setTint(drawable, ContextCompat.getColor(this, getMenuItemsIconColor()))
-        menu.findItem(R.id.action_network_offline).icon = drawable
+        updateNetworkMenuMenuColor()
 
         syncNetworkStateOption()
         return true
+    }
+
+    private fun updateNetworkMenuMenuColor() {
+
+        if (SessionData.networkAvailable.value != true) {
+            menu?.findItem(R.id.action_network_offline)?.let {
+                var drawable = it.icon
+
+                drawable = DrawableCompat.wrap(drawable)
+                DrawableCompat.setTint(
+                    drawable,
+                    ContextCompat.getColor(this, getMenuItemsIconColor())
+                )
+                it.icon = drawable
+            }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

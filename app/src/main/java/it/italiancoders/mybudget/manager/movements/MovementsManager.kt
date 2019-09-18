@@ -28,6 +28,7 @@
 package it.italiancoders.mybudget.manager.movements
 
 import android.content.Context
+import it.italiancoders.mybudget.cache.ExpenseSummaryCache
 import it.italiancoders.mybudget.cache.MovementCache
 import it.italiancoders.mybudget.manager.AbstractRestManager
 import it.italiancoders.mybudget.rest.api.RetrofitBuilder
@@ -50,6 +51,7 @@ class MovementsManager(context: Context) : AbstractRestManager(context) {
         RetrofitBuilder.getSecureClient(context).create(MovementRestService::class.java)
 
     private val movementCache = MovementCache(context)
+    private var expenseSummaryCache = ExpenseSummaryCache(context)
 
     fun load(id: Int): Movement? {
         val networkAvailable = NetworkChecker().isNetworkAvailable(context)
@@ -102,12 +104,18 @@ class MovementsManager(context: Context) : AbstractRestManager(context) {
 
     }
 
-    fun delete(id: Int): Boolean {
-        val response = movementService.delete(id)
+    fun delete(movement: Movement): Boolean {
+
+        val response = movementService.delete(movement.id!!.toInt())
 
         val success = processVoidResponse(response)
 
-        if (success) movementCache.remove(id)
+        if (success) {
+            movementCache.remove(movement.id.toInt())
+
+            val parametri = createParametriRicerca(movement)
+            expenseSummaryCache.remove(parametri)
+        }
 
         return success
     }
@@ -121,6 +129,9 @@ class MovementsManager(context: Context) : AbstractRestManager(context) {
         if (success) {
             movementCache.remove(id)
             movementCache.addAll(listOf(movement))
+
+            val parametri = createParametriRicerca(movement)
+            expenseSummaryCache.remove(parametri)
         }
 
         return success
@@ -133,16 +144,19 @@ class MovementsManager(context: Context) : AbstractRestManager(context) {
         val success = processVoidResponse(response)
 
         if (success) {
-            val cal = Calendar.getInstance()
-            cal.time = movement.executedAtDate!!
-            movementCache.remove(
-                ParametriRicerca(
-                    cal.get(Calendar.YEAR),
-                    cal.get(Calendar.MONTH) + 1
-                )
-            )
+            val parametri = createParametriRicerca(movement)
+
+            movementCache.remove(parametri)
+            expenseSummaryCache.remove(parametri)
         }
 
         return success
+    }
+
+    private fun createParametriRicerca(movement: Movement): ParametriRicerca {
+        val cal = Calendar.getInstance()
+        cal.time = movement.executedAtDate!!
+
+        return ParametriRicerca(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1)
     }
 }

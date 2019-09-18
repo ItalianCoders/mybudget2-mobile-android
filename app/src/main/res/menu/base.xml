@@ -32,7 +32,7 @@
     <item
             android:id="@+id/action_network_offline"
             android:orderInCategory="200"
-            android:title="@string/add"
+            android:title="@string/no_network"
             app:showAsAction="ifRoom"
             android:icon="@drawable/ic_signal_cellular_off"/>
 

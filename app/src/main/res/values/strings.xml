@@ -46,16 +46,16 @@
     <string name="delete">Cancella</string>
     <string name="refresh">Aggiorna</string>
     <string name="undo">Annulla</string>
+    <string name="no_network">Nessuna connessione</string>
 
     <string name="name">Nome</string>
     <string name="description">Descrizione</string>
 
     <string name="network_unavailable_dialog_title">Nessuna connessione disponibile</string>
     <string name="network_unavailable_dialog_message">In questo momento sembra non essere disponibile nessuna
-        connessione internet.\n
-        Potrai comunque consultare tutte informazioni disponibili risalenti all\'ultima disponibile.
-        \n\n
-        Quando non vedrai più questo simbolo significherà che potrai utilizzare l\'applicazione online.
+        connessione internet.
+        \nPotrai comunque consultare tutte informazioni risalenti all\'ultimo caricamento.
+        \n\nQuando non vedrai più questo simbolo significherà che potrai utilizzare l\'applicazione online.
     </string>
 
     <string name="field_required">Richiesto</string>

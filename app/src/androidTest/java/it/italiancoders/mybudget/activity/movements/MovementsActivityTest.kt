@@ -169,7 +169,7 @@ class MovementsActivityTest : BaseActivityTest() {
 
         movementPageObject.checkMovement(movementPage.contents[editMovement14Position])
 
-        Mockito.`when`(movementsManager.delete(14)).doReturn(true)
+        Mockito.`when`(movementsManager.delete(Movement(14L))).doReturn(true)
         MovementsMockData.mock2019_08_no_id_00014(movementsManager)
         movementPageObject.clickDeleteButton()
 
@@ -198,7 +198,7 @@ class MovementsActivityTest : BaseActivityTest() {
         val editMovement14Position = movementPage!!.contents.indexOfFirst { it.id!! == 14L }
 
         // Error on delete
-        Mockito.`when`(movementsManager.delete(14)).doReturn(false)
+        Mockito.`when`(movementsManager.delete(Movement(14L))).doReturn(false)
         listMovementsPageObject.swipeRightMovementItem(editMovement14Position)
 
         listMovementsPageObject.checkMovementDeletedSnackBarVisible()
@@ -207,7 +207,7 @@ class MovementsActivityTest : BaseActivityTest() {
         listMovementsPageObject.checkMovementsListChildCount(14)
 
         // Delete ok
-        Mockito.`when`(movementsManager.delete(14)).doReturn(true)
+        Mockito.`when`(movementsManager.delete(Movement(14L))).doReturn(true)
         listMovementsPageObject.swipeRightMovementItem(editMovement14Position)
 
         listMovementsPageObject.checkMovementDeletedSnackBarVisible()

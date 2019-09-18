@@ -109,7 +109,7 @@ class ListMovementsViewModel @Inject constructor(private val movementsManager: M
         if (movement.id == null) return
 
         ioJob {
-            val success = movementsManager.delete(movement.id.toInt())
+            val success = movementsManager.delete(movement)
 
             if (success) {
                 val pageOld = page.value

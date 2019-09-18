@@ -75,6 +75,8 @@ class CurrentMonthExpenseSummaryService : JobIntentService(), AbstractWidgetServ
 
         private const val JOB_ID = 1
 
+        internal const val EXTRA_FORCE_REFRESH = "extraForceRefresh"
+
         private val TAG = CurrentMonthExpenseSummaryService::class.simpleName
 
         fun enqueueWork(context: Context, work: Intent) {
@@ -95,19 +97,25 @@ class CurrentMonthExpenseSummaryService : JobIntentService(), AbstractWidgetServ
 
         val appWidgetIds = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS)
 
+        val forceRefresh = intent.getBooleanExtra(EXTRA_FORCE_REFRESH, true)
+
         appWidgetIds?.forEach {
 
             SessionData.session = sessionManager.getLastSession()
 
             when {
                 SessionData.session == null -> updateViewsForNoSession(this, it)
-                SessionData.session != null -> updateViewsWithSummary(this, it)
+                SessionData.session != null -> updateViewsWithSummary(this, it, forceRefresh)
             }
         }
     }
 
     @SuppressLint("DefaultLocale")
-    private fun updateViewsWithSummary(context: Context, appWidgetId: Int) {
+    private fun updateViewsWithSummary(
+        context: Context,
+        appWidgetId: Int,
+        forceRefresh: Boolean
+    ) {
         val cal = Calendar.getInstance()
         val parametriRicerca =
             ParametriRicerca(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1)
@@ -120,7 +128,7 @@ class CurrentMonthExpenseSummaryService : JobIntentService(), AbstractWidgetServ
          * See <a href="https://github.com/ItalianCoders/mybudget2-mobile-android/issues/12">on github repository</a>
          *
          */
-        val result = expenseSummaryManager.getExpenseSummary(parametriRicerca, false)
+        val result = expenseSummaryManager.getExpenseSummary(parametriRicerca, false, forceRefresh)
         Log.d(TAG, "Summary in result: ${result.value != null}")
 
         when {

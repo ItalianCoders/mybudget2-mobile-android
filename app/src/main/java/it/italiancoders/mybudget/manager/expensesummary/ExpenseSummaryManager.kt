@@ -29,6 +29,7 @@ package it.italiancoders.mybudget.manager.expensesummary
 
 import android.content.Context
 import it.italiancoders.mybudget.cache.ExpenseSummaryCache
+import it.italiancoders.mybudget.cache.MovementCache
 import it.italiancoders.mybudget.manager.AbstractRestManager
 import it.italiancoders.mybudget.manager.Result
 import it.italiancoders.mybudget.manager.movements.ParametriRicerca
@@ -36,6 +37,7 @@ import it.italiancoders.mybudget.rest.api.RetrofitBuilder
 import it.italiancoders.mybudget.rest.api.services.ExpenseSummaryRestService
 import it.italiancoders.mybudget.rest.models.ExpenseSummary
 import it.italiancoders.mybudget.rest.models.MovementListPage
+import it.italiancoders.mybudget.utils.NetworkChecker
 import it.italiancoders.mybudget.utils.OpenForTesting
 
 /**
@@ -50,24 +52,46 @@ class ExpenseSummaryManager(context: Context) : AbstractRestManager(context) {
         RetrofitBuilder.getSecureClient(context).create(ExpenseSummaryRestService::class.java)
 
     private val expenseSummaryCache = ExpenseSummaryCache(context)
+    private val movementCache = MovementCache(context)
 
-    fun getExpenseSummary(parametri: ParametriRicerca, showError: Boolean): Result<ExpenseSummary> {
+    fun getExpenseSummary(
+        parametri: ParametriRicerca,
+        showError: Boolean,
+        forceRefresh: Boolean
+    ): Result<ExpenseSummary> {
 
-        expenseSummaryCache.get(parametri)
+        val networkAvailable = NetworkChecker().isNetworkAvailable(context)
 
-        val response = expenseSummaryRestService.getExpenseSummary(
-            parametri.year,
-            parametri.month,
-            parametri.day,
-            parametri.week,
-            null
-        )
+        val expenseCache = expenseSummaryCache.get(parametri)
 
-        return processResponseWithResult(response, showError)
+        return if (networkAvailable && (forceRefresh || expenseCache == null)) {
+
+            val response = expenseSummaryRestService.getExpenseSummary(
+                parametri.year,
+                parametri.month,
+                parametri.day,
+                parametri.week,
+                null
+            )
+
+            val result = processResponseWithResult(response, showError)
+
+            result.value?.let {
+                expenseSummaryCache.remove(parametri)
+                expenseSummaryCache.add(it, parametri)
+            }
+
+            result
+        } else {
+            expenseCache?.let {
+                it.lastMovements = movementCache.get(parametri)
+            }
+            Result(expenseCache, null, null)
+        }
     }
 
-    fun getExpenseSummary(parametri: ParametriRicerca): ExpenseSummary =
-        getExpenseSummary(parametri, true).value ?: ExpenseSummary(
+    fun getExpenseSummary(parametri: ParametriRicerca, forceRefresh: Boolean): ExpenseSummary =
+        getExpenseSummary(parametri, true,forceRefresh).value ?: ExpenseSummary(
             0.0,
             arrayOf(),
             MovementListPage()

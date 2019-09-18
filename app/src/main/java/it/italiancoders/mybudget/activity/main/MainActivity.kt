@@ -63,7 +63,6 @@ import it.italiancoders.mybudget.app.module.viewModel.DaggerViewModelFactory
 import it.italiancoders.mybudget.databinding.ActivityMainBinding
 import it.italiancoders.mybudget.tutorial.TutorialMainActivity
 import it.italiancoders.mybudget.utils.LinePagerIndicatorDecoration
-import it.italiancoders.mybudget.utils.NetworkChecker
 import java.math.BigDecimal
 import javax.inject.Inject
 
@@ -87,8 +86,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
         SessionHandler().setAppLastSession(this,false)
 
         (application as MyBudgetApplication).appComponent.inject(this)
-
-        NetworkChecker().isNetworkAvailable(this)
 
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
@@ -125,7 +122,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
         })
 
         if (SessionData.session != null) {
-            binding.model?.loadExpenseSummary()
+            binding.model?.loadExpenseSummary(false)
         }
 
         binding.contentMain.addMovementButton.setOnClickListener {
@@ -161,12 +158,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == MovementActivity.REQUEST_CODE_MOVEMENT && resultCode == Activity.RESULT_OK) {
-            binding.model?.loadExpenseSummary()
+            binding.model?.loadExpenseSummary(false)
         }
     }
 
     override fun onUserLoggedIn() {
-        binding.model?.loadExpenseSummary()
+        binding.model?.loadExpenseSummary(true)
     }
 
     fun nextPeriodType(view: View?) {
@@ -218,6 +215,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
         }
     }
 
+    override fun onNetworkStateChange(networkAvailable: Boolean) {
+        super.onNetworkStateChange(networkAvailable)
+
+        binding.contentMain.addMovementButton.isEnabled = networkAvailable
+        binding.contentMain.addScheduledMovementButton.isEnabled = networkAvailable
+    }
+
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_settings -> startActivity(Intent(this, SettingsActivity::class.java))
@@ -258,7 +262,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_sync -> {
-                binding.model?.loadExpenseSummary()
+                binding.model?.loadExpenseSummary(true)
                 true
             }
             else -> super.onOptionsItemSelected(item)

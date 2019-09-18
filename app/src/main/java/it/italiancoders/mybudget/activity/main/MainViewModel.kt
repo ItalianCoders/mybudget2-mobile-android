@@ -86,15 +86,15 @@ open class MainViewModel @Inject constructor(private var expenseSummaryManager: 
         val nextPeriodoType = periodType.value?.nextType() ?: PeriodType.MONTH
         periodType.postValue(nextPeriodoType)
 
-        loadExpenseSummary(buildParametriRicerca(nextPeriodoType))
+        loadExpenseSummary(buildParametriRicerca(nextPeriodoType),false)
     }
 
     /**
      * Load expense summary whit the current parameters
      */
-    fun loadExpenseSummary() {
+    fun loadExpenseSummary(forceRefresh: Boolean) {
         val periodoType = periodType.value ?: PeriodType.MONTH
-        loadExpenseSummary(buildParametriRicerca(periodoType))
+        loadExpenseSummary(buildParametriRicerca(periodoType),forceRefresh)
     }
 
     /**
@@ -110,14 +110,14 @@ open class MainViewModel @Inject constructor(private var expenseSummaryManager: 
         this.month.postValue(month)
         this.day.postValue(day)
 
-        loadExpenseSummary(buildParametriRicerca(periodType.value!!, year, month, day))
+        loadExpenseSummary(buildParametriRicerca(periodType.value!!, year, month, day),false)
     }
 
-    private fun loadExpenseSummary(parametriRicerca: ParametriRicerca) {
+    private fun loadExpenseSummary(parametriRicerca: ParametriRicerca, forceRefresh: Boolean) {
         loadingData.set(true)
 
         ioJob {
-            val summary = expenseSummaryManager.getExpenseSummary(parametriRicerca)
+            val summary = expenseSummaryManager.getExpenseSummary(parametriRicerca,forceRefresh)
 
             total.postValue(summary.totalAmount?.toBigDecimal() ?: BigDecimal.ZERO)
             categoryOverview.postValue(summary.categoryOverview?.toList() ?: listOf())

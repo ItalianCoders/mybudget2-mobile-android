@@ -167,6 +167,12 @@ class MovementsActivity : BaseActivity<ActivityMovementsBinding>() {
         }
     }
 
+    override fun onNetworkStateChange(networkAvailable: Boolean) {
+        super.onNetworkStateChange(networkAvailable)
+
+        binding.newMovementFab.isEnabled = networkAvailable
+    }
+
     private fun openNewMovement() {
         startActivityForResult(
             Intent(this@MovementsActivity, MovementActivity::class.java),

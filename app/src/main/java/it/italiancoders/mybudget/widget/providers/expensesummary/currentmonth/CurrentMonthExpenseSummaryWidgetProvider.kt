@@ -32,6 +32,7 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import it.italiancoders.mybudget.widget.MyBudgetWidgetManager
 
 
 /**
@@ -44,9 +45,18 @@ class CurrentMonthExpenseSummaryWidgetProvider : AppWidgetProvider() {
     private val TAG = CurrentMonthExpenseSummaryWidgetProvider::class.simpleName
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        super.onReceive(context, intent)
 
-        Log.d(TAG, "onReceive")
+        if (context != null && intent?.action == MyBudgetWidgetManager.ACTION_APPWIDGET_FORCE_REFRESH) {
+            val intentUpdate = Intent(context, CurrentMonthExpenseSummaryService::class.java)
+            intentUpdate.putExtra(
+                AppWidgetManager.EXTRA_APPWIDGET_IDS,
+                intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS)
+            )
+            intentUpdate.putExtra(CurrentMonthExpenseSummaryService.EXTRA_FORCE_REFRESH, true)
+            CurrentMonthExpenseSummaryService.enqueueWork(context, intentUpdate)
+        } else {
+            super.onReceive(context, intent)
+        }
     }
 
     override fun onUpdate(
@@ -54,12 +64,13 @@ class CurrentMonthExpenseSummaryWidgetProvider : AppWidgetProvider() {
         appWidgetManager: AppWidgetManager?,
         appWidgetIds: IntArray?
     ) {
-        Log.d("WIDGET", "UPDATE!!!!")
+        Log.d(TAG, "Widget update")
 
         context?.let {
             // To prevent any ANR timeouts, we perform the update in a service
             val intent = Intent(it, CurrentMonthExpenseSummaryService::class.java)
             intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds)
+            intent.putExtra(CurrentMonthExpenseSummaryService.EXTRA_FORCE_REFRESH, false)
             CurrentMonthExpenseSummaryService.enqueueWork(it, intent)
         }
     }

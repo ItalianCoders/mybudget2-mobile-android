@@ -35,6 +35,7 @@ import android.view.View
 import android.widget.RemoteViews
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.activity.main.MainActivity
+import it.italiancoders.mybudget.widget.MyBudgetWidgetManager
 import it.italiancoders.mybudget.widget.providers.expensesummary.currentmonth.CurrentMonthExpenseSummaryWidgetProvider
 
 /**
@@ -49,7 +50,7 @@ interface AbstractWidgetService {
      */
     fun createRefreshIntent(context: Context, appWidgetId: Int): PendingIntent? {
         val intent = Intent(context, CurrentMonthExpenseSummaryWidgetProvider::class.java)
-        intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+        intent.action = MyBudgetWidgetManager.ACTION_APPWIDGET_FORCE_REFRESH
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, intArrayOf(appWidgetId))
         return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }

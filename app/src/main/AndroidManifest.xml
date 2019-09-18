@@ -85,6 +85,7 @@
                 android:label="@string/widget_current_month_expense_summary_title">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="it.italiancoders.mybudget.widgets.ACTION_APPWIDGET_FORCE_REFRESH" />
             </intent-filter>
             <meta-data
                     android:name="android.appwidget.provider"

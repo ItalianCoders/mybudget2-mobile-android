@@ -52,6 +52,7 @@ import it.italiancoders.mybudget.app.module.viewModel.DaggerViewModelFactory
 import it.italiancoders.mybudget.databinding.ListMovementsFragmentBinding
 import it.italiancoders.mybudget.rest.models.Movement
 import it.italiancoders.mybudget.rest.models.MovementListPage
+import it.italiancoders.mybudget.utils.NetworkChecker
 import it.italiancoders.mybudget.utils.recyclerview.SwipeToDeleteCallback
 import javax.inject.Inject
 
@@ -141,6 +142,16 @@ class ListMovementsFragment : Fragment() {
         movementsDataAdapter.removeMovement(movement)
         movementsDataAdapter.notifyItemRemoved(position)
 
+        if(!NetworkChecker().isNetworkAvailable(binding.root.context)) {
+            Toast.makeText(
+                binding.root.context,
+                R.string.no_network,
+                Toast.LENGTH_SHORT
+            ).show()
+            movementsDataAdapter.addMovement(movement, position)
+            return
+        }
+
         var confirmDelete = true
         var deleteProcessed = false
 
@@ -170,6 +181,7 @@ class ListMovementsFragment : Fragment() {
                             movementsDataAdapter.addMovement(movement, position)
                         }
                     }
+
                 } else {
                     movementsDataAdapter.addMovement(movement, position)
                 }

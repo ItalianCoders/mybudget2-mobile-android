@@ -120,7 +120,7 @@ class MovementViewModel @Inject constructor(
         }
 
         ioJob {
-            val success = movementsManager.delete(movement.id!!.toInt())
+            val success = movementsManager.delete(movement)
 
             uiJob { if (success) onSuccessAction.invoke() else onFailureAction.invoke() }
         }

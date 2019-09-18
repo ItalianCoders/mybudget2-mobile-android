@@ -67,6 +67,8 @@ data class Movement(
 
     constructor() : this(null, BigDecimal.ZERO, Category(), "", null)
 
+    constructor(id: Long) : this(id, BigDecimal.ZERO, Category(), "", null)
+
     fun toEntity(): Movement =
         Movement(
             this@Movement.id!!,
