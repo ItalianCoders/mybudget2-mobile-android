@@ -88,8 +88,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
 
         (application as MyBudgetApplication).appComponent.inject(this)
 
-        //SessionData.session = sessionManager.getLastSession()
-
         NetworkChecker().isNetworkAvailable(this)
 
         setTheme(R.style.AppTheme)

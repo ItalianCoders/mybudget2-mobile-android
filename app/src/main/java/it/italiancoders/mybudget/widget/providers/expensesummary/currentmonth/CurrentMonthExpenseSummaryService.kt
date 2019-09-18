@@ -114,6 +114,12 @@ class CurrentMonthExpenseSummaryService : JobIntentService(), AbstractWidgetServ
 
         Log.d(TAG, "Parametri: $parametriRicerca")
 
+        /**
+         * When the widget is added, if the application is not started in the background, the API call generates a SocketTimeoutException.
+         *
+         * See <a href="https://github.com/ItalianCoders/mybudget2-mobile-android/issues/12">on github repository</a>
+         *
+         */
         val result = expenseSummaryManager.getExpenseSummary(parametriRicerca, false)
         Log.d(TAG, "Summary in result: ${result.value != null}")
 
