@@ -48,8 +48,8 @@ import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.activity.main.view.lastmovements.MovementsDataAdapter
 import it.italiancoders.mybudget.activity.movements.edit.MovementActivity
 import it.italiancoders.mybudget.app.MyBudgetApplication
+import it.italiancoders.mybudget.app.module.viewModel.DaggerViewModelFactory
 import it.italiancoders.mybudget.databinding.ListMovementsFragmentBinding
-import it.italiancoders.mybudget.manager.movements.MovementsManager
 import it.italiancoders.mybudget.rest.models.Movement
 import it.italiancoders.mybudget.rest.models.MovementListPage
 import it.italiancoders.mybudget.utils.recyclerview.SwipeToDeleteCallback
@@ -61,7 +61,7 @@ class ListMovementsFragment : Fragment() {
     lateinit var binding: ListMovementsFragmentBinding
 
     @Inject
-    lateinit var movementsManager: MovementsManager
+    lateinit var listMovementsViewModelFactory: DaggerViewModelFactory
 
     private val movementsDataAdapter = MovementsDataAdapter(mutableListOf())
 
@@ -84,7 +84,7 @@ class ListMovementsFragment : Fragment() {
         }
 
         binding.model =
-            ViewModelProvider(this, ListMovementsViewModelFactory(movementsManager)).get(
+            ViewModelProvider(this, listMovementsViewModelFactory).get(
                 ListMovementsViewModel::class.java
             )
 

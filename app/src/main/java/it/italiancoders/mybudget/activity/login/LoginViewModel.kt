@@ -34,9 +34,10 @@ import it.italiancoders.mybudget.manager.session.SessionManager
 import it.italiancoders.mybudget.utils.ioJob
 import it.italiancoders.mybudget.utils.uiJob
 import java.util.*
+import javax.inject.Inject
 
 
-class LoginViewModel(private val sessionManager: SessionManager) : ViewModel() {
+class LoginViewModel @Inject constructor(private val sessionManager: SessionManager) : ViewModel() {
 
     val username = MutableLiveData<String>().apply { postValue("") }
     val password = MutableLiveData<String>().apply { postValue("") }

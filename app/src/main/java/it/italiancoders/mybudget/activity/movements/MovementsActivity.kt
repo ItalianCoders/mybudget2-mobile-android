@@ -43,7 +43,6 @@ import it.italiancoders.mybudget.activity.BaseActivity
 import it.italiancoders.mybudget.activity.movements.edit.MovementActivity
 import it.italiancoders.mybudget.activity.movements.list.ListMovementsFragment
 import it.italiancoders.mybudget.activity.movements.search.SearchMovementsView
-import it.italiancoders.mybudget.app.component.AppComponent
 import it.italiancoders.mybudget.databinding.ActivityMovementsBinding
 import it.italiancoders.mybudget.tutorial.AbstractTutorialActivity
 import it.italiancoders.mybudget.tutorial.TutorialMovementsActivity
@@ -97,10 +96,6 @@ class MovementsActivity : BaseActivity<ActivityMovementsBinding>() {
         })
 
         initSearchMovementsSlidingPanel()
-    }
-
-    override fun injectComponent(appComponent: AppComponent) {
-        appComponent.inject(this)
     }
 
     fun search(view: View?) {

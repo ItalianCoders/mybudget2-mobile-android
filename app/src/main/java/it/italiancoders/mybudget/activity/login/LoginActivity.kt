@@ -45,7 +45,8 @@ import com.afollestad.materialdialogs.input.input
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.activity.BaseActivity
 import it.italiancoders.mybudget.activity.registration.RegistrationUserInfoActivity
-import it.italiancoders.mybudget.app.component.AppComponent
+import it.italiancoders.mybudget.app.MyBudgetApplication
+import it.italiancoders.mybudget.app.module.viewModel.DaggerViewModelFactory
 import it.italiancoders.mybudget.databinding.ActivityLoginBinding
 import it.italiancoders.mybudget.manager.registrationuserinfo.RegistrationUserInfoManager
 import it.italiancoders.mybudget.utils.PrivacyPolicyManager
@@ -61,26 +62,25 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
     @Inject
     lateinit var registrationUserInfoManager: RegistrationUserInfoManager
 
-    lateinit var loginViewModel: LoginViewModel
+    @Inject
+    lateinit var loginViewModelFactory: DaggerViewModelFactory
+
+    private lateinit var loginViewModel: LoginViewModel
 
     override fun getLayoutResID(): Int = R.layout.activity_login
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        loginViewModel = ViewModelProvider(
-            this,
-            LoginViewModelFactory(sessionManager)
-        ).get(LoginViewModel::class.java)
+        (application as MyBudgetApplication).appComponent.inject(this)
+
+        loginViewModel =
+            ViewModelProvider(this, loginViewModelFactory).get(LoginViewModel::class.java)
         binding.viewModel = loginViewModel
 
         // Animate header and footer slide in
         LoginHeaderFooterAnimator.start(binding.headerContainer)
         LoginHeaderFooterAnimator.start(binding.footerContainer, false)
-    }
-
-    override fun injectComponent(appComponent: AppComponent) {
-        appComponent.inject(this)
     }
 
     fun login(view: View) {

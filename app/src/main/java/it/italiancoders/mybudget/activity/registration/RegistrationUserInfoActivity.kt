@@ -36,16 +36,16 @@ import androidx.lifecycle.ViewModelProvider
 import com.afollestad.materialdialogs.MaterialDialog
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.activity.BaseActivity
-import it.italiancoders.mybudget.app.component.AppComponent
+import it.italiancoders.mybudget.app.MyBudgetApplication
+import it.italiancoders.mybudget.app.module.viewModel.DaggerViewModelFactory
 import it.italiancoders.mybudget.databinding.ActivityRegistrationUserInfoBinding
-import it.italiancoders.mybudget.manager.registrationuserinfo.RegistrationUserInfoManager
 import javax.inject.Inject
 
 
 class RegistrationUserInfoActivity : BaseActivity<ActivityRegistrationUserInfoBinding>() {
 
     @Inject
-    lateinit var registrationUserInfoManager: RegistrationUserInfoManager
+    lateinit var registrationUserInfoViewModelFactory: DaggerViewModelFactory
 
     override fun getLayoutResID(): Int = R.layout.activity_registration_user_info
 
@@ -54,14 +54,11 @@ class RegistrationUserInfoActivity : BaseActivity<ActivityRegistrationUserInfoBi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding.model = ViewModelProvider(
-            this,
-            RegistrationUserInfoViewModelFactory(registrationUserInfoManager)
-        ).get(RegistrationUserInfoViewModel::class.java)
-    }
+        (application as MyBudgetApplication).appComponent.inject(this)
 
-    override fun injectComponent(appComponent: AppComponent) {
-        appComponent.inject(this)
+        binding.model = ViewModelProvider(this, registrationUserInfoViewModelFactory).get(
+            RegistrationUserInfoViewModel::class.java
+        )
     }
 
     fun createReagistration(view: View) {

@@ -38,13 +38,14 @@ import it.italiancoders.mybudget.rest.models.MovementListPage
 import it.italiancoders.mybudget.utils.ioJob
 import java.math.BigDecimal
 import java.util.*
+import javax.inject.Inject
 
 /**
  * @author fattazzo
  *         <p/>
  *         date: 27/07/19
  */
-open class MainViewModel(var expenseSummaryManager: ExpenseSummaryManager) : ViewModel() {
+open class MainViewModel @Inject constructor(private var expenseSummaryManager: ExpenseSummaryManager) : ViewModel() {
 
     var year: MutableLiveData<Int> = MutableLiveData(Calendar.getInstance().get(Calendar.YEAR))
     var month: MutableLiveData<Int> = MutableLiveData(Calendar.getInstance().get(Calendar.MONTH))

@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: MainViewModelFactory.kt
+ * File: CurrentMonthExpenseSummaryWidgetProvider.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,17 +25,42 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget.activity.main
+package it.italiancoders.mybudget.widget.providers.expensesummary.currentmonth
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import it.italiancoders.mybudget.manager.expensesummary.ExpenseSummaryManager
+import android.appwidget.AppWidgetManager
+import android.appwidget.AppWidgetProvider
+import android.content.Context
+import android.content.Intent
+import android.util.Log
 
-class MainViewModelFactory(private val expenseSummaryManager: ExpenseSummaryManager) :
-    ViewModelProvider.Factory {
 
+/**
+ * @author fattazzo
+ *         <p/>
+ *         date: 16/09/19
+ */
+class CurrentMonthExpenseSummaryWidgetProvider : AppWidgetProvider() {
 
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return MainViewModel(expenseSummaryManager) as T
+    private val TAG = CurrentMonthExpenseSummaryWidgetProvider::class.simpleName
+
+    override fun onReceive(context: Context?, intent: Intent?) {
+        super.onReceive(context, intent)
+
+        Log.d(TAG, "onReceive")
+    }
+
+    override fun onUpdate(
+        context: Context?,
+        appWidgetManager: AppWidgetManager?,
+        appWidgetIds: IntArray?
+    ) {
+        Log.d("WIDGET", "UPDATE!!!!")
+
+        context?.let {
+            // To prevent any ANR timeouts, we perform the update in a service
+            val intent = Intent(it, CurrentMonthExpenseSummaryService::class.java)
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds)
+            CurrentMonthExpenseSummaryService.enqueueWork(it, intent)
+        }
     }
 }

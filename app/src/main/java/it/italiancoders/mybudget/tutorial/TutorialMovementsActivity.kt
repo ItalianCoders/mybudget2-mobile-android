@@ -49,10 +49,6 @@ class TutorialMovementsActivity(activity: BaseActivity<ActivityMovementsBinding>
         const val KEY = "movements_activity_show"
     }
 
-    override fun isNeverShow(): Boolean {
-        return true
-    }
-
     override fun getTutorialPreferenceKey(): String = KEY
 
     override fun getTargets(): ArrayList<Target> {

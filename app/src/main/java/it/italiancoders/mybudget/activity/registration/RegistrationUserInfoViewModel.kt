@@ -35,13 +35,14 @@ import it.italiancoders.mybudget.manager.registrationuserinfo.RegistrationUserIn
 import it.italiancoders.mybudget.rest.models.UserRegistrationInfo
 import it.italiancoders.mybudget.utils.ioJob
 import it.italiancoders.mybudget.utils.uiJob
+import javax.inject.Inject
 
 /**
  * @author fattazzo
  *         <p/>
  *         date: 24/08/19
  */
-class RegistrationUserInfoViewModel(private val registrationUserInfoManager: RegistrationUserInfoManager) :
+class RegistrationUserInfoViewModel @Inject constructor(private val registrationUserInfoManager: RegistrationUserInfoManager) :
     ViewModel() {
 
     val firstname = MutableLiveData<String>("")

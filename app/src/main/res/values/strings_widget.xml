@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Project: mybudget2-mobile-android
-  ~ File: network_security_config.xml
+  ~ File: strings_widget.xml
   ~
   ~ Created by fattazzo
   ~ Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -26,9 +26,7 @@
   ~ SOFTWARE.
   -->
 
-<network-security-config>
-    <domain-config cleartextTrafficPermitted="true">
-        <!--<domain includeSubdomains="true">mybudgetfin.herokuapp.com</domain>-->
-        <domain includeSubdomains="true">144.91.65.212</domain>
-    </domain-config>
-</network-security-config>
+<resources>
+
+    <string name="widget_current_month_expense_summary_title">Mese corrente</string>
+</resources>

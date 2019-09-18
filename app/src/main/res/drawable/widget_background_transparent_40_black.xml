@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Project: mybudget2-mobile-android
-  ~ File: network_security_config.xml
+  ~ File: widget_background_transparent_40_black.xml
   ~
   ~ Created by fattazzo
   ~ Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -26,9 +26,21 @@
   ~ SOFTWARE.
   -->
 
-<network-security-config>
-    <domain-config cleartextTrafficPermitted="true">
-        <!--<domain includeSubdomains="true">mybudgetfin.herokuapp.com</domain>-->
-        <domain includeSubdomains="true">144.91.65.212</domain>
-    </domain-config>
-</network-security-config>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+        android:shape="rectangle" >
+
+    <corners android:radius="7dp" />
+
+    <solid android:color="#77000000" />
+
+    <padding
+            android:bottom="1dp"
+            android:left="1dp"
+            android:right="1dp"
+            android:top="1dp" />
+
+    <size
+            android:height="60dp"
+            android:width="270dp" />
+
+</shape>

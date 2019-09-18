@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: CategoriesViewModelFactory.kt
+ * File: Result.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,17 +25,11 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget.activity.categories
+package it.italiancoders.mybudget.manager
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import it.italiancoders.mybudget.manager.categories.CategoriesManager
-
-class CategoriesViewModelFactory(private val categoriesManager: CategoriesManager) :
-    ViewModelProvider.Factory {
-
-
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return CategoriesViewModel(categoriesManager) as T
-    }
-}
+/**
+ * @author fattazzo
+ *         <p/>
+ *         date: 18/09/19
+ */
+data class Result<T>(val value: T?, val error: Int?, val exception: Exception?)

@@ -39,8 +39,8 @@ android {
         applicationId "it.italiancoders.mybudget"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 51
-        versionName "0.9.6"
+        versionCode 58
+        versionName "0.9.13"
         testInstrumentationRunner "it.italiancoders.mybudget.runner.CustomTestRunner"
 
         multiDexEnabled true
@@ -163,6 +163,7 @@ dependencies {
 
     // Dagger
     implementation 'com.google.dagger:dagger:2.24'
+    implementation 'com.google.dagger:dagger-android-support:2.24'
     kapt 'com.google.dagger:dagger-compiler:2.24'
     kapt 'com.google.dagger:dagger-android-processor:2.24'
 

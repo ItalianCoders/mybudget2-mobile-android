@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Project: mybudget2-mobile-android
-  ~ File: network_security_config.xml
+  ~ File: widget_current_month_expense_summary_info.xml
   ~
   ~ Created by fattazzo
   ~ Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,10 +25,12 @@
   ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
   ~ SOFTWARE.
   -->
-
-<network-security-config>
-    <domain-config cleartextTrafficPermitted="true">
-        <!--<domain includeSubdomains="true">mybudgetfin.herokuapp.com</domain>-->
-        <domain includeSubdomains="true">144.91.65.212</domain>
-    </domain-config>
-</network-security-config>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+        android:minWidth="250dp"
+        android:minHeight="180dp"
+        android:updatePeriodMillis="86400000"
+        android:previewImage="@drawable/widget_preview_current_month_expense_summary"
+        android:initialLayout="@layout/widget_current_month_expense_summary"
+        android:resizeMode="horizontal|vertical"
+        android:widgetCategory="home_screen">
+</appwidget-provider>

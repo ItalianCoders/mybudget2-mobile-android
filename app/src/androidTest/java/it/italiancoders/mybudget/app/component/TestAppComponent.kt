@@ -33,6 +33,7 @@ import it.italiancoders.mybudget.app.module.AppModule
 import it.italiancoders.mybudget.app.module.CategoriesModule
 import it.italiancoders.mybudget.app.module.MovementsModule
 import it.italiancoders.mybudget.app.module.SessionModule
+import it.italiancoders.mybudget.app.module.viewModel.ViewModelModule
 import javax.inject.Singleton
 
 /**
@@ -41,7 +42,7 @@ import javax.inject.Singleton
  *         date: 04/09/19
  */
 @Singleton
-@Component(modules = [AppModule::class, CategoriesModule::class, MovementsModule::class, SessionModule::class])
+@Component(modules = [AppModule::class, CategoriesModule::class, MovementsModule::class, SessionModule::class,ViewModelModule::class])
 interface TestAppComponent : AppComponent {
 
     fun inject(test: BaseActivityTest)

@@ -38,9 +38,9 @@ import com.google.android.material.appbar.AppBarLayout
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.activity.BaseActivity
 import it.italiancoders.mybudget.activity.categories.edit.EditCategoryDialogBuilder
-import it.italiancoders.mybudget.app.component.AppComponent
+import it.italiancoders.mybudget.app.MyBudgetApplication
+import it.italiancoders.mybudget.app.module.viewModel.DaggerViewModelFactory
 import it.italiancoders.mybudget.databinding.ActivityCategoriesBinding
-import it.italiancoders.mybudget.manager.categories.CategoriesManager
 import it.italiancoders.mybudget.rest.models.Category
 import it.italiancoders.mybudget.tutorial.AbstractTutorialActivity
 import it.italiancoders.mybudget.tutorial.TutorialCategoriesActivity
@@ -52,7 +52,7 @@ class CategoriesActivity : BaseActivity<ActivityCategoriesBinding>() {
     private val categoriesDataAdapter: CategoriesDataAdapter = CategoriesDataAdapter()
 
     @Inject
-    lateinit var categoriesManager: CategoriesManager
+    lateinit var categoriesViewModelFactory: DaggerViewModelFactory
 
     lateinit var categoriesViewModel: CategoriesViewModel
 
@@ -64,6 +64,8 @@ class CategoriesActivity : BaseActivity<ActivityCategoriesBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        (application as MyBudgetApplication).appComponent.inject(this)
+
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
@@ -74,7 +76,7 @@ class CategoriesActivity : BaseActivity<ActivityCategoriesBinding>() {
         binding.toolbarLayout.setCollapsedTitleTypeface(typeface)
 
         categoriesViewModel =
-            ViewModelProvider(this, CategoriesViewModelFactory(categoriesManager)).get(
+            ViewModelProvider(this, categoriesViewModelFactory).get(
                 CategoriesViewModel::class.java
             )
         binding.model = categoriesViewModel
@@ -129,10 +131,6 @@ class CategoriesActivity : BaseActivity<ActivityCategoriesBinding>() {
         })
 
         categoriesViewModel.loadAll()
-    }
-
-    override fun injectComponent(appComponent: AppComponent) {
-        appComponent.inject(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

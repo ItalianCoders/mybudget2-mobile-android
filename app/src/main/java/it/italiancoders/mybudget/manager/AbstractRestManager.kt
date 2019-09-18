@@ -80,6 +80,26 @@ abstract class AbstractRestManager(protected val context: Context) {
         }
     }
 
+    protected fun <T> processResponseWithResult(
+        call: Call<T>,
+        showErrorMessage: Boolean = true
+    ): Result<T> {
+        return try {
+            val response = call.execute()
+            if (response.isSuccessful) {
+                Result(response.body(), null, null)
+            } else {
+                if (showErrorMessage)
+                    showError(response.message())
+                Result(null, response.code(), null)
+            }
+        } catch (e: Exception) {
+            if (showErrorMessage)
+                showError()
+            Result(null, null, e)
+        }
+    }
+
     protected fun processVoidResponse(call: Call<Void>, showErrorMessage: Boolean = true): Boolean {
         return try {
             val response = call.execute()
@@ -99,7 +119,7 @@ abstract class AbstractRestManager(protected val context: Context) {
 
     private fun showError(message: String = "Errore!") {
         Handler(Looper.getMainLooper()).post {
-            Toast.makeText(context,message, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
         }
     }
 }

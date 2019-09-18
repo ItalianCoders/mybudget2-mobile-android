@@ -43,8 +43,6 @@ import com.afollestad.materialdialogs.MaterialDialog
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.SessionData
 import it.italiancoders.mybudget.activity.login.LoginActivity
-import it.italiancoders.mybudget.app.MyBudgetApplication
-import it.italiancoders.mybudget.app.component.AppComponent
 import it.italiancoders.mybudget.manager.session.SessionManager
 import it.italiancoders.mybudget.tutorial.AbstractTutorialActivity
 import javax.inject.Inject
@@ -98,12 +96,8 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        injectComponent((application as MyBudgetApplication).appComponent)
-
         SessionData.networkAvailable.observe(this, networkAvailabilityObserver)
     }
-
-    abstract fun injectComponent(appComponent: AppComponent)
 
     override fun onResume() {
         super.onResume()
@@ -113,11 +107,7 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
         }
 
         if (checkUserSession()) {
-            SessionData.session = sessionManager.getLastSession()
-            if (SessionData.session == null) {
-                val intent = Intent(this.applicationContext, LoginActivity::class.java)
-                startActivityForResult(intent, LoginActivity.REQUEST_CODE_LOGIN)
-            }
+            SessionHandler().setAppLastSession(this,true)
         }
     }
 

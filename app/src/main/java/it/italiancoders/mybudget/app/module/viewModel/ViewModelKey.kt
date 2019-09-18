@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: LoginViewModelFactory.kt
+ * File: ViewModelKey.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,17 +25,13 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget.activity.login
+package it.italiancoders.mybudget.app.module.viewModel
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import it.italiancoders.mybudget.manager.session.SessionManager
+import dagger.MapKey
+import kotlin.reflect.KClass
 
-class LoginViewModelFactory(private val sessionManager: SessionManager) :
-    ViewModelProvider.Factory {
-
-
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return LoginViewModel(sessionManager) as T
-    }
-}
+@Retention(AnnotationRetention.RUNTIME)
+@Target(AnnotationTarget.FUNCTION)
+@MapKey
+internal annotation class ViewModelKey(val value: KClass<out ViewModel>)

@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: ListMovementsViewModelFactory.kt
+ * File: AbstractWidgetProvider.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,16 +25,28 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget.activity.movements.list
+package it.italiancoders.mybudget.widget.providers
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import it.italiancoders.mybudget.manager.movements.MovementsManager
+import android.app.PendingIntent
+import android.appwidget.AppWidgetManager
+import android.appwidget.AppWidgetProvider
+import android.content.Context
+import android.content.Intent
 
-class ListMovementsViewModelFactory(private val movementsManager: MovementsManager) :
-    ViewModelProvider.Factory {
+/**
+ * @author fattazzo
+ *         <p/>
+ *         date: 16/09/19
+ */
+abstract class AbstractWidgetProvider: AppWidgetProvider() {
 
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return ListMovementsViewModel(movementsManager) as T
+    /**
+     * Create intent for widget refresh action
+     */
+    protected fun createRefreshIntent(context: Context?, appWidgetIds: IntArray?): PendingIntent? {
+        val intent = Intent(context, this::class.java)
+        intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds)
+        return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 }

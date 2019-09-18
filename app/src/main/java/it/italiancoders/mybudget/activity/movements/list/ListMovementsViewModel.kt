@@ -39,8 +39,9 @@ import it.italiancoders.mybudget.rest.models.MovementListPage
 import it.italiancoders.mybudget.utils.ioJob
 import it.italiancoders.mybudget.utils.uiJob
 import java.util.*
+import javax.inject.Inject
 
-class ListMovementsViewModel(private val movementsManager: MovementsManager) : ViewModel() {
+class ListMovementsViewModel @Inject constructor(private val movementsManager: MovementsManager) : ViewModel() {
 
     val year = MutableLiveData<Int?>(Calendar.getInstance().get(Calendar.YEAR))
     val month = MutableLiveData<Int?>(Calendar.getInstance().get(Calendar.MONTH))

@@ -52,4 +52,7 @@
     <!-- Categories -->
     <dimen name="categories_header_icon_size">86dp</dimen>
 
+    <!-- Widgets -->
+    <dimen name="widget_margin">8dp</dimen>
+
 </resources>

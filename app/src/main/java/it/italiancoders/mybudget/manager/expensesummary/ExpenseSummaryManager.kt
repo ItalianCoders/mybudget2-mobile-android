@@ -30,6 +30,7 @@ package it.italiancoders.mybudget.manager.expensesummary
 import android.content.Context
 import it.italiancoders.mybudget.cache.ExpenseSummaryCache
 import it.italiancoders.mybudget.manager.AbstractRestManager
+import it.italiancoders.mybudget.manager.Result
 import it.italiancoders.mybudget.manager.movements.ParametriRicerca
 import it.italiancoders.mybudget.rest.api.RetrofitBuilder
 import it.italiancoders.mybudget.rest.api.services.ExpenseSummaryRestService
@@ -50,7 +51,7 @@ class ExpenseSummaryManager(context: Context) : AbstractRestManager(context) {
 
     private val expenseSummaryCache = ExpenseSummaryCache(context)
 
-    fun getExpenseSummary(parametri: ParametriRicerca): ExpenseSummary {
+    fun getExpenseSummary(parametri: ParametriRicerca, showError: Boolean): Result<ExpenseSummary> {
 
         expenseSummaryCache.get(parametri)
 
@@ -62,6 +63,13 @@ class ExpenseSummaryManager(context: Context) : AbstractRestManager(context) {
             null
         )
 
-        return processResponse(response) ?: ExpenseSummary(0.0, arrayOf(), MovementListPage())
+        return processResponseWithResult(response, showError)
     }
+
+    fun getExpenseSummary(parametri: ParametriRicerca): ExpenseSummary =
+        getExpenseSummary(parametri, true).value ?: ExpenseSummary(
+            0.0,
+            arrayOf(),
+            MovementListPage()
+        )
 }

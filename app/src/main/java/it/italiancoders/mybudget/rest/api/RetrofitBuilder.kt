@@ -53,10 +53,10 @@ object RetrofitBuilder {
 
     private val httpClientBuilder: OkHttpClient.Builder
         get() {
-            val builder = OkHttpClient.Builder().connectTimeout(50, TimeUnit.SECONDS).writeTimeout(
-                50,
-                TimeUnit.SECONDS
-            ).readTimeout(50, TimeUnit.SECONDS)
+            val builder = OkHttpClient.Builder()
+                .connectTimeout(50, TimeUnit.SECONDS)
+                .writeTimeout(50, TimeUnit.SECONDS)
+                .readTimeout(50, TimeUnit.SECONDS)
 
             builder.hostnameVerifier(HostnameVerifier { _, _ -> true })
 
@@ -87,34 +87,35 @@ object RetrofitBuilder {
     }
 
     private fun applySocketFactoryAndTrustManager(builder: OkHttpClient.Builder) {
-            val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
-                @Throws(CertificateException::class)
-                override fun checkClientTrusted(
-                    chain: Array<java.security.cert.X509Certificate>,
-                    authType: String
-                ) {
-                }
+        val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
+            @Throws(CertificateException::class)
+            override fun checkClientTrusted(
+                chain: Array<java.security.cert.X509Certificate>,
+                authType: String
+            ) {
+            }
 
-                @Throws(CertificateException::class)
-                override fun checkServerTrusted(
-                    chain: Array<java.security.cert.X509Certificate>,
-                    authType: String
-                ) {
-                }
+            @Throws(CertificateException::class)
+            override fun checkServerTrusted(
+                chain: Array<java.security.cert.X509Certificate>,
+                authType: String
+            ) {
+            }
 
-                override fun getAcceptedIssuers(): Array<java.security.cert.X509Certificate> {
-                    return arrayOf()
-                }
-            })
+            override fun getAcceptedIssuers(): Array<java.security.cert.X509Certificate> {
+                return arrayOf()
+            }
+        })
 
-            // Install the all-trusting trust manager
-            val sslContext = SSLContext.getInstance("SSL")
-            sslContext.init(null, trustAllCerts, java.security.SecureRandom())
-            // Create an ssl socket factory with our all-trusting manager
-            sslContext.getSocketFactory()
+        // Install the all-trusting trust manager
+        val sslContext = SSLContext.getInstance("SSL")
+        sslContext.init(null, trustAllCerts, java.security.SecureRandom())
+        // Create an ssl socket factory with our all-trusting manager
+        sslContext.getSocketFactory()
 
-        val socketToUse = if(socketFactory == null) sslContext.socketFactory else socketFactory
-        val trustToUse: X509TrustManager = if(trustManager == null) (trustAllCerts[0] as X509TrustManager) else trustManager!!
+        val socketToUse = if (socketFactory == null) sslContext.socketFactory else socketFactory
+        val trustToUse: X509TrustManager =
+            if (trustManager == null) (trustAllCerts[0] as X509TrustManager) else trustManager!!
 
         builder.sslSocketFactory(socketToUse!!, trustToUse)
     }

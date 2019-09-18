@@ -33,13 +33,15 @@ import androidx.lifecycle.ViewModel
 import it.italiancoders.mybudget.manager.categories.CategoriesManager
 import it.italiancoders.mybudget.rest.models.Category
 import it.italiancoders.mybudget.utils.ioJob
+import javax.inject.Inject
 
 /**
  * @author fattazzo
  *         <p/>
  *         date: 18/07/19
  */
-class CategoriesViewModel(private val categoriesManager: CategoriesManager) : ViewModel() {
+class CategoriesViewModel @Inject constructor(private val categoriesManager: CategoriesManager) :
+    ViewModel() {
 
     val categories = MutableLiveData<List<Category>>().apply { postValue(listOf()) }
 

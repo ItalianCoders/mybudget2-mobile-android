@@ -43,10 +43,9 @@ import com.afollestad.materialdialogs.MaterialDialog
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.activity.BaseActivity
 import it.italiancoders.mybudget.adapters.CategoryAdapter
-import it.italiancoders.mybudget.app.component.AppComponent
+import it.italiancoders.mybudget.app.MyBudgetApplication
+import it.italiancoders.mybudget.app.module.viewModel.DaggerViewModelFactory
 import it.italiancoders.mybudget.databinding.ActivityMovementBinding
-import it.italiancoders.mybudget.manager.categories.CategoriesManager
-import it.italiancoders.mybudget.manager.movements.MovementsManager
 import it.italiancoders.mybudget.rest.models.Category
 import it.italiancoders.mybudget.rest.models.Movement
 import java.util.*
@@ -61,10 +60,7 @@ class MovementActivity : BaseActivity<ActivityMovementBinding>(), View.OnFocusCh
     }
 
     @Inject
-    lateinit var categoriesManager: CategoriesManager
-
-    @Inject
-    lateinit var movementsManager: MovementsManager
+    lateinit var movementViewModelFactory: DaggerViewModelFactory
 
     lateinit var model: MovementViewModel
 
@@ -73,9 +69,11 @@ class MovementActivity : BaseActivity<ActivityMovementBinding>(), View.OnFocusCh
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        (application as MyBudgetApplication).appComponent.inject(this)
+
         model = ViewModelProvider(
             this,
-            MovementViewModelFactory(categoriesManager, movementsManager)
+            movementViewModelFactory
         ).get(
             MovementViewModel::class.java
         )
@@ -103,10 +101,6 @@ class MovementActivity : BaseActivity<ActivityMovementBinding>(), View.OnFocusCh
                 setTitle(R.string.movement_edit)
             }
         }
-    }
-
-    override fun injectComponent(appComponent: AppComponent) {
-        appComponent.inject(this)
     }
 
     fun changeDate(view: View) {

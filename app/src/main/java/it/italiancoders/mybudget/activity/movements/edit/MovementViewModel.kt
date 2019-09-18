@@ -37,13 +37,14 @@ import it.italiancoders.mybudget.utils.ioJob
 import it.italiancoders.mybudget.utils.uiJob
 import java.math.BigDecimal
 import java.util.*
+import javax.inject.Inject
 
 /**
  * @author fattazzo
  *         <p/>
  *         date: 06/08/19
  */
-class MovementViewModel(
+class MovementViewModel @Inject constructor(
     private val categoriesManager: CategoriesManager,
     private val movementsManager: MovementsManager
 ) : ViewModel() {

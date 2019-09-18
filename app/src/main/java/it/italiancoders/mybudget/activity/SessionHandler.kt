@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: RegistrationUserInfoViewModelFactory.kt
+ * File: SessionHandler.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,17 +25,34 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget.activity.registration
+package it.italiancoders.mybudget.activity
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import it.italiancoders.mybudget.manager.registrationuserinfo.RegistrationUserInfoManager
+import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
+import it.italiancoders.mybudget.SessionData
+import it.italiancoders.mybudget.activity.login.LoginActivity
+import it.italiancoders.mybudget.app.MyBudgetApplication
+import it.italiancoders.mybudget.manager.session.SessionManager
+import javax.inject.Inject
 
-class RegistrationUserInfoViewModelFactory(private val registrationUserInfoManager: RegistrationUserInfoManager) :
-    ViewModelProvider.Factory {
+/**
+ * @author fattazzo
+ *         <p/>
+ *         date: 16/09/19
+ */
+class SessionHandler {
 
+    @Inject
+    lateinit var sessionManager: SessionManager
 
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return RegistrationUserInfoViewModel(registrationUserInfoManager) as T
+    fun setAppLastSession(activity: AppCompatActivity, openLoginActivity: Boolean) {
+
+        (activity.application as MyBudgetApplication).appComponent.inject(this)
+
+        SessionData.session = sessionManager.getLastSession()
+        if (SessionData.session == null && openLoginActivity) {
+            val intent = Intent(activity.applicationContext, LoginActivity::class.java)
+            activity.startActivityForResult(intent, LoginActivity.REQUEST_CODE_LOGIN)
+        }
     }
 }

@@ -50,6 +50,7 @@ import com.whiteelephant.monthpicker.MonthPickerDialog
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.SessionData
 import it.italiancoders.mybudget.activity.BaseActivity
+import it.italiancoders.mybudget.activity.SessionHandler
 import it.italiancoders.mybudget.activity.categories.CategoriesActivity
 import it.italiancoders.mybudget.activity.login.LoginActivity
 import it.italiancoders.mybudget.activity.main.chart.ChartsCategoryOverviewAdapter
@@ -58,9 +59,8 @@ import it.italiancoders.mybudget.activity.movements.MovementsActivity
 import it.italiancoders.mybudget.activity.movements.edit.MovementActivity
 import it.italiancoders.mybudget.activity.settings.SettingsActivity
 import it.italiancoders.mybudget.app.MyBudgetApplication
-import it.italiancoders.mybudget.app.component.AppComponent
+import it.italiancoders.mybudget.app.module.viewModel.DaggerViewModelFactory
 import it.italiancoders.mybudget.databinding.ActivityMainBinding
-import it.italiancoders.mybudget.manager.expensesummary.ExpenseSummaryManager
 import it.italiancoders.mybudget.tutorial.TutorialMainActivity
 import it.italiancoders.mybudget.utils.LinePagerIndicatorDecoration
 import it.italiancoders.mybudget.utils.NetworkChecker
@@ -72,7 +72,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
     NavigationView.OnNavigationItemSelectedListener {
 
     @Inject
-    lateinit var expenseSummaryManager: ExpenseSummaryManager
+    lateinit var viewModelFactory: DaggerViewModelFactory
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     var mBottomSheetBehavior: BottomSheetBehavior<LastMovementsView?>? = null
@@ -84,15 +84,18 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
     override fun createTutorial() = TutorialMainActivity(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        SessionHandler().setAppLastSession(this,false)
+
         (application as MyBudgetApplication).appComponent.inject(this)
 
-        SessionData.session = sessionManager.getLastSession()
+        //SessionData.session = sessionManager.getLastSession()
+
         NetworkChecker().isNetworkAvailable(this)
 
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
 
-        binding.model = ViewModelProvider(this, MainViewModelFactory(expenseSummaryManager))
+        binding.model = ViewModelProvider(this, viewModelFactory)
             .get(MainViewModel::class.java)
         binding.contentMain.lastMovementsView.lifecycleOwner = this
 
@@ -135,10 +138,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
         }
 
         initLastMovementsSlidingPanel()
-    }
-
-    override fun injectComponent(appComponent: AppComponent) {
-        appComponent.inject(this)
     }
 
     override fun onBackPressed() {
