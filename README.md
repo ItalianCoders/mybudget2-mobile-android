@@ -1,5 +1,6 @@
 ![](https://img.shields.io/badge/android-API%20%2023%2B-green)
 ![GitHub last commit](https://img.shields.io/github/last-commit/ItalianCoders/mybudget2-mobile-android)
+![GitHub issues by-label](https://img.shields.io/github/issues/ItalianCoders/mybudget2-mobile-android/help%20wanted?color=red)
 ![GitHub issues](https://img.shields.io/github/issues-raw/ItalianCoders/mybudget2-mobile-android?color=red)
 ![GitHub closed issues](https://img.shields.io/github/issues-closed/ItalianCoders/mybudget2-mobile-android)
 [![CircleCI](https://circleci.com/gh/ItalianCoders/mybudget2-mobile-android.svg?style=shield)](https://14-191944532-gh.circle-artifacts.com/0/reports/tests/testReleaseUnitTest/index.html)
