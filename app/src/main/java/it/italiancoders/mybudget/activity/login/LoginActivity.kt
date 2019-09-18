@@ -31,10 +31,12 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.afollestad.materialdialogs.MaterialDialog
@@ -87,6 +89,11 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
 
         loginViewModel.login(
             {
+                this.currentFocus?.let { v ->
+                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                    imm?.hideSoftInputFromWindow(v.windowToken, 0)
+                }
+
                 setResult(Activity.RESULT_OK, Intent())
                 this@LoginActivity.finish()
             },
