@@ -49,6 +49,7 @@ Di seguito verrà riportato un elenco delle tecniche di programmazione e framewo
 - [Launch screen](#heavy_check_mark-launch-screen)
 - [Room ORM](#room-orm)
 - [Menu](#menu)
+- [ProGuard](#proguard)
 - [Local Junit Test](#local-junit-test)
 - [Instrumented Test](#instrumented-test)
 - [Shared test](#shared-test)
@@ -267,6 +268,9 @@ Nel [Manifest.xml](app/src/main/AndroidManifest.xml) il tema è stato impostato 
 - Entity
 - Dao
 - Converter
+
+##### ProGuard
+:construction: In costruzione :construction:
 
 ##### Menu
 :construction: In costruzione :construction:
