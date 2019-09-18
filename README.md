@@ -85,12 +85,21 @@ Di seguito verrà riportato un elenco delle tecniche di programmazione e framewo
   Custom view: [SearchMovementsView](app/src/main/java/it/italiancoders/mybudget/activity/movements/search/SearchMovementsView.kt) |
 
 - #### ViewModelFactory
-  In Android non esiste la possibilità di poter instanziare un ViewModel con costruttore con 1 o più parametri attraverso un _ViewModelProviders_. Per questo motivo si rende necessario l'uso di _ViewModelFactory_.
+  In Android non esiste la possibilità di poter instanziare un ViewModel con un costruttore con 1 o più parametri attraverso un _ViewModelProviders_. Per questo motivo si rende necessario l'uso di _ViewModelFactory_.
 
-  Nell'applicazione possiamo trovare l'uso di factory quasi ovunque. Un esempio può essere quello in [CategoriesActivity](app/src/main/java/it/italiancoders/mybudget/activity/categories/CategoriesActivity.kt) dove il ViewModel viene creato nel metodo _onCreate_ in questo modo
+  Nell'applicazione possiamo trovare l'uso di factory quasi ovunque. Un esempio può essere quello in [CategoriesActivity](app/src/main/java/it/italiancoders/mybudget/activity/categories/CategoriesActivity.kt) dove il ViewModel viene creato nel metodo _onCreate_. In realtà non esite un factory per ogni ViewModel perchè tramite Dagger injection viene utilizzata la classe [DaggerViewModelFactory](app/module/viewModel/DaggerViewModelFactory.java). Se invece si decidesse di non utilizzare questa libreria l'implementazione del factory da utilizzare sarebbe:
 
   ```kotlin
-  ViewModelProvider(this,CategoriesViewModelFactory(categoriesManager)).get(CategoriesViewModel::class.java)
+  import androidx.lifecycle.ViewModel
+  import androidx.lifecycle.ViewModelProvider
+  import it.italiancoders.mybudget.manager.categories.CategoriesManager
+
+  class CategoriesViewModelFactory(private val categoriesManager: CategoriesManager) : ViewModelProvider.Factory {
+
+      override fun <T : ViewModel> create(modelClass: Class<T>): T {
+          return CategoriesViewModel(categoriesManager) as T
+      }
+  }
   ```
 
 ##### LiveData
@@ -223,7 +232,9 @@ Nel caso specifico dell'applicazione la successione degli stati è infinita in q
 
 ## :heavy_check_mark: Launch screen
 
-La creazione della launch screen è stata fatta con l'utilizzo di un tema dedicato impostato sull'activity di partenza.
+La creazione della launch screen è stata fatta con l'utilizzo di un tema dedicato impostato sull'activity di partenza. Per approfondimenti è possibile fare riferimento al mio articolo:
+
+[Splash Screen in Android: impariamo a crearle nel modo corretto](https://italiancoders.it/splash-screen-in-android-impariamo-a-crearle-nel-modo-corretto)
 
 Nel file [styles.xml](app/src/main/res/values/styles.xml) è presente il tema _AppTheme.Launcher_ seguente:
 ```xml
