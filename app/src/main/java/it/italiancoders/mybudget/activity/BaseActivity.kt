@@ -102,12 +102,13 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        if (getTutorial() != null && getTutorial()!!.isNeverShow()) {
-            binding.root.post { getTutorial()?.start() }
+        if (checkUserSession()) {
+            SessionHandler().setAppLastSession(this, true)
         }
 
-        if (checkUserSession()) {
-            SessionHandler().setAppLastSession(this,true)
+        val tutorial = getTutorial()
+        if (SessionData.session != null && tutorial?.isNeverShow() == true) {
+            binding.root.post { getTutorial()?.start() }
         }
     }
 
