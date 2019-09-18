@@ -39,8 +39,8 @@ android {
         applicationId "it.italiancoders.mybudget"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 58
-        versionName "0.9.13"
+        versionCode 60
+        versionName "0.9.15"
         testInstrumentationRunner "it.italiancoders.mybudget.runner.CustomTestRunner"
 
         multiDexEnabled true
@@ -56,8 +56,13 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            debuggable true
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro', 'proguard-test-rules.pro'
         }
     }
     compileOptions {
@@ -205,7 +210,7 @@ dependencies {
 
     // Awaitility. Workaround used for wait bottomSheetBehaviour state change instead SystemClock.sleep()
     // https://github.com/awaitility/awaitility
-    androidTestImplementation ("org.awaitility:awaitility:4.0.1") {
+    androidTestImplementation("org.awaitility:awaitility:4.0.1") {
         exclude group: 'org.hamcrest', module: 'hamcrest'
     }
 }

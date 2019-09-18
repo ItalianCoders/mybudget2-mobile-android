@@ -20,6 +20,21 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+-keep class it.italiancoders.** { *; }
+
+# Klaxon
+-keep public class kotlin.reflect.jvm.internal.impl.** { public *; }
+-keep class com.beust.klaxon.** { *; }
+-keep interface com.beust.klaxon.** { *; }
+-keep class kotlin.Metadata { *; }
+
+# MPAndroidChart - fix animation
+# For more details, see https://github.com/PhilJay/MPAndroidChart/issues/348
+-keep public class com.github.mikephil.charting.animation.* {
+    public protected *;
+}
+
+# Logging
 -assumenosideeffects class android.util.Log {
   public static *** d(...);
   public static *** w(...);
