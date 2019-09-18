@@ -46,7 +46,9 @@ object ExpenseSummaryMockData : AbstractMockData() {
         parametriRicerca: ParametriRicerca,
         dataJsonPath: String
     ) {
-        `when`(expenseSummaryManager.getExpenseSummary(parametriRicerca))
+        `when`(expenseSummaryManager.getExpenseSummary(parametriRicerca,true))
+            .doReturn(fromJsonFile<ExpenseSummary>(dataJsonPath, ExpenseSummary::class))
+        `when`(expenseSummaryManager.getExpenseSummary(parametriRicerca,false))
             .doReturn(fromJsonFile<ExpenseSummary>(dataJsonPath, ExpenseSummary::class))
     }
 

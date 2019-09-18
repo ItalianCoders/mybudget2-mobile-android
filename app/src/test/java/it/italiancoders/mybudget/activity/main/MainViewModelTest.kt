@@ -155,7 +155,7 @@ class MainViewModelTest : AbstractViewModelTest<MainViewModel>() {
 
         assertThat(viewModel.month.value, `is`(6))
 
-        viewModel.loadExpenseSummary()
+        viewModel.loadExpenseSummary(true)
         val expenseSummaryExpected = ExpenseSummaryMockData.fromJsonFile<ExpenseSummary>(
             ExpenseSummaryConfig.DATA_2019_07_OK,
             ExpenseSummary::class
@@ -180,7 +180,7 @@ class MainViewModelTest : AbstractViewModelTest<MainViewModel>() {
 
         assertThat(viewModel.month.value, `is`(7))
 
-        viewModel.loadExpenseSummary()
+        viewModel.loadExpenseSummary(true)
         var expenseSummaryExpected = ExpenseSummaryMockData.fromJsonFile<ExpenseSummary>(
             ExpenseSummaryConfig.DATA_2019_08_OK,
             ExpenseSummary::class
