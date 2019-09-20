@@ -34,7 +34,7 @@ import it.italiancoders.mybudget.mocks.config.MovementsConfig
 import it.italiancoders.mybudget.mocks.data.MovementsMockData
 import it.italiancoders.mybudget.rest.models.MovementListPage
 import org.hamcrest.CoreMatchers.*
-import org.junit.Assert.assertThat
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 import org.mockito.Mock
 import java.util.*
@@ -55,7 +55,7 @@ class ListMovementsViewModelTest : AbstractViewModelTest<ListMovementsViewModel>
     @Test
     override fun initialValues() {
         assertThat(viewModel.year.value, `is`(Calendar.getInstance().get(Calendar.YEAR)))
-        assertThat(viewModel.month.value, `is`(Calendar.getInstance().get(Calendar.MONTH)))
+        assertThat(viewModel.month.value, `is`(Calendar.getInstance().get(Calendar.MONTH)+1))
         assertThat(viewModel.day.value, `is`(nullValue()))
 
         assertThat(viewModel.categoryId.value, `is`(nullValue()))

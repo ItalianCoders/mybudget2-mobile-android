@@ -37,8 +37,8 @@ import it.italiancoders.mybudget.rest.api.RetrofitBuilder
 import it.italiancoders.mybudget.rest.api.services.ExpenseSummaryRestService
 import it.italiancoders.mybudget.rest.models.ExpenseSummary
 import it.italiancoders.mybudget.rest.models.MovementListPage
-import it.italiancoders.mybudget.utils.NetworkChecker
 import it.italiancoders.mybudget.utils.OpenForTesting
+import it.italiancoders.mybudget.utils.connection.NetworkChecker
 
 /**
  * @author fattazzo
@@ -60,7 +60,7 @@ class ExpenseSummaryManager(context: Context) : AbstractRestManager(context) {
         forceRefresh: Boolean
     ): Result<ExpenseSummary> {
 
-        val networkAvailable = NetworkChecker().isNetworkAvailable(context)
+        val networkAvailable = NetworkChecker().isInternetAvailable(context)
 
         val expenseCache = expenseSummaryCache.get(parametri)
 

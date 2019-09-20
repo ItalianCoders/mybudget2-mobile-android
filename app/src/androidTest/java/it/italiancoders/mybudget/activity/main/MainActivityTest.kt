@@ -149,9 +149,7 @@ class MainActivityTest : BaseActivityTest() {
 
         mainPageObject.clickLastMovementHeader(true, rule.activity)
 
-        mainPageObject.clickLastMovemement(
-            rule.activity,
-            viewModel.lastMovements.value!!.contents.indexOfFirst { it.id!! == 14L })
+        mainPageObject.clickLastMovemement(viewModel.lastMovements.value!!.contents.indexOfFirst { it.id!! == 14L })
 
         mainPageObject.checkActivityEditMovementVisible()
 

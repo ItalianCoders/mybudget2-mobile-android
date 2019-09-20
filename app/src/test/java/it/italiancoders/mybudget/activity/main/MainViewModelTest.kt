@@ -34,7 +34,7 @@ import it.italiancoders.mybudget.mocks.data.ExpenseSummaryMockData
 import it.italiancoders.mybudget.rest.models.ExpenseSummary
 import it.italiancoders.mybudget.rest.models.MovementListPage
 import org.hamcrest.CoreMatchers.*
-import org.junit.Assert.assertThat
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 import org.mockito.Mock
 import java.math.BigDecimal

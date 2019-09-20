@@ -173,7 +173,7 @@ class MainPageObject {
             )
     }
 
-    fun clickLastMovemement(mainActivity: MainActivity, position: Int) {
+    fun clickLastMovemement(position: Int) {
         onView(withId(R.id.movements_recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition<MovementsDataAdapter.MovementViewHolder>(position,click()))
     }
 

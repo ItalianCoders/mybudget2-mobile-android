@@ -41,7 +41,7 @@ import it.italiancoders.mybudget.activity.login.UserValidationRules
 object ValidationBindingAdapter {
 
     @JvmStatic
-    @BindingAdapter("app:validation", "app:errorMsg")
+    @BindingAdapter("validation", "errorMsg")
     fun setErrorEnable(textInputLayout: TextInputLayout, stringRule: UserValidationRules.Rule, errorMsg: String) {
         textInputLayout.editText?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {

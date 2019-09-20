@@ -131,7 +131,6 @@ abstract class ExpenseSummaryDao {
 
         delete(parametriRicerca)
 
-        expenseSummary.lastMovements = MovementListPage()
         val expenseSummaryEntity = ExpenseSummary(
             null,
             parametriRicerca.year,
@@ -139,7 +138,7 @@ abstract class ExpenseSummaryDao {
             parametriRicerca.day,
             parametriRicerca.week,
             parametriRicerca.categoryId?.toInt(),
-            Klaxon().toJsonString(expenseSummary)
+            Klaxon().toJsonString(expenseSummary.copy(lastMovements = MovementListPage()))
         )
 
         insert(expenseSummaryEntity)

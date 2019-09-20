@@ -30,7 +30,6 @@ package it.italiancoders.mybudget.mocks.data
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import com.beust.klaxon.*
 import org.junit.Assert.fail
-import java.io.File
 import java.io.InputStream
 import kotlin.reflect.KClass
 
@@ -42,6 +41,7 @@ import kotlin.reflect.KClass
  */
 abstract class AbstractMockData {
 
+    @Suppress("UNCHECKED_CAST")
     fun <T> fromJsonFile(filePath: String, kclazz: KClass<*>): T? {
         return try {
             val parser = Klaxon().parser(kclazz)
@@ -69,19 +69,20 @@ abstract class AbstractMockData {
 
             val result = arrayListOf<Any?>()
 
-            val jsonArray = parseValue as JsonArray<T>
+            val jsonArray = parseValue as JsonArray<*>
 
             jsonArray.forEach { jo ->
-                if (jo is JsonObject) {
-                    val t = Klaxon().fromJsonObject(jo as JsonObject,kclazz::class.java,kclazz)
-                    if (t != null) result.add(t)
-                    else throw KlaxonException("Couldn't convert $jo")
-                } else if (jo != null) {
-                    val converter = Klaxon().findConverterFromClass(T::class.java, null)
-                    val convertedValue = converter.fromJson(JsonValue(jo, null, null, Klaxon()))
-                    result.add(convertedValue)
-                } else {
-                    throw KlaxonException("Couldn't convert $jo")
+                when {
+                    jo is JsonObject -> {
+                        val t = Klaxon().fromJsonObject(jo,kclazz::class.java,kclazz)
+                        result.add(t)
+                    }
+                    jo != null -> {
+                        val converter = Klaxon().findConverterFromClass(T::class.java, null)
+                        val convertedValue = converter.fromJson(JsonValue(jo, null, null, Klaxon()))
+                        result.add(convertedValue)
+                    }
+                    else -> throw KlaxonException("Couldn't convert $jo")
                 }
             }
             @Suppress("UNCHECKED_CAST")
@@ -90,23 +91,6 @@ abstract class AbstractMockData {
             fail("Error json parse from File $filePath to ${kclazz.simpleName}")
             listOf()
         }
-    }
-
-    /**
-     * Load file from resources folder. Resource folder mapping instrumental test assets.
-     *
-     * See build.gradle in sourceSets section
-     */
-    private fun loadFile2(filePath: String): File {
-        val fileUri = try {
-            this.javaClass.classLoader?.getResource(filePath)?.toURI()
-        } catch (e: java.lang.Exception) {
-            null
-        }
-
-        assert(fileUri != null) { "Resource: $filePath not found" }
-
-        return File(fileUri)
     }
 
     private fun loadFile(filePath: String): InputStream {

@@ -32,7 +32,7 @@ import it.italiancoders.mybudget.manager.session.SessionManager
 import it.italiancoders.mybudget.mocks.data.SessionMockData
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert
-import org.junit.Assert.assertThat
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 import org.mockito.Mock
 import java.util.*

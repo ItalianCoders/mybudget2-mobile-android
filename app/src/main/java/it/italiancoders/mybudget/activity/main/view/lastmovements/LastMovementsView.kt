@@ -104,7 +104,7 @@ class LastMovementsView : LinearLayout {
 
             listMovementsFragment?.let {
                 val year = binding.model?.year?.value!!
-                val month = binding.model?.month?.value!!
+                val month = binding.model?.month?.value!!+1
                 val day = null
                 val categoryId = null
 

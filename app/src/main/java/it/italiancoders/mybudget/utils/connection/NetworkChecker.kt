@@ -25,12 +25,11 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget.utils
+package it.italiancoders.mybudget.utils.connection
 
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import it.italiancoders.mybudget.SessionData
 
 
 /**
@@ -40,18 +39,14 @@ import it.italiancoders.mybudget.SessionData
  */
 class NetworkChecker {
 
-    fun isNetworkAvailable(context: Context): Boolean {
-        val networkAvailable = try {
-            val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    fun isInternetAvailable(context: Context): Boolean = try {
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-            val an = cm.activeNetwork
-            val capabilities = cm.getNetworkCapabilities(an)
-            capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) ?: false
-        } catch (e: Exception) {
-            e.printStackTrace()
-            false
-        }
-        SessionData.networkAvailable.postValue(networkAvailable)
-        return networkAvailable
+        val an = cm.activeNetwork
+        val capabilities = cm.getNetworkCapabilities(an)
+        capabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) ?: false
+    } catch (e: Exception) {
+        e.printStackTrace()
+        false
     }
 }

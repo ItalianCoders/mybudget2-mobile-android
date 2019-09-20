@@ -35,8 +35,8 @@ import it.italiancoders.mybudget.rest.api.RetrofitBuilder
 import it.italiancoders.mybudget.rest.api.services.MovementRestService
 import it.italiancoders.mybudget.rest.models.Movement
 import it.italiancoders.mybudget.rest.models.MovementListPage
-import it.italiancoders.mybudget.utils.NetworkChecker
 import it.italiancoders.mybudget.utils.OpenForTesting
+import it.italiancoders.mybudget.utils.connection.NetworkChecker
 import java.util.*
 
 /**
@@ -54,7 +54,7 @@ class MovementsManager(context: Context) : AbstractRestManager(context) {
     private var expenseSummaryCache = ExpenseSummaryCache(context)
 
     fun load(id: Int): Movement? {
-        val networkAvailable = NetworkChecker().isNetworkAvailable(context)
+        val networkAvailable = NetworkChecker().isInternetAvailable(context)
 
         val movementCached = movementCache.get(id)
 
@@ -76,7 +76,7 @@ class MovementsManager(context: Context) : AbstractRestManager(context) {
 
     fun search(parametri: ParametriRicerca, forceReload: Boolean = false): MovementListPage {
 
-        val networkAvailable = NetworkChecker().isNetworkAvailable(context)
+        val networkAvailable = NetworkChecker().isInternetAvailable(context)
 
         val movementsCached = movementCache.get(parametri)
 

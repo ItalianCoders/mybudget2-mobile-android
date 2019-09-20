@@ -36,8 +36,8 @@ import it.italiancoders.mybudget.manager.AbstractRestManager
 import it.italiancoders.mybudget.rest.api.RetrofitBuilder
 import it.italiancoders.mybudget.rest.api.services.RegistrationUserInfoRestService
 import it.italiancoders.mybudget.rest.models.UserRegistrationInfo
-import it.italiancoders.mybudget.utils.NetworkChecker
 import it.italiancoders.mybudget.utils.OpenForTesting
+import it.italiancoders.mybudget.utils.connection.NetworkChecker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -56,7 +56,7 @@ class RegistrationUserInfoManager(context: Context) : AbstractRestManager(contex
 
     fun create(userRegistrationInfo: UserRegistrationInfo) : Boolean? {
 
-        if (!NetworkChecker().isNetworkAvailable(context)) {
+        if (!NetworkChecker().isInternetAvailable(context)) {
             Handler(Looper.getMainLooper()).post {
                 Toast.makeText(
                     context,
@@ -78,7 +78,7 @@ class RegistrationUserInfoManager(context: Context) : AbstractRestManager(contex
         onSuccessAction: (Void?) -> Unit,
         onFailureAction: ((Int?) -> Unit)? = null
     ) {
-        if (!NetworkChecker().isNetworkAvailable(context)) {
+        if (!NetworkChecker().isInternetAvailable(context)) {
             Toast.makeText(context, R.string.network_unavailable_dialog_title, Toast.LENGTH_SHORT)
                 .show()
             return
@@ -97,7 +97,7 @@ class RegistrationUserInfoManager(context: Context) : AbstractRestManager(contex
         onSuccessAction: (Void?) -> Unit,
         onFailureAction: (Int?) -> Unit
     ) {
-        if (!NetworkChecker().isNetworkAvailable(context)) {
+        if (!NetworkChecker().isInternetAvailable(context)) {
             Toast.makeText(context, R.string.network_unavailable_dialog_title, Toast.LENGTH_SHORT)
                 .show()
             return

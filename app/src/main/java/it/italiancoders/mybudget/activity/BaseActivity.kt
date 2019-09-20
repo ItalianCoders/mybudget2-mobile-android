@@ -45,7 +45,7 @@ import it.italiancoders.mybudget.SessionData
 import it.italiancoders.mybudget.activity.login.LoginActivity
 import it.italiancoders.mybudget.manager.session.SessionManager
 import it.italiancoders.mybudget.tutorial.AbstractTutorialActivity
-import it.italiancoders.mybudget.utils.NetworkChecker
+import it.italiancoders.mybudget.utils.connection.ConnectivityLiveData
 import javax.inject.Inject
 
 
@@ -64,6 +64,8 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
 
     @Inject
     lateinit var sessionManager: SessionManager
+
+    val connectivityLiveData: ConnectivityLiveData by lazy { ConnectivityLiveData(application) }
 
     /**
      * Activity data binding
@@ -96,13 +98,13 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        SessionData.networkAvailable.observe(this, networkAvailabilityObserver)
     }
 
     override fun onResume() {
         super.onResume()
-        NetworkChecker().isNetworkAvailable(this)
+        SessionData.networkAvailable.observe(this, networkAvailabilityObserver)
+
+        //NetworkChecker().isInternetAvailable(this)
 
         if (checkUserSession()) {
             SessionHandler().setAppLastSession(this, true)
@@ -123,6 +125,11 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
         super.onDestroy()
     }
 
+    override fun onPause() {
+        SessionData.networkAvailable.removeObserver(networkAvailabilityObserver)
+        super.onPause()
+    }
+
     protected fun initToolbar(toolbar: Toolbar) {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -130,6 +137,8 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
     }
 
     private fun syncNetworkStateOption() {
+        updateNetworkMenuMenuColor()
+
         if (SessionData.networkAvailable.value == false) {
             showOption(R.id.action_network_offline)
         } else {
@@ -152,25 +161,20 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
         menuInflater.inflate(R.menu.base, menu)
         this.menu = menu
 
-        updateNetworkMenuMenuColor()
-
         syncNetworkStateOption()
         return true
     }
 
     private fun updateNetworkMenuMenuColor() {
+        menu?.findItem(R.id.action_network_offline)?.let {
+            var drawable = it.icon
 
-        if (SessionData.networkAvailable.value != true) {
-            menu?.findItem(R.id.action_network_offline)?.let {
-                var drawable = it.icon
-
-                drawable = DrawableCompat.wrap(drawable)
-                DrawableCompat.setTint(
-                    drawable,
-                    ContextCompat.getColor(this, getMenuItemsIconColor())
-                )
-                it.icon = drawable
-            }
+            drawable = DrawableCompat.wrap(drawable)
+            DrawableCompat.setTint(
+                drawable,
+                ContextCompat.getColor(this, getMenuItemsIconColor())
+            )
+            it.icon = drawable
         }
     }
 

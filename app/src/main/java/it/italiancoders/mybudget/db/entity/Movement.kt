@@ -30,12 +30,14 @@ package it.italiancoders.mybudget.db.entity
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.RoomWarnings
 import it.italiancoders.mybudget.rest.models.Movement
 import java.math.BigDecimal
 
 /**
  * Movement
  */
+@SuppressWarnings(RoomWarnings.PRIMARY_KEY_FROM_EMBEDDED_IS_DROPPED)
 @Entity(tableName = "movements")
 data class Movement(
     @PrimaryKey val id: Long,

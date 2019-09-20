@@ -28,13 +28,14 @@
 package it.italiancoders.mybudget.app
 
 import android.app.Application
+import it.italiancoders.mybudget.SessionData
 import it.italiancoders.mybudget.app.component.AppComponent
 import it.italiancoders.mybudget.app.component.DaggerAppComponent
 import it.italiancoders.mybudget.app.module.AppModule
 import it.italiancoders.mybudget.app.module.CategoriesModule
 import it.italiancoders.mybudget.app.module.MovementsModule
 import it.italiancoders.mybudget.app.module.SessionModule
-
+import it.italiancoders.mybudget.utils.connection.ConnectivityLiveData
 
 /**
  * @author fattazzo
@@ -49,7 +50,10 @@ open class MyBudgetApplication : Application() {
         super.onCreate()
 
         initAppComponent()
+
+        ConnectivityLiveData(this).observeForever { SessionData.networkAvailable.postValue(it) }
     }
+
 
     private fun initAppComponent() {
         appComponent = DaggerAppComponent.builder()

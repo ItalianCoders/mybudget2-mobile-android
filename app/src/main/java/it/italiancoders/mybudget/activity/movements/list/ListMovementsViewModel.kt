@@ -44,7 +44,7 @@ import javax.inject.Inject
 class ListMovementsViewModel @Inject constructor(private val movementsManager: MovementsManager) : ViewModel() {
 
     val year = MutableLiveData<Int?>(Calendar.getInstance().get(Calendar.YEAR))
-    val month = MutableLiveData<Int?>(Calendar.getInstance().get(Calendar.MONTH))
+    val month = MutableLiveData<Int?>(Calendar.getInstance().get(Calendar.MONTH)+1)
     val day: MutableLiveData<Int?> = MutableLiveData(null)
 
     val categoryId: MutableLiveData<Long?> = MutableLiveData(null)

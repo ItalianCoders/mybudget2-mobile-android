@@ -33,8 +33,8 @@ import it.italiancoders.mybudget.manager.AbstractRestManager
 import it.italiancoders.mybudget.rest.api.RetrofitBuilder
 import it.italiancoders.mybudget.rest.api.services.CategoryRestService
 import it.italiancoders.mybudget.rest.models.Category
-import it.italiancoders.mybudget.utils.NetworkChecker
 import it.italiancoders.mybudget.utils.OpenForTesting
+import it.italiancoders.mybudget.utils.connection.NetworkChecker
 
 /**
  * @author fattazzo
@@ -51,7 +51,7 @@ class CategoriesManager(context: Context) : AbstractRestManager(context) {
 
     fun loadAll(forceReload: Boolean = false): List<Category> {
 
-        val networkAvailable = NetworkChecker().isNetworkAvailable(context)
+        val networkAvailable = NetworkChecker().isInternetAvailable(context)
 
         val cachedCategories = categoryCache.getAll()
 
