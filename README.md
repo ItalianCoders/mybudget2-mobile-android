@@ -43,6 +43,7 @@ Di seguito verrà riportato un elenco delle tecniche di programmazione e framewo
 - [State Machine](#heavy_check_mark-state-machine)
 - [Activity startActivityForResult](#activity-startactivityforresult)
 - [BottomSheetBehavior](#bottomsheetbehavior)
+- [Connectivity monitor](#heavy_check_mark-connectivity-monitor)
 - [Firebase](#firebase)
 - [Crashlytics](#crashlytics)
 - [Settings](#settings)
@@ -219,6 +220,19 @@ Nel caso specifico dell'applicazione la successione degli stati è infinita in q
 
 ##### BottomSheetBehavior
 :construction: In costruzione :construction:
+
+## :heavy_check_mark: Connectivity monitor
+
+L'applicazione prevede la possibilità di funzionare, con ovvie limitazioni, anche in assenza di una connessione a internet.
+
+Il monitoraggio della connesisone è gestito nella classe [ConnectivityLiveData](app/src/main/java/it/italiancoders/mybudget/utils/connection/ConnectivityLiveData.kt) in cui sfruttando i _LiveData_ viene registrata una callback su _ConnectivityManager_ che esegue un _postValue_ sugli eventi _onAvailable_ e _onLost_.
+
+In questo modo registrando un observer su questa classe è possibile essere informati in tempo reale delle presenza o assenza di connessione. Questo viene fatto nella _BaseActivity_ con
+
+```kotlin
+SessionData.networkAvailable?.observe(this, networkAvailabilityObserver)
+```
+L'observer richiama il metodo <kbd>syncNetworkStateOption()</kbd> che può essere sovrascritto in ogni activity per aggiornare lo stato dei vari componenti.
 
 ##### Firebase
 :construction: In costruzione :construction:

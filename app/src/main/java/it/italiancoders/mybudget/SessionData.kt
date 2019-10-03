@@ -27,8 +27,8 @@
 
 package it.italiancoders.mybudget
 
-import androidx.lifecycle.MutableLiveData
 import it.italiancoders.mybudget.rest.models.Session
+import it.italiancoders.mybudget.utils.connection.ConnectivityLiveData
 
 /**
  * @author fattazzo
@@ -39,5 +39,5 @@ object SessionData {
 
     var session: Session? = null
 
-    var networkAvailable: MutableLiveData<Boolean> = MutableLiveData( true )
+    var networkAvailable:  ConnectivityLiveData? = null
 }

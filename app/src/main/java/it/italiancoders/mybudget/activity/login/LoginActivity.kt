@@ -46,6 +46,7 @@ import com.afollestad.materialdialogs.input.getInputField
 import com.afollestad.materialdialogs.input.input
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.activity.BaseActivity
+import it.italiancoders.mybudget.activity.activation.ActivationActivity
 import it.italiancoders.mybudget.activity.registration.RegistrationUserInfoActivity
 import it.italiancoders.mybudget.app.MyBudgetApplication
 import it.italiancoders.mybudget.app.module.viewModel.DaggerViewModelFactory
@@ -103,7 +104,15 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>() {
                         title(R.string.login_user_not_activated_title)
                         message(R.string.login_user_not_activated_message)
                         icon(R.drawable.ic_error)
-                        positiveButton { this@LoginActivity.recreate() }
+                        positiveButton {
+                            val intent = Intent(this@LoginActivity, ActivationActivity::class.java)
+                            intent.putExtra(
+                                ActivationActivity.USERNAME_EXTRA,
+                                loginViewModel.username.value
+                            )
+                            startActivity(intent)
+                            this@LoginActivity.finish()
+                        }
                     }
                 } else {
                     Toast.makeText(this, R.string.login_error, Toast.LENGTH_SHORT).show()

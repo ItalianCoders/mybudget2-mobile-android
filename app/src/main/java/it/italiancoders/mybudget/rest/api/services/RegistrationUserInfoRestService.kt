@@ -30,7 +30,10 @@ package it.italiancoders.mybudget.rest.api.services
 import it.italiancoders.mybudget.rest.models.UserRegistrationInfo
 import retrofit2.Call
 import retrofit2.Response
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.POST
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 /**
  * @author fattazzo
@@ -52,14 +55,16 @@ interface RegistrationUserInfoRestService {
      *
      * @param username username of user
      */
-    @POST("resend-confirm-registration-mail")
-    suspend fun resend(@Query("username") username: String): Response<Void>
+    @POST("resend-confirm-registration-mail/{username}")
+    suspend fun resend(@Path("username") username: String): Response<Void>
 
     /**
      * Confirm Registration
      *
+     * @param username username
      * @param token token for confirmation
      */
-    @GET("confirm-registration/{token}")
-    suspend fun confirm(@Path("token") token: String): Response<Void>
+    @POST("confirm-registration/{username}")
+    fun confirm(@Path("username") username: String, @Query("token") token: String): Call<Void>
+
 }

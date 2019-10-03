@@ -54,7 +54,7 @@ class RegistrationUserInfoManager(context: Context) : AbstractRestManager(contex
     private val registrationUserInfoRestService =
         RetrofitBuilder.client.create(RegistrationUserInfoRestService::class.java)
 
-    fun create(userRegistrationInfo: UserRegistrationInfo) : Boolean? {
+    fun create(userRegistrationInfo: UserRegistrationInfo): Boolean? {
 
         if (!NetworkChecker().isInternetAvailable(context)) {
             Handler(Looper.getMainLooper()).post {
@@ -70,7 +70,7 @@ class RegistrationUserInfoManager(context: Context) : AbstractRestManager(contex
 
         val response = registrationUserInfoRestService.create(userRegistrationInfo)
 
-        return processVoidResponse(response,false)
+        return processVoidResponse(response, false)
     }
 
     fun resend(
@@ -93,21 +93,23 @@ class RegistrationUserInfoManager(context: Context) : AbstractRestManager(contex
     }
 
     fun confirm(
-        token: String,
-        onSuccessAction: (Void?) -> Unit,
-        onFailureAction: (Int?) -> Unit
-    ) {
+        username: String,
+        token: String
+    ): Boolean? {
         if (!NetworkChecker().isInternetAvailable(context)) {
-            Toast.makeText(context, R.string.network_unavailable_dialog_title, Toast.LENGTH_SHORT)
-                .show()
-            return
+            Handler(Looper.getMainLooper()).post {
+                Toast.makeText(
+                    context,
+                    R.string.network_unavailable_dialog_title,
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+            }
+            return null
         }
 
-        CoroutineScope(Dispatchers.IO).launch {
-            val response = registrationUserInfoRestService.confirm(token)
-            withContext(Dispatchers.Main) {
-                processResponse(response, onSuccessAction, onFailureAction)
-            }
-        }
+        val response = registrationUserInfoRestService.confirm(username, token)
+
+        return processVoidResponse(response, false)
     }
 }

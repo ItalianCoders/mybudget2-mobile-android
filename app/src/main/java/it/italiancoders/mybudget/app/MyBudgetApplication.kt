@@ -51,7 +51,7 @@ open class MyBudgetApplication : Application() {
 
         initAppComponent()
 
-        ConnectivityLiveData(this).observeForever { SessionData.networkAvailable.postValue(it) }
+        SessionData.networkAvailable = ConnectivityLiveData(this) //.observeForever { SessionData.networkAvailable.postValue(it) }
     }
 
 

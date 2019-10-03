@@ -102,12 +102,12 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        SessionData.networkAvailable.observe(this, networkAvailabilityObserver)
+        SessionData.networkAvailable?.observe(this, networkAvailabilityObserver)
 
         //NetworkChecker().isInternetAvailable(this)
 
         if (checkUserSession()) {
-            SessionHandler().setAppLastSession(this, true)
+            SessionHandler().setAppLastSession(this, openLoginActivityOnNoSessionData())
         }
 
         val tutorial = getTutorial()
@@ -118,15 +118,17 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
         updateNetworkMenuMenuColor()
     }
 
+    protected open fun openLoginActivityOnNoSessionData() : Boolean = true
+
     protected open fun checkUserSession(): Boolean = true
 
     override fun onDestroy() {
-        SessionData.networkAvailable.removeObserver(networkAvailabilityObserver)
+        SessionData.networkAvailable?.removeObserver(networkAvailabilityObserver)
         super.onDestroy()
     }
 
     override fun onPause() {
-        SessionData.networkAvailable.removeObserver(networkAvailabilityObserver)
+        SessionData.networkAvailable?.removeObserver(networkAvailabilityObserver)
         super.onPause()
     }
 
@@ -139,17 +141,18 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
     private fun syncNetworkStateOption() {
         updateNetworkMenuMenuColor()
 
-        if (SessionData.networkAvailable.value == false) {
+        if (SessionData.networkAvailable?.value != true) {
             showOption(R.id.action_network_offline)
         } else {
             hideOption(R.id.action_network_offline)
         }
-        onNetworkStateChange(SessionData.networkAvailable.value ?: false)
+        onNetworkStateChange(SessionData.networkAvailable?.value ?: false)
     }
 
     /**
      * Invoked on network state change
      */
+
     open fun onNetworkStateChange(networkAvailable: Boolean) {}
 
     override fun onSupportNavigateUp(): Boolean {

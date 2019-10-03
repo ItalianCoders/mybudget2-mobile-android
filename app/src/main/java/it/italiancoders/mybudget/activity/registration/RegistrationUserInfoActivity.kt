@@ -30,17 +30,18 @@ package it.italiancoders.mybudget.activity.registration
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import com.afollestad.materialdialogs.MaterialDialog
 import it.italiancoders.mybudget.R
 import it.italiancoders.mybudget.activity.BaseActivity
+import it.italiancoders.mybudget.activity.activation.ActivationActivity
 import it.italiancoders.mybudget.app.MyBudgetApplication
 import it.italiancoders.mybudget.app.module.viewModel.DaggerViewModelFactory
 import it.italiancoders.mybudget.databinding.ActivityRegistrationUserInfoBinding
 import javax.inject.Inject
-
 
 class RegistrationUserInfoActivity : BaseActivity<ActivityRegistrationUserInfoBinding>() {
 
@@ -76,7 +77,15 @@ class RegistrationUserInfoActivity : BaseActivity<ActivityRegistrationUserInfoBi
             title(R.string.registration_created_title)
             message(R.string.registration_created_message)
             icon(android.R.drawable.ic_dialog_email)
-            positiveButton { this@RegistrationUserInfoActivity.finish() }
+            positiveButton {
+                startActivity(
+                    Intent(
+                        this@RegistrationUserInfoActivity,
+                        ActivationActivity::class.java
+                    )
+                )
+                this@RegistrationUserInfoActivity.finish()
+            }
         }
     }
 

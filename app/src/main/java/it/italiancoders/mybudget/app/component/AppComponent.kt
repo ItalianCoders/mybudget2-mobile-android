@@ -29,6 +29,7 @@ package it.italiancoders.mybudget.app.component
 
 import dagger.Component
 import it.italiancoders.mybudget.activity.SessionHandler
+import it.italiancoders.mybudget.activity.activation.ActivationActivity
 import it.italiancoders.mybudget.activity.categories.CategoriesActivity
 import it.italiancoders.mybudget.activity.login.LoginActivity
 import it.italiancoders.mybudget.activity.main.MainActivity
@@ -63,6 +64,7 @@ interface AppComponent {
     fun inject(activity: MovementActivity)
     fun inject(activity: LoginActivity)
     fun inject(activity: RegistrationUserInfoActivity)
+    fun inject(activity: ActivationActivity)
 
     fun inject(view: SearchMovementsView)
 

@@ -48,7 +48,7 @@ import androidx.lifecycle.LiveData
  * See https://developer.android.com/reference/android/net/ConnectivityManager#CONNECTIVITY_ACTION
  */
 class ConnectivityLiveData @VisibleForTesting internal constructor(private val connectivityManager: ConnectivityManager) :
-    LiveData<Boolean>(false) {
+    LiveData<Boolean>() {
 
     @RequiresPermission(android.Manifest.permission.ACCESS_NETWORK_STATE)
     constructor(application: Application) : this(

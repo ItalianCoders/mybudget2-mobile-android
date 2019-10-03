@@ -66,7 +66,7 @@ class EditCategoryDialogBuilder(private val categoriesViewModel: CategoriesViewM
             .setText(category.description)
 
         // Buttons
-        if (SessionData.networkAvailable.value != false) {
+        if (SessionData.networkAvailable?.value != false) {
             dialog.positiveButton(R.string.save, click = getPositiveCallback(category))
             // Add delete button only for existing and not readonly categories
             if (category.id != null && !category.isIsReadOnly) {

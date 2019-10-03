@@ -33,6 +33,7 @@ import androidx.lifecycle.ViewModelProvider
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
+import it.italiancoders.mybudget.activity.activation.ActivationViewModel
 import it.italiancoders.mybudget.activity.categories.CategoriesViewModel
 import it.italiancoders.mybudget.activity.login.LoginViewModel
 import it.italiancoders.mybudget.activity.main.MainViewModel
@@ -74,4 +75,9 @@ internal abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(RegistrationUserInfoViewModel::class)
     internal abstract fun provideRegistrationUserInfoViewModel(viewModel: RegistrationUserInfoViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ActivationViewModel::class)
+    internal abstract fun provideActivationViewModel(viewModel: ActivationViewModel): ViewModel
 }
