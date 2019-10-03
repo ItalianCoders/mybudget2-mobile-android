@@ -113,6 +113,18 @@ class ExpenseSummaryDaoTest : AbstractDbTest() {
     }
 
     @Test
+    fun deleteAll() {
+
+        var expenseSummary = appDb.expenseSummaryDao().loadAll()
+        assertThat(expenseSummary.size, `is`(5))
+
+        appDb.expenseSummaryDao().deleteAll()
+
+        expenseSummary = appDb.expenseSummaryDao().loadAll()
+        assertThat(expenseSummary.size, `is`(0))
+    }
+
+    @Test
     fun delete() {
 
         var expenseSummary = appDb.expenseSummaryDao().loadAll()
