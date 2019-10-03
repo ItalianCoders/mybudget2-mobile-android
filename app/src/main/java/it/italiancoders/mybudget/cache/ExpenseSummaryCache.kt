@@ -45,6 +45,8 @@ class ExpenseSummaryCache(private val context: Context) {
 
     fun remove(parametriRicerca: ParametriRicerca) = expenseSummaryDao.delete(parametriRicerca)
 
+    fun removeAll() = expenseSummaryDao.deleteAll()
+
     fun add(
         expenseSummary: ExpenseSummary,
         parametriRicerca: ParametriRicerca

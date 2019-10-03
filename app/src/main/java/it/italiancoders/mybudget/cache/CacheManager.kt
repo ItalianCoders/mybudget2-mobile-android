@@ -1,6 +1,6 @@
 /*
  * Project: mybudget2-mobile-android
- * File: CategoryDao.kt
+ * File: CacheManager.kt
  *
  * Created by fattazzo
  * Copyright © 2019 Gianluca Fattarsi. All rights reserved.
@@ -25,38 +25,20 @@
  * SOFTWARE.
  */
 
-package it.italiancoders.mybudget.db.dao
+package it.italiancoders.mybudget.cache
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import it.italiancoders.mybudget.db.entity.Category
+import android.content.Context
 
 /**
  * @author fattazzo
  *         <p/>
- *         date: 23/07/19
+ *         date: 03/10/19
  */
-@Dao
-interface CategoryDao {
+class CacheManager(val context: Context) {
 
-    @Query("SELECT * from categories")
-    fun loadAll(): List<Category>
-
-    @Query("DELETE from categories")
-    fun deleteAll()
-
-    @Query("DELETE from categories where id = :id")
-    fun delete(id: Long)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(vararg category: Category)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(category: Category)
-
-    @Query("SELECT * FROM categories where id = :id")
-    fun load(id: Long): Category?
-
+    fun invalidate() {
+        CategoryCache(context).removeAll()
+        ExpenseSummaryCache(context).removeAll()
+        MovementCache(context).removeAll()
+    }
 }

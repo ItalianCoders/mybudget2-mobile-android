@@ -60,6 +60,7 @@ import it.italiancoders.mybudget.activity.movements.edit.MovementActivity
 import it.italiancoders.mybudget.activity.settings.SettingsActivity
 import it.italiancoders.mybudget.app.MyBudgetApplication
 import it.italiancoders.mybudget.app.module.viewModel.DaggerViewModelFactory
+import it.italiancoders.mybudget.cache.CacheManager
 import it.italiancoders.mybudget.databinding.ActivityMainBinding
 import it.italiancoders.mybudget.tutorial.TutorialMainActivity
 import it.italiancoders.mybudget.utils.LinePagerIndicatorDecoration
@@ -83,7 +84,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
     override fun createTutorial() = TutorialMainActivity(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        SessionHandler().setAppLastSession(this,false)
+        SessionHandler().setAppLastSession(this, false)
 
         (application as MyBudgetApplication).appComponent.inject(this)
 
@@ -229,6 +230,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(),
             R.id.nav_movements -> startActivity(Intent(this, MovementsActivity::class.java))
             R.id.nav_logout -> {
                 sessionManager.removeSession()
+                CacheManager(this).invalidate()
                 startActivity(Intent(this.applicationContext, LoginActivity::class.java))
             }
         }

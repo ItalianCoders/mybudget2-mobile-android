@@ -148,4 +148,7 @@ abstract class ExpenseSummaryDao {
 
     @Query("SELECT * from expense_summary")
     abstract fun loadAll(): List<ExpenseSummary>
+
+    @Query("DELETE FROM expense_summary")
+    abstract fun deleteAll()
 }

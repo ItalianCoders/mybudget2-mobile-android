@@ -66,6 +66,8 @@ class MovementCache(val context: Context) {
 
     fun remove(id: Int) = movementDao.delete(id.toLong())
 
+    fun removeAll() = movementDao.deleteAll()
+
     fun addAll(movements: List<Movement>) =
         movementDao.insertAll(*movements.map { it.toEntity() }.toTypedArray())
 
