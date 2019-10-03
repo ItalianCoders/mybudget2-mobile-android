@@ -47,6 +47,8 @@
                 android:launchMode="singleTask"
                 android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.Launcher">
+            <meta-data android:name="android.app.shortcuts"
+                    android:resource="@xml/shortcuts" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -73,6 +75,9 @@
                 android:screenOrientation="portrait"></activity>
         <activity
                 android:name=".activity.registration.RegistrationUserInfoActivity"
+                android:screenOrientation="portrait"></activity>
+        <activity
+                android:name=".activity.activation.ActivationActivity"
                 android:screenOrientation="portrait"></activity>
         <activity
                 android:name=".activity.movements.edit.MovementActivity"
